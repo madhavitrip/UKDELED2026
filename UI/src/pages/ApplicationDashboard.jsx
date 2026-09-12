@@ -121,6 +121,16 @@ export default function ApplicationDashboard() {
     return dobStr;
   };
 
+  const formatFullAddress = (addr, dist, st, pin) => {
+    if (!addr && !dist && !st && !pin) return ".................................................";
+    const parts = [];
+    if (addr) parts.push(addr.trim());
+    if (dist && (!addr || !addr.toLowerCase().includes(dist.toLowerCase()))) parts.push(dist.trim());
+    if (st && (!addr || !addr.toLowerCase().includes(st.toLowerCase()))) parts.push(st.trim());
+    if (pin && (!addr || !addr.includes(pin))) parts.push(pin.trim());
+    return parts.join(", ") || ".................................................";
+  };
+
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     if (!token) {
@@ -195,6 +205,11 @@ export default function ApplicationDashboard() {
   const handlePrint = () => {
     const printWindow = window.open("", "", "width=1000,height=800");
 
+    const todayFormatted = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+    const candidateDate = profile?.paymentDate ? formatDob(profile.paymentDate) : todayFormatted;
+    const candidatePlace = profile?.district || profile?.examCity1 || ".................";
+    const candidateAddress = formatFullAddress(profile?.mailingAddress, profile?.district, profile?.state, profile?.pinCode);
+
     const htmlDoc = `<!DOCTYPE html>
 <html>
 <head>
@@ -228,13 +243,71 @@ export default function ApplicationDashboard() {
     th { background: #e8e8e8; border: 1px solid #000; padding: 6px; text-align: left; font-weight: bold; }
     td { border: 1px solid #000; padding: 6px; }
     
-    .warning { border: 2px solid #d32f2f; background: #ffebee; padding: 5px; margin: 5px 0; font-size: 10px; color: #b71c1c; text-align: center; }
-    
-    .declarations { border: 1px solid #000; padding: 12px; margin: 15px 0; }
-    .declarations h3 { text-align: center; font-size: 11px; font-weight: bold; margin-bottom: 8px; }
-    .declarations p { font-size: 10px; text-align: center; margin-bottom: 8px; line-height: 1.3; }
-    .declarations ol { margin: 0 0 0 18px; font-size: 10px; line-height: 1.4; }
-    .declarations li { margin-bottom: 6px; }
+    .declarations {
+      border: 1px solid #000;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-family: 'Utsaah', 'Nirmala UI', 'Mangal', 'Segoe UI', sans-serif !important;
+    }
+    .declarations h3 {
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .declarations .decl-intro {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+    .declarations ol {
+      margin: 0 0 0 22px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .declarations li {
+      margin-bottom: 5px;
+      text-align: justify;
+    }
+    .decl-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 14px;
+      padding-top: 8px;
+      border-top: 1px solid #999;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .decl-footer-left {
+      flex: 1;
+    }
+    .decl-footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+    .decl-sig-box {
+      width: 130px;
+      height: 50px;
+      border: 1px solid #000;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      overflow: hidden;
+    }
+    .decl-sig-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .field-val {
+      font-weight: bold;
+    }
     
     .signature { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; gap: 10px; }
     .sig-box { flex: 1; display: flex; flex-direction: column; align-items: center; }
@@ -363,27 +436,38 @@ export default function ApplicationDashboard() {
 
   <!-- DECLARATIONS -->
   <div class="declarations">
-    <h3>घोषणा</h3>
-    <p>मैं <b>${profile.fullName}</b> पुत्र/पुत्री श्री <b>${profile.fatherName}</b> शपथपूर्वक घोषणा करता/करती हूँ कि :</p>
+    <h3>घोषणा :</h3>
+    <p class="decl-intro">मैं <b><u>${profile.fullName || '.............................................'}</u></b> पुत्र / पुत्री श्री <b><u>${profile.fatherName || '.......................................'}</u></b> शपथपूर्वक घोषणा करता / करती हूँ कि –</p>
     <ol>
-      <li>
-              मैंने "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय (DELED I & II) 2026: सूचना विवरणिका" में   अंकित अर्हताओं एवं दिशा - निर्देशों का भली - भाँति अध्ययन कर लिया है । मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
-            </li>
-            <li>
-              मुझे "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय 2026 हेतु जारी समस्त दिशा-निर्देश एवं शर्तें मान्य हैं।
-            </li>
-            <li>
-परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियाँ मेरे मूल अभिलेखों  पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांचोपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखंड विद्यालयी शिक्षा परिषद को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरुद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।            </li>
-            <li>
-आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख / दस्तावेज (प्रमाण / अंक पत्र ). आवेदन की तिथि से पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।
-            </li>
-            <li>
-निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026 हेतु विचारणीय होगा।            </li>
-            <li>
-मैं इस तथ्य से भली-भाँति अवगत हूँ कि अध्यापक पात्रता परीक्षा (TET) उत्तीर्ण अभ्यर्थी का नियुक्ति / चयन हेतु दावा/अधिकार नहीं होता है। यह परीक्षा नियुक्ति / चयन हेतु निर्धारित अर्हताओं में से मात्र एक अनिवार्य अर्हता है। शिक्षकों की नियुक्ति / चयन  राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम / निर्देश के अन्तर्गत ही किया जाता है।            </li>
-            <li>
-मुझे पूर्व में किसी भी केन्द्रीय या राज्य अध्यापक पात्रता परीक्षा (TET) से प्रतिबंधित (Debar) नहीं किया गया है।            </li>
+      <li>मैंने ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026 : सूचना विवरणिका’’ में अंकित अर्हताओं एवं दिशा-निर्देशों का भली-भाँति अध्ययन कर लिया है। मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।</li>
+      <li>मुझे ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु जारी समस्त दिशा-निर्देश एवं शर्ते मान्य हैं।</li>
+      <li>परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियां मेरे मूल अभिलेखों पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांच उपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखण्ड विद्यालयी शिक्षा परिषद् को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरूद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।</li>
+      <li>आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख/दस्तावेज (प्रमाण पत्र/अंक पत्र) आवेदन की अन्तिम तिथि के पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने अथवा तथ्य छुपाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।</li>
+      <li>निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु विचारणीय होगा।</li>
+      <li>मैं इस तथ्य से भली-भाँति अवगत हूँ कि द्विवर्षीय डी.एल.एड. प्रशिक्षण प्राप्त अभ्यर्थियों को प्रशिक्षणोपरांत राजकीय सेवा में सेवायोजित किये जाने की कोई बाध्यता नहीं है। तत्समय प्रचलित सेवा नियमावली में विहित न्यूनतम प्रशिक्षण/अन्य निर्धारित योग्यता धारित करने वाले अभ्यर्थियों को ही नियमानुसार सेवा में लिया जायेगा। शिक्षकों की नियुक्ति/चयन राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम/निर्देश के अन्तर्गत ही किया जाता है।</li>
+      <li>मुझे परिषद् द्वारा पूर्व में किसी भी परीक्षा से प्रतिबन्धित (Debar) नहीं किया गया है।</li>
     </ol>
+
+    <div class="decl-footer">
+      <div class="decl-footer-left">
+        <div><strong>स्थान :</strong> <span class="field-val">${candidatePlace}</span></div>
+        <div><strong>दिनांक :</strong> <span class="field-val">${candidateDate}</span></div>
+      </div>
+      <div class="decl-footer-right">
+        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 6px;">
+          ${uploads.signatureFilePreview ? `
+            <div class="decl-sig-box">
+              <img src="${uploads.signatureFilePreview}" alt="Signature">
+            </div>
+          ` : '<div style="width: 130px; height: 45px; border: 1px dashed #666; margin-bottom: 4px;"></div>'}
+          <div style="font-weight: bold; font-size: 13px;">आवेदक के हस्ताक्षर</div>
+        </div>
+        <div style="text-align: left; width: 100%; max-width: 320px;">
+          <div><strong>नाम :</strong> <span class="field-val">${profile.fullName || '.................................................'}</span></div>
+          <div><strong>पता :</strong> <span class="field-val">${candidateAddress}</span></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1145,45 +1229,63 @@ export default function ApplicationDashboard() {
               </div>
 
               {/* Declarations (घोषणा) section */}
-              <div className="border border-red-300 rounded-sm bg-red-50/50 p-3 sm:p-4 md:p-5 space-y-3 sm:space-y-4 md:space-y-5 print:border-gray-300 print:bg-white">
-                <h3 className="text-center font-bold text-red-700 text-xs sm:text-sm md:text-base tracking-wide print:text-black">
-                  घोषणा
+              <div
+                className="font-utsaah border border-red-300 rounded-sm bg-red-50/50 p-4 sm:p-5 md:p-6 space-y-4 print:border-gray-300 print:bg-white text-gray-900"
+                style={{ fontFamily: "'Utsaah', 'Nirmala UI', 'Mangal', 'Segoe UI', sans-serif" }}
+              >
+                <h3 className="text-center font-bold text-red-700 text-base sm:text-lg md:text-xl tracking-wide print:text-black">
+                  घोषणा :
                 </h3>
-                <p className="font-semibold text-center text-gray-800 text-[9px] sm:text-xs md:text-sm">
+                <p className="font-medium text-gray-900 text-sm sm:text-base md:text-[17px] leading-relaxed">
                   मैं{" "}
-                  <span className="font-black underline">
-                    {profile.fullName}
+                  <span className="font-bold underline">
+                    {profile.fullName || "............................................."}
                   </span>{" "}
-                  पुत्र/पुत्री श्री{" "}
-                  <span className="font-black underline">
-                    {profile.fatherName}
+                  पुत्र / पुत्री श्री{" "}
+                  <span className="font-bold underline">
+                    {profile.fatherName || "......................................."}
                   </span>{" "}
-                  शपथपूर्वक घोषणा करता/करती हूँ कि :
+                  शपथपूर्वक घोषणा करता / करती हूँ कि –
                 </p>
-                <ol className="list-decimal list-inside space-y-2 sm:space-y-2.5 md:space-y-3 text-[8px] sm:text-[9px] md:text-[10px] leading-relaxed text-gray-700 pl-2">
+                <ol className="list-decimal pl-6 space-y-2 text-xs sm:text-sm md:text-[15.5px] leading-relaxed text-gray-800 text-justify">
                   <li>
-                    मैंने "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय (DELED I & II) 2026: सूचना विवरणिका" में   अंकित अर्हताओं एवं दिशा - निर्देशों का भली - भाँति अध्ययन कर लिया है । मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
+                    मैंने ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026 : सूचना विवरणिका’’ में अंकित अर्हताओं एवं दिशा-निर्देशों का भली-भाँति अध्ययन कर लिया है। मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
                   </li>
                   <li>
-                    मुझे "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय 2026 हेतु जारी समस्त दिशा-निर्देश एवं शर्तें मान्य हैं।
+                    मुझे ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु जारी समस्त दिशा-निर्देश एवं शर्ते मान्य हैं।
                   </li>
                   <li>
-                    परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियाँ मेरे मूल अभिलेखों  पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांचोपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखंड विद्यालयी शिक्षा परिषद को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरुद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।            </li>
-                  <li>
-                    आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख / दस्तावेज (प्रमाण / अंक पत्र ). आवेदन की तिथि से पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।
+                    परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियां मेरे मूल अभिलेखों पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांच उपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखण्ड विद्यालयी शिक्षा परिषद् को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरूद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।
                   </li>
                   <li>
-                    निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026 हेतु विचारणीय होगा।            </li>
+                    आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख/दस्तावेज (प्रमाण पत्र/अंक पत्र) आवेदन की अन्तिम तिथि के पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने अथवा तथ्य छुपाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।
+                  </li>
                   <li>
-                    मैं इस तथ्य से भली-भाँति अवगत हूँ कि अध्यापक पात्रता परीक्षा (TET) उत्तीर्ण अभ्यर्थी का नियुक्ति / चयन हेतु दावा/अधिकार नहीं होता है। यह परीक्षा नियुक्ति / चयन हेतु निर्धारित अर्हताओं में से मात्र एक अनिवार्य अर्हता है। शिक्षकों की नियुक्ति / चयन  राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम / निर्देश के अन्तर्गत ही किया जाता है।            </li>
+                    निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु विचारणीय होगा।
+                  </li>
                   <li>
-                    मुझे पूर्व में किसी भी केन्द्रीय या राज्य अध्यापक पात्रता परीक्षा (TET) से प्रतिबंधित (Debar) नहीं किया गया है।            </li>
+                    मैं इस तथ्य से भली-भाँति अवगत हूँ कि द्विवर्षीय डी.एल.एड. प्रशिक्षण प्राप्त अभ्यर्थियों को प्रशिक्षणोपरांत राजकीय सेवा में सेवायोजित किये जाने की कोई बाध्यता नहीं है। तत्समय प्रचलित सेवा नियमावली में विहित न्यूनतम प्रशिक्षण/अन्य निर्धारित योग्यता धारित करने वाले अभ्यर्थियों को ही नियमानुसार सेवा में लिया जायेगा। शिक्षकों की नियुक्ति/चयन राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम/निर्देश के अन्तर्गत ही किया जाता है।
+                  </li>
+                  <li>
+                    मुझे परिषद् द्वारा पूर्व में किसी भी परीक्षा से प्रतिबन्धित (Debar) नहीं किया गया है।
+                  </li>
                 </ol>
 
-                <div className="pt-6">
-                  <div className="flex justify-end">
-                    <div className="flex flex-col items-center">
-                      <div className="w-[140px] h-[55px] border border-gray-300 bg-white flex items-center justify-center overflow-hidden">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-red-200 print:border-gray-300 text-xs sm:text-sm md:text-[15.5px]">
+                  <div className="space-y-1.5">
+                    <div>
+                      <span className="font-bold">स्थान : </span>
+                      <span className="font-semibold">{profile?.district || profile?.examCity1 || "................."}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold">दिनांक : </span>
+                      <span className="font-semibold">{profile?.paymentDate ? formatDob(profile.paymentDate) : new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:items-end">
+                    <div className="flex flex-col items-center mb-2">
+                      <div className="w-[140px] h-[55px] border border-gray-400 bg-white flex items-center justify-center overflow-hidden mb-1">
                         {uploads.signatureFilePreview ? (
                           <img
                             src={uploads.signatureFilePreview}
@@ -1192,14 +1294,24 @@ export default function ApplicationDashboard() {
                           />
                         ) : (
                           <span className="text-[10px] text-gray-400">
-                            Signature
+                            (हस्ताक्षर)
                           </span>
                         )}
                       </div>
-
-                      <p className="text-[9px] text-gray-600 font-semibold mt-2">
-                        (Signature of the Applicant)
+                      <p className="text-xs sm:text-sm font-bold text-gray-900">
+                        आवेदक के हस्ताक्षर
                       </p>
+                    </div>
+
+                    <div className="space-y-1 text-left sm:text-right w-full sm:max-w-[320px]">
+                      <div>
+                        <span className="font-bold">नाम : </span>
+                        <span className="font-semibold">{profile.fullName || "................................................."}</span>
+                      </div>
+                      <div>
+                        <span className="font-bold">पता : </span>
+                        <span className="font-semibold">{formatFullAddress(profile?.mailingAddress, profile?.district, profile?.state, profile?.pinCode)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

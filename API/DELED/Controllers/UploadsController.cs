@@ -601,11 +601,11 @@ namespace DELED.Controllers
     {
         public int UserId { get; set; }
 
-        public IFormFile Photo { get; set; }
+        public IFormFile? Photo { get; set; }
 
-        public IFormFile Signature { get; set; }
+        public IFormFile? Signature { get; set; }
 
-        public IFormFile Thumb { get; set; }
+        public IFormFile? Thumb { get; set; }
     }
 
 }

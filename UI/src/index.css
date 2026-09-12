@@ -92,3 +92,22 @@
     padding: 10px 14px !important;
   }
 }
+
+@font-face {
+  font-family: 'Utsaah';
+  src: local('Utsaah'), local('Utsaah-Regular');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Utsaah';
+  src: local('Utsaah Bold'), local('Utsaah-Bold');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-utsaah,
+.font-utsaah * {
+  font-family: 'Utsaah', 'Nirmala UI', 'Mangal', 'Segoe UI', sans-serif !important;
+}

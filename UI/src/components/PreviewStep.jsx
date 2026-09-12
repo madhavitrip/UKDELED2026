@@ -142,8 +142,8 @@ export default function PreviewStep({
                 resultData.isPhysicallyHandicapped
                   ? "YES"
                   : resultData.personalDetailId
-                  ? "NO"
-                  : formData.phyHandicapped,
+                    ? "NO"
+                    : formData.phyHandicapped,
               phyType: resultData.disabilityType || formData.phyType,
               multiDisabilityType: resultData.multiDisabilityType || formData.multiDisabilityType || formData.multiPhType,
               multiPhType: resultData.multiDisabilityType || formData.multiPhType,
@@ -151,8 +151,8 @@ export default function PreviewStep({
                 resultData.scribeRequired
                   ? "YES"
                   : resultData.personalDetailId
-                  ? "NO"
-                  : formData.scribeRequired,
+                    ? "NO"
+                    : formData.scribeRequired,
               examCity1: resultData.examCity1 || formData.examCity1,
               examCity2: resultData.examCity2 || formData.examCity2,
               address: resultData.mailingAddress || formData.address,
@@ -198,8 +198,21 @@ export default function PreviewStep({
     };
   }, []);
 
+  const formatFullAddress = (addr, dist, st, pin) => {
+    if (!addr && !dist && !st && !pin) return ".................................................";
+    const parts = [];
+    if (addr) parts.push(addr.trim());
+    if (dist && (!addr || !addr.toLowerCase().includes(dist.toLowerCase()))) parts.push(dist.trim());
+    if (st && (!addr || !addr.toLowerCase().includes(st.toLowerCase()))) parts.push(st.trim());
+    if (pin && (!addr || !addr.includes(pin))) parts.push(pin.trim());
+    return parts.join(", ") || ".................................................";
+  };
+
   const data = previewData || formData;
   const isFemaleCandidate = (data.gender || "").toUpperCase() === "FEMALE";
+  const declPlace = data.district || data.examCity1 || ".................";
+  const declDate = data.paymentDate ? formatDob(data.paymentDate) : new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+  const declAddress = formatFullAddress(data.address || data.mailingAddress, data.district, data.state, data.pincode || data.pinCode);
 
   if (loading) {
     return (
@@ -413,13 +426,12 @@ export default function PreviewStep({
                 </th>
                 <td className="border border-gray-300 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-semibold">
                   {data.phyHandicapped === "YES" || data.isPhysicallyHandicapped
-                    ? `YES (${
-                        data.phyType === "Multi" && data.multiPhType
-                          ? (Array.isArray(data.multiPhType)
-                              ? (data.multiPhType.length > 0 ? `Multi (${data.multiPhType.join(", ")})` : "Multi")
-                              : data.multiPhType)
-                          : data.phyType || data.disabilityType || "N/A"
-                      })`
+                    ? `YES (${data.phyType === "Multi" && data.multiPhType
+                      ? (Array.isArray(data.multiPhType)
+                        ? (data.multiPhType.length > 0 ? `Multi (${data.multiPhType.join(", ")})` : "Multi")
+                        : data.multiPhType)
+                      : data.phyType || data.disabilityType || "N/A"
+                    })`
                     : "NO"}
                 </td>
               </tr>
@@ -431,8 +443,8 @@ export default function PreviewStep({
                   {data.scribeRequired === true || data.scribeRequired === "YES"
                     ? "YES"
                     : data.scribeRequired === false || data.scribeRequired === "NO"
-                    ? "NO"
-                    : "N/A"}
+                      ? "NO"
+                      : "N/A"}
                 </td>
                 <th className="border border-gray-300 bg-gray-50 px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-sm sm:text-base">
                   Exam City 1ˢᵗ
@@ -481,9 +493,8 @@ export default function PreviewStep({
                 </th>
                 <td className="border border-gray-300 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-semibold">
                   {data.idProofType || data.identityProof
-                    ? `${data.idProofType || data.identityProof} (${
-                        data.idProofNo || data.identityProofNo || "N/A"
-                      })`
+                    ? `${data.idProofType || data.identityProof} (${data.idProofNo || data.identityProofNo || "N/A"
+                    })`
                     : "N/A"}
                 </td>
               </tr>
@@ -548,17 +559,95 @@ export default function PreviewStep({
       </div>
 
       {/* Declaration */}
-      <div className="border border-gray-300 p-4 sm:p-5 rounded-lg bg-gray-50 space-y-3">
-        <h4 className="font-extrabold text-gray-900 text-base sm:text-lg">
-          घोषणा (Declaration):
+      <div
+        className="font-utsaah border border-gray-300 p-4 sm:p-5 md:p-6 rounded-lg bg-gray-50 space-y-4 text-gray-900"
+        style={{ fontFamily: "'Utsaah', 'Nirmala UI', 'Mangal', 'Segoe UI', sans-serif" }}
+      >
+        <h4 className="font-extrabold text-gray-900 text-base sm:text-lg md:text-xl text-center tracking-wide">
+          घोषणा :
         </h4>
-        <p className="text-sm sm:text-base text-gray-800 leading-relaxed font-medium">
-          मैं प्रमाणित करता/करती हूँ कि मेरे द्वारा आवेदन पत्र में दी गई समस्त
-          प्रविष्टियाँ पूर्णतः सत्य एवं सही हैं। यदि कोई भी प्रविष्टि असत्य या
-          गलत पाई जाती है तो मेरा अभ्यर्थन किसी भी स्तर पर निरस्त किया जा सकता
-          है।
+        <p className="font-medium text-gray-900 text-sm sm:text-base md:text-[17px] leading-relaxed">
+          मैं{" "}
+          <span className="font-bold underline">
+            {data.applicantName || data.fullName || "............................................."}
+          </span>{" "}
+          पुत्र / पुत्री श्री{" "}
+          <span className="font-bold underline">
+            {data.fatherName || "......................................."}
+          </span>{" "}
+          शपथपूर्वक घोषणा करता / करती हूँ कि –
         </p>
-        <div className="pt-2 flex items-center gap-3">
+
+        <ol className="list-decimal pl-6 space-y-2 text-xs sm:text-sm md:text-[15.5px] leading-relaxed text-gray-800 text-justify">
+          <li>
+            मैंने ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026 : सूचना विवरणिका’’ में अंकित अर्हताओं एवं दिशा-निर्देशों का भली-भाँति अध्ययन कर लिया है। मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
+          </li>
+          <li>
+            मुझे ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु जारी समस्त दिशा-निर्देश एवं शर्ते मान्य हैं।
+          </li>
+          <li>
+            परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियां मेरे मूल अभिलेखों पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांच उपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखण्ड विद्यालयी शिक्षा परिषद् को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरूद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।
+          </li>
+          <li>
+            आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख/दस्तावेज (प्रमाण पत्र/अंक पत्र) आवेदन की अन्तिम तिथि के पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने अथवा तथ्य छुपाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।
+          </li>
+          <li>
+            निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन ‘‘प्रारंभिक शिक्षा में द्विवर्षीय डिप्लोमा (D.El.E.d.) प्रशिक्षण हेतु प्रवेश परीक्षा 2026’’ हेतु विचारणीय होगा।
+          </li>
+          <li>
+            मैं इस तथ्य से भली-भाँति अवगत हूँ कि द्विवर्षीय डी.एल.एड. प्रशिक्षण प्राप्त अभ्यर्थियों को प्रशिक्षणोपरांत राजकीय सेवा में सेवायोजित किये जाने की कोई बाध्यता नहीं है। तत्समय प्रचलित सेवा नियमावली में विहित न्यूनतम प्रशिक्षण/अन्य निर्धारित योग्यता धारित करने वाले अभ्यर्थियों को ही नियमानुसार सेवा में लिया जायेगा। शिक्षकों की नियुक्ति/चयन राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम/निर्देश के अन्तर्गत ही किया जाता है।
+          </li>
+          <li>
+            मुझे परिषद् द्वारा पूर्व में किसी भी परीक्षा से प्रतिबन्धित (Debar) नहीं किया गया है।
+          </li>
+        </ol>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-300 text-xs sm:text-sm md:text-[15.5px]">
+          <div className="space-y-1.5">
+            <div>
+              <span className="font-bold">स्थान : </span>
+              <span className="font-semibold">{declPlace}</span>
+            </div>
+            <div>
+              <span className="font-bold">दिनांक : </span>
+              <span className="font-semibold">{declDate}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:items-end">
+            <div className="flex flex-col items-center mb-2">
+              <div className="w-[140px] h-[55px] border border-gray-400 bg-white flex items-center justify-center overflow-hidden mb-1">
+                {data.signatureFilePreview ? (
+                  <img
+                    src={data.signatureFilePreview}
+                    alt="Signature Preview"
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <span className="text-[10px] text-gray-400">
+                    (हस्ताक्षर)
+                  </span>
+                )}
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-gray-900">
+                आवेदक के हस्ताक्षर
+              </p>
+            </div>
+
+            <div className="space-y-1 text-left sm:text-right w-full sm:max-w-[320px]">
+              <div>
+                <span className="font-bold">नाम : </span>
+                <span className="font-semibold">{data.applicantName || data.fullName || "................................................."}</span>
+              </div>
+              <div>
+                <span className="font-bold">पता : </span>
+                <span className="font-semibold">{declAddress}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-3 flex items-center gap-3 border-t border-gray-200">
           <input
             type="checkbox"
             id="agreedTerms"
@@ -571,7 +660,7 @@ export default function PreviewStep({
           />
           <label
             htmlFor="agreedTerms"
-            className="text-sm sm:text-base font-bold text-gray-900 cursor-pointer"
+            className="text-sm sm:text-base font-bold text-gray-900 cursor-pointer font-sans"
           >
             I accept all the terms and declare that the information provided is
             true to the best of my knowledge.
