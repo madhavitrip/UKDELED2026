@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DELED.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260911095646_AddMultiDisabilityTypeColumn")]
-    partial class AddMultiDisabilityTypeColumn
+    [Migration("20260915045251_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

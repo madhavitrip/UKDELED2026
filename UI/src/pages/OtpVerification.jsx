@@ -73,12 +73,17 @@ export default function OtpVerification() {
     setError("");
     setSuccess("");
 
+    const showOtpError = (msg) => {
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     if (!mobileOtp.trim() || mobileOtp.length < 4) {
-      return setError("Please enter a valid 6-digit Mobile OTP (कृपया मोबाइल पर प्राप्त वैध 6-अंकीय ओटीपी दर्ज करें)");
+      return showOtpError("Please enter a valid 6-digit Mobile OTP (कृपया मोबाइल पर प्राप्त वैध 6-अंकीय ओटीपी दर्ज करें)");
     }
 
     if (!emailOtp.trim() || emailOtp.length < 4) {
-      return setError("Please enter a valid 6-digit Email OTP (कृपया ईमेल पर प्राप्त वैध 6-अंकीय ओटीपी दर्ज करें)");
+      return showOtpError("Please enter a valid 6-digit Email OTP (कृपया ईमेल पर प्राप्त वैध 6-अंकीय ओटीपी दर्ज करें)");
     }
 
     const result = await verifyOtp(regData.userId, mobileOtp, emailOtp);
@@ -89,7 +94,7 @@ export default function OtpVerification() {
         navigate("/application", { replace: true });
       }, 3500);
     } else {
-      setError(result.error || "Invalid OTP or OTP has expired.");
+      showOtpError(result.error || "Invalid OTP or OTP has expired.");
     }
   };
 
@@ -97,8 +102,13 @@ export default function OtpVerification() {
     setError("");
     setSuccess("");
 
+    const showOtpError = (msg) => {
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     if (!regData.userId) {
-      setError("User session expired. Please register again.");
+      showOtpError("User session expired. Please register again.");
       return;
     }
 
@@ -112,7 +122,7 @@ export default function OtpVerification() {
       sessionStorage.setItem("otp_timer_expiry", newExpiry.toString());
       setTimer(120);
     } else {
-      setError(result.error || "Failed to resend OTP. Please try again.");
+      showOtpError(result.error || "Failed to resend OTP. Please try again.");
     }
   };
 

@@ -9,7 +9,6 @@ import {
   FaEye,
   FaEyeSlash,
   FaHome,
-  FaTimes,
 } from "react-icons/fa";
 import { QRCodeSVG as QRCode } from "qrcode.react";
 
@@ -27,6 +26,7 @@ export default function ApplicationDashboard() {
   });
 
   const [imageError, setImageError] = useState(false);
+  const [maxStepProgress, setMaxStepProgress] = useState(0);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
@@ -81,21 +81,6 @@ export default function ApplicationDashboard() {
     }
   };
 
-  const isNotDeled1 = (applyFor) => {
-    const val = (applyFor || "")
-      .toUpperCase()
-      .replace(/\s+/g, "")
-      .replace(/[-_]/g, "");
-    return val !== "DELEDI" && val !== "DELED1";
-  };
-
-  const isNotDeled2 = (applyFor) => {
-    const val = (applyFor || "")
-      .toUpperCase()
-      .replace(/\s+/g, "")
-      .replace(/[-_]/g, "");
-    return val !== "DELEDII" && val !== "DELED2";
-  };
 
   const isCorrectionWindowOpen = () => {
     if (!timelines || timelines.length === 0) return false;
@@ -181,6 +166,16 @@ export default function ApplicationDashboard() {
             }
           } catch (e) {
             console.error("Error fetching timelines", e);
+          }
+
+          try {
+            const stepRes = await api.get(`/api/UserStepProgresses`);
+            if (stepRes.data && stepRes.data.length > 0) {
+              const maxStep = Math.max(...stepRes.data.map((s) => s.stepNumber || 0));
+              setMaxStepProgress(maxStep);
+            }
+          } catch (e) {
+            console.log("Could not fetch step progress", e);
           }
         }
       } catch (err) {
@@ -494,7 +489,8 @@ export default function ApplicationDashboard() {
 
   // Determine application states
   const hasApplied = profile && profile.personalDetailId;
-  const isLocked = profile && profile.completedStep >= 4;
+  const isStep4Completed = (profile && profile.completedStep >= 4) || (profile && profile.isPaymentCompleted) || maxStepProgress >= 4;
+  const isLocked = isStep4Completed;
   const isPaymentCompleted = profile && profile.isPaymentCompleted;
 
   let isFeeClosed = false;
@@ -767,25 +763,27 @@ export default function ApplicationDashboard() {
                   locked, you can preview and print your application form.
                 </p>
 
-                <div className={`grid grid-cols-1 ${isPaymentCompleted ? 'sm:grid-cols-2 lg:grid-cols-3' : 'sm:grid-cols-2'} gap-3 sm:gap-4 md:gap-5 pt-2`}>
-                  {/* Fill/Edit Button */}
-                  {!isLocked && !isFeeClosed ? (
-                    <button
-                      onClick={() => navigate("/registration-form")}
-                      className="flex items-center justify-center gap-2 p-3 sm:p-4 md:p-5 bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm md:text-base rounded-lg transition duration-200 shadow-md hover:scale-[1.01] cursor-pointer"
-                    >
-                      <span>✍️</span>{" "}
-                      {hasApplied
-                        ? "Edit / Complete Application"
-                        : "Apply for DELED 2026"}
-                    </button>
-                  ) : (
-                    <button
-                      disabled
-                      className="flex items-center justify-center gap-2 p-3 sm:p-4 md:p-5 bg-gray-100 text-gray-400 font-extrabold text-xs sm:text-sm md:text-base rounded-lg border border-gray-200 cursor-not-allowed"
-                    >
-                      <span>🔒</span> {isFeeClosed ? "Deadline Passed" : "Application Form Locked"}
-                    </button>
+                <div className={`grid grid-cols-1 ${!isStep4Completed ? (isPaymentCompleted ? 'sm:grid-cols-2 lg:grid-cols-3' : 'sm:grid-cols-2') : 'sm:grid-cols-1 md:grid-cols-2'} gap-3 sm:gap-4 md:gap-5 pt-2`}>
+                  {/* Fill/Edit Button - Completely hidden when Step 4 is completed */}
+                  {!isStep4Completed && (
+                    !isFeeClosed ? (
+                      <button
+                        onClick={() => navigate("/registration-form")}
+                        className="flex items-center justify-center gap-2 p-3 sm:p-4 md:p-5 bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm md:text-base rounded-lg transition duration-200 shadow-md hover:scale-[1.01] cursor-pointer"
+                      >
+                        <span>✍️</span>{" "}
+                        {hasApplied
+                          ? "Edit / Complete Application"
+                          : "Apply for DELED 2026"}
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="flex items-center justify-center gap-2 p-3 sm:p-4 md:p-5 bg-gray-100 text-gray-400 font-extrabold text-xs sm:text-sm md:text-base rounded-lg border border-gray-200 cursor-not-allowed"
+                      >
+                        <span>🔒</span> Deadline Passed
+                      </button>
+                    )
                   )}
 
                   {/* Make Corrections Button */}

@@ -302,25 +302,34 @@ namespace DELED.Controllers
                 var existingEmailUser = await _context.Users
                     .FirstOrDefaultAsync(u => u.IsOTPVerified && u.Email.ToLower() == normalizedEmail);
 
+                // Check if verified phone number already exists
+                var existingPhoneUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.IsOTPVerified && u.PhoneNumber == cleanedPhone);
+
+                if (existingEmailUser != null && existingPhoneUser != null)
+                {
+                    return BadRequest(new 
+                    { 
+                        success = false, 
+                        message = "Mobile number and Email ID combination already exists." 
+                    });
+                }
+
                 if (existingEmailUser != null)
                 {
                     return BadRequest(new 
                     { 
                         success = false, 
-                        message = "Registration failed. Please verify your details and try again." 
+                        message = "Email ID already exists." 
                     });
                 }
-
-                // Check if verified phone number already exists
-                var existingPhoneUser = await _context.Users
-                    .FirstOrDefaultAsync(u => u.IsOTPVerified && u.PhoneNumber == cleanedPhone);
 
                 if (existingPhoneUser != null)
                 {
                     return BadRequest(new 
                     { 
                         success = false, 
-                        message = "Registration failed. Please verify your details and try again." 
+                        message = "Mobile number already exists." 
                     });
                 }
 

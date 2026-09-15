@@ -246,26 +246,6 @@ namespace DELED.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Payments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TransactionId = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payments", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "PaymentTransactions",
                 columns: table => new
                 {
@@ -416,6 +396,8 @@ namespace DELED.Migrations
                     IsPhysicallyHandicapped = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisabilityType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    MultiDisabilityType = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ScribeRequired = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ExamCity1 = table.Column<int>(type: "int", nullable: false),
                     ExamCity2 = table.Column<int>(type: "int", nullable: false),
@@ -511,6 +493,24 @@ namespace DELED.Migrations
                 values: new object[] { 1, new DateTime(2026, 6, 25, 0, 0, 0, 0, DateTimeKind.Local), true, "यू० टी० ई० टी० (DELED) 2026 के लिए ऑनलाइन पंजीकरण की अंतिम तिथि 30 मई 2026 है। अंतिम समय की भीड़ से बचने के लिए जल्द आवेदन करें।" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Uploads_UserId",
+                table: "Uploads",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAuths_UserId",
+                table: "UserAuths",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPersonalDetails_UserId",
+                table: "UserPersonalDetails",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRegistration_Email_Unique",
                 table: "Users",
                 column: "Email",
@@ -520,6 +520,12 @@ namespace DELED.Migrations
                 name: "IX_UserRegistration_PhoneNumber_Unique",
                 table: "Users",
                 column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStepProgresses_UserId_StepNumber",
+                table: "UserStepProgresses",
+                columns: new[] { "UserId", "StepNumber" },
                 unique: true);
         }
 
@@ -558,9 +564,6 @@ namespace DELED.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notices");
-
-            migrationBuilder.DropTable(
-                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "PaymentTransactions");

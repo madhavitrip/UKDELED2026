@@ -38,14 +38,19 @@ export default function ForgotPassword() {
     setError("");
     setSuccess("");
 
-    if (!formData.email.trim()) return setError("Email ID is required");
-    if (!formData.phoneNumber.trim()) return setError("Registered Mobile No. is required");
+    const showForgotError = (msg) => {
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    if (!formData.email.trim()) return showForgotError("Email ID is required");
+    if (!formData.phoneNumber.trim()) return showForgotError("Registered Mobile No. is required");
 
     setLoading(true);
 
     if (captchaInput !== captchaVal) {
       setLoading(false);
-      setError("Invalid Captcha Code. Please try again.");
+      showForgotError("Invalid Captcha Code. Please try again.");
       setCaptchaInput("");
       generateCaptcha();
       return;
@@ -65,9 +70,9 @@ export default function ForgotPassword() {
     } catch (err) {
       const errorMsg = err.response?.data || "Failed to retrieve password. Ensure the email and phone number are registered.";
       if (typeof errorMsg === 'object') {
-        setError(errorMsg.message || "An error occurred. Please try again.");
+        showForgotError(errorMsg.message || "An error occurred. Please try again.");
       } else {
-        setError(errorMsg);
+        showForgotError(errorMsg);
       }
       setCaptchaInput("");
       generateCaptcha();

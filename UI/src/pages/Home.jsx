@@ -25,6 +25,11 @@ export default function Home() {
 
   useEffect(() => {
     generateCaptcha();
+    const expiredMsg = sessionStorage.getItem("session_expired_message");
+    if (expiredMsg) {
+      setError(expiredMsg);
+      sessionStorage.removeItem("session_expired_message");
+    }
   }, []);
   const [activeTab, setActiveTab] = useState("circulars");
   const [circulars, setCirculars] = useState([]);
@@ -273,17 +278,22 @@ export default function Home() {
     setError("");
     setSuccess("");
 
+    const showLoginError = (msg) => {
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     const isRegEmpty = !loginData.registrationNo.trim();
     const isPassEmpty = !loginData.password.trim();
 
     // Validate basic fields
     if (isRegEmpty || isPassEmpty) {
-      if (isRegEmpty) return setError("Registration No. is required.");
-      if (isPassEmpty) return setError("Password is required.");
+      if (isRegEmpty) return showLoginError("Registration No. is required.");
+      if (isPassEmpty) return showLoginError("Password is required.");
     }
 
     if (captchaInput !== captchaVal) {
-      setError("Invalid Captcha Code. Please try again.");
+      showLoginError("Invalid Captcha Code. Please try again.");
       setCaptchaInput("");
       generateCaptcha();
       return;
@@ -297,13 +307,13 @@ export default function Home() {
           navigate("/application");
         }, 1200);
       } else {
-        setError(result.error || "Invalid Email ID or Password");
+        showLoginError(result.error || "Invalid Email ID or Password");
         setCaptchaInput("");
         generateCaptcha();
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError("Login failed. Please try again.");
+      showLoginError("Login failed. Please try again.");
       setCaptchaInput("");
       generateCaptcha();
     }

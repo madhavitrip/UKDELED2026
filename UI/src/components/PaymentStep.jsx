@@ -97,6 +97,11 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
   const applicationFee = feeData?.applicationFee ?? getFallbackApplicationFee();
   const processingFee = feeData?.processingFee ?? 0;
   const totalAmount = feeData?.totalAmount ?? (applicationFee + processingFee);
+  const triggerPaymentError = (msg) => {
+    setError(msg);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const applicantId = feeData?.applicantId || formData.applicantId || formData.registrationNo || 'N/A';
   const applicantName = feeData?.applicantName || formData.applicantName || 'N/A';
 
@@ -106,18 +111,12 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
     console.log('[Payment] isLoading:', isLoading);
     
     if (!agreeTerms) {
-      notification.warning({
-        message: "Agreement Required",
-        description: "Please agree to the terms and conditions before proceeding."
-      });
-      return
+      triggerPaymentError("Please agree to the terms and conditions before proceeding.");
+      return;
     }
 
     if (isAlreadyPaid) {
-      notification.warning({
-        message: "Payment Already Completed",
-        description: "Your payment has already been completed. Multiple payments are not allowed."
-      });
+      triggerPaymentError("Your payment has already been completed. Multiple payments are not allowed.");
       return;
     }
 
@@ -125,7 +124,7 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
     if (!window.AtomPaynetz) {
       const errorMsg = 'Payment gateway script not loaded. The external payment service may be temporarily unavailable. Please try again in a moment or check your internet connection.';
       console.error('[Payment]', errorMsg);
-      setError(errorMsg);
+      triggerPaymentError(errorMsg);
       setIsLoading(false);
       return;
     }
@@ -197,11 +196,7 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
         setIsAlreadyPaid(true);
         setIsLoading(false);
         setIsPaymentInProgress(false);
-        notification.warning({
-          message: "Payment Already Completed",
-          description: response.data.message || "Your payment transaction is successful. Multiple payments are not allowed.",
-          duration: 5
-        });
+        triggerPaymentError(response.data.message || "Your payment transaction is successful. Multiple payments are not allowed.");
         if (onProceedPayment) {
           onProceedPayment();
         }
@@ -257,14 +252,9 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
 
       if (isDuplicateOrSuccess) {
         setIsAlreadyPaid(true);
-        notification.warning({
-          message: "Payment Already Completed",
-          description: errorMsg || "Your payment has already been processed. You cannot make another payment.",
-          duration: 5
-        });
-        setError(null);
+        triggerPaymentError(errorMsg || "Your payment has already been processed. You cannot make another payment.");
       } else {
-        setError(
+        triggerPaymentError(
           errorMsg ||
           'Failed to initiate payment. Please try again.'
         );
@@ -356,6 +346,19 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
   return (
     <div className="bg-gray-50 py-2 sm:py-3 md:py-4">
       <div className="max-w-2xl mx-auto px-2 sm:px-3 md:px-4">
+        {/* Top Error Banner */}
+        {error && (
+          <div className="mb-3 sm:mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-xs flex items-center justify-between">
+            <p className="text-red-700 font-bold text-sm sm:text-base">❌ {error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="text-gray-400 hover:text-gray-600 font-bold ml-2 text-sm"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {/* Disclaimer */}
         <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
           <p className="text-blue-800 font-bold text-sm sm:text-base flex items-start gap-2">
@@ -406,13 +409,6 @@ export default function PaymentStep({ formData = {}, onProceedPayment, onBackToP
             <span className="text-2xl sm:text-3xl md:text-4xl font-black text-blue-700">₹{totalAmount}</span>
           </div>
         </div>
-
-        {/* Error */}
-        {error && (
-          <div className="mb-3 sm:mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-lg">
-            <p className="text-red-700 font-bold text-sm sm:text-base">❌ {error}</p>
-          </div>
-        )}
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

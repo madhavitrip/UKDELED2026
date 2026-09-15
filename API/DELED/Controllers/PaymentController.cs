@@ -263,19 +263,31 @@ namespace DELED.Controllers
                         transaction.Amount = amount;
 
                         // Check if payment was successful from NTT response
-                        bool paymentSuccessful = statusCode == "OTS0000";
+                        bool paymentSuccessful = statusCode == "OTS0000" || statusCode == "OTS0002";
 
-                        // If payment successful from callback, verify with requery
                         if (paymentSuccessful)
                         {
-                            var reqResult1 = await _paymentService.RequeryPayment(merchantTxnId, merchTxnDate, amount);
-                            isPaymentValid = reqResult1.isPaid;
-                            // NOTE: If requery fails/pending, keep isPaymentValid = false.
-                            // The background PaymentRequerySchedulerService will retry this automatically.
+                            isPaymentValid = true;
+                            transaction.Status = "SUCCESS";
+
+                            try
+                            {
+                                string requeryDate = !string.IsNullOrEmpty(merchTxnDate)
+                                    ? merchTxnDate
+                                    : transaction.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss");
+                                var reqResult1 = await _paymentService.RequeryPayment(merchantTxnId, requeryDate, amount);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Callback Requery warning: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            transaction.Status = "FAILED";
                         }
 
                         // Update transaction status based on validation result
-                        transaction.Status = isPaymentValid ? "SUCCESS" : "FAILED";
                         _context.PaymentTransactions.Update(transaction);
                         await _context.SaveChangesAsync();
 
@@ -312,7 +324,7 @@ namespace DELED.Controllers
                 }
 
                 // Redirect to UI page with payment outcome
-                string redirectBase = _configuration["NTTData:FrontendReturnUrl"] ?? "http://localhost:3000";
+                string redirectBase = (_configuration["NTTData:FrontendReturnUrl"] ?? "http://localhost:3000").TrimEnd('/');
                 string redirectUrl = $"{redirectBase}/registration-form?step=4&status={(isPaymentValid ? "SUCCESS" : "FAILED")}&txnId={merchantTxnId}";
 
                 return Redirect(redirectUrl);
@@ -386,19 +398,27 @@ namespace DELED.Controllers
                     // Check if payment was successful from NTT response (OTS0000 = success, OTS0002 = force success)
                     if (statusCode == "OTS0000" || statusCode == "OTS0002")
                     {
-                        Console.WriteLine("Calling RequeryPayment...");
+                        Console.WriteLine("NTT response received success statusCode: " + statusCode);
+                        isPaymentValid = true;
+                        transaction.Status = "SUCCESS";
 
-                        var reqResult2 = await _paymentService.RequeryPayment(
-                            merchantTxnId,
-                            merchTxnDate,
-                            amount);
-                        isPaymentValid = reqResult2.isPaid;
+                        try
+                        {
+                            string requeryDate = !string.IsNullOrEmpty(merchTxnDate)
+                                ? merchTxnDate
+                                : transaction.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss");
 
-                        Console.WriteLine($"Requery Result = {isPaymentValid}");
-                        // NOTE: If requery fails/pending, keep isPaymentValid = false.
-                        // Transaction stays PENDING and background scheduler will retry.
+                            var reqResult2 = await _paymentService.RequeryPayment(
+                                merchantTxnId,
+                                requeryDate,
+                                amount);
 
-                        transaction.Status = isPaymentValid ? "SUCCESS" : "PENDING";
+                            Console.WriteLine($"Requery Result = {reqResult2.isPaid}");
+                        }
+                        catch (Exception reqEx)
+                        {
+                            Console.WriteLine($"PaymentResponse Requery warning: {reqEx.Message}");
+                        }
                     }
                     else
                     {
@@ -440,7 +460,7 @@ namespace DELED.Controllers
                 }
 
                 // Redirect to UI page with payment outcome
-                string redirectBase = _configuration["NTTData:FrontendReturnUrl"] ?? "http://localhost:3000";
+                string redirectBase = (_configuration["NTTData:FrontendReturnUrl"] ?? "http://localhost:3000").TrimEnd('/');
                 string redirectUrl = $"{redirectBase}/registration-form?step=4&status={(isPaymentValid ? "SUCCESS" : "FAILED")}&txnId={merchantTxnId}";
 
                 return Redirect(redirectUrl);
@@ -1002,7 +1022,7 @@ namespace DELED.Controllers
                 string registrationNo = user.RegistrationNo ?? userId.ToString();
                 var applicationUrl = _configuration["AppSettings:FrontendUrl"];
                 // Build email subject
-                string subject = "🎉 Payment Successful - UTET 2026 Application";
+                string subject = "🎉 Payment Successful - UKDELED 2026 Application";
 
                 // Build email body with professional HTML template
                 string body = $@"
@@ -1033,11 +1053,11 @@ namespace DELED.Controllers
             <table style='width: 100%; border-collapse: collapse;'>
                 <tr>
                     <td style='width: 70px; vertical-align: middle; text-align: left;'>
-                        <img src='https://ukutet.com/API/Logo/ubse_white.jpg' alt='Logo' style='width: 60px; height: 60px; border-radius: 50%; display: block;'>
+                        <img src='https://ukdeled.com/API/Logo/ubse_white.jpg' alt='Logo' style='width: 60px; height: 60px; border-radius: 50%; display: block;'>
                     </td>
                     <td style='vertical-align: middle; text-align: left; padding-left: 15px;'>
                         <h1 style='margin: 0; font-size: 24px; font-weight: bold;'>Payment Successful!</h1>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;'>UTET 2026 Application</p>
+                        <p style='margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;'>UKDELED 2026 Application</p>
                     </td>
                 </tr>
             </table>
@@ -1047,7 +1067,7 @@ namespace DELED.Controllers
             
             <div class='success-badge'>✓ Payment Confirmed</div>
             
-            <p>We are pleased to confirm that your payment for UTET 2026 application has been successfully processed. Your application is now complete and locked for submission.</p>
+            <p>We are pleased to confirm that your payment for UKDELED 2026 application has been successfully processed. Your application is now complete and locked for submission.</p>
             
             <div class='details'>
                 <div class='detail-row'>
@@ -1077,12 +1097,12 @@ namespace DELED.Controllers
                 • Your application has been successfully submitted.<br/>
                 • Keep this email for your records as proof of payment.<br/>
                 • You will receive further updates regarding exam dates and admit card via email.<br/>
-                • For any queries, contact: <a href='mailto:helpdesk@ukutet.com' style='color: #1565c0;'>helpdesk@ukutet.com</a>
+                • For any queries, contact: <a href='mailto:info@ukdeled.com' style='color: #1565c0;'>info@ukdeled.com</a>
             </div>
             
             <a href='{applicationUrl}' class='button'>View Your Application</a>
             
-            <p>Thank you for registering with Uttarakhand Teacher Eligibility Test (UTET) 2026.<br/>
+            <p>Thank you for registering with Uttarakhand Teacher Eligibility Test (UKDELED) 2026.<br/>
             We wish you all the best for the examination!</p>
             
             <p style='color: #999; font-size: 12px; margin-top: 20px;'>
@@ -1092,8 +1112,8 @@ namespace DELED.Controllers
             </p>
         </div>
         <div class='footer'>
-            <p>This is an automated email. Please do not reply to this email. For support, visit helpdesk@ukutet.com</p>
-            <p>&copy; 2026 UTET. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply to this email. For support, visit info@ukdeled.com</p>
+            <p>&copy; 2026 UKDELED. All rights reserved.</p>
         </div>
     </div>
 </body>

@@ -14,6 +14,12 @@ const AdminLogin = () => {
 
   // Redirect if already logged in as admin
   useEffect(() => {
+    const expiredMsg = sessionStorage.getItem("session_expired_message");
+    if (expiredMsg) {
+      setLocalError(expiredMsg);
+      sessionStorage.removeItem("session_expired_message");
+    }
+
     const token = sessionStorage.getItem("token");
     const isAdmin = sessionStorage.getItem("isAdmin");
     if (token && isAdmin === "true") {

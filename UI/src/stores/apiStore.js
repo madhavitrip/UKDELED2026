@@ -25,7 +25,10 @@ const handleAuthFailure = (message) => {
   
   if (hadToken && !isAlertingSessionExpired) {
     isAlertingSessionExpired = true;
-    alert(message || "Your session has expired or you have logged in from another device. Please log in again.");
+    sessionStorage.setItem(
+      "session_expired_message",
+      message || "Your session has expired or you have logged in from another device. Please log in again."
+    );
   }
   // Force redirect to reset the application state
   window.location.href = isAdmin ? "/admin/login" : "/";

@@ -34,7 +34,10 @@ const handleAuthFailure = (message) => {
   
   if (hadToken && !isAlertingAdminSessionExpired) {
     isAlertingAdminSessionExpired = true;
-    alert(message || "Your admin session has expired or you have logged in from another device. Please log in again.");
+    sessionStorage.setItem(
+      "session_expired_message",
+      message || "Your admin session has expired or you have logged in from another device. Please log in again."
+    );
   }
   window.location.href = "/admin/login";
 };

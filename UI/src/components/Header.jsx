@@ -43,7 +43,13 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <FaPhoneAlt className="w-5 h-5 text-[#047857] shrink-0" />
           <span className="text-[#0369a1] font-bold text-base sm:text-lg md:text-[18px] tracking-tight">
-            Ph: 08062987406 (4 lines)
+            Ph1: 9125877583
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <FaPhoneAlt className="w-5 h-5 text-[#047857] shrink-0" />
+          <span className="text-[#0369a1] font-bold text-base sm:text-lg md:text-[18px] tracking-tight">
+            Ph2: 8853817583
           </span>
         </div>
         <div className="flex items-center gap-3">

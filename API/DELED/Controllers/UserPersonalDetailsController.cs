@@ -318,6 +318,8 @@ namespace DELED.Controllers
                     .Select(s => s.StepNumber)
                     .FirstOrDefaultAsync();
 
+                completeDetails.CompletedStep = maxStep;
+
                 var uploads = await _context.Uploads.FirstOrDefaultAsync(u => u.UserId == userId);
                 var userObj = await _context.Users.FindAsync(userId);
                 string encryptedToken = userObj != null ? _securityService.EncryptUrlSafe(userObj.RegistrationNo) : "";
@@ -522,6 +524,15 @@ namespace DELED.Controllers
                             return BadRequest(new { success = false, message = "Last date for amendments has passed. No further changes can be made." });
                         }
                     }
+                }
+
+                // Check if Step 4 is completed or payment is completed
+                bool isStep4Completed = await _context.UserStepProgresses
+                    .AnyAsync(s => s.UserId == userId && s.StepNumber >= 4);
+
+                if ((isStep4Completed || isPaymentCompleted) && !(isCorrectionWindowOpen && isPaymentCompleted))
+                {
+                    return BadRequest(new { success = false, message = "Application is confirmed and locked. Personal details cannot be updated." });
                 }
 
 

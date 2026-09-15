@@ -124,104 +124,81 @@ export default function PersonalDetailsStep({
     e.preventDefault();
     setErrorMsg("");
 
+    const triggerError = (msg) => {
+      setErrorMsg(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     // Validation checks
     if (!formData.appliedCategory || formData.appliedCategory === "Select") {
-      setErrorMsg("Please select Applied Training Category (प्रशिक्षण हेतु आवेदित वर्ग).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Please select Applied Training Category (प्रशिक्षण हेतु आवेदित वर्ग).");
     }
 
     if (!formData.graduationCourse || formData.graduationCourse === "Select") {
-      setErrorMsg("Please select Graduation Course (स्नातक परीक्षा का नाम).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Please select Graduation Course (स्नातक परीक्षा का नाम).");
     }
 
     if (!formData.graduationUniversity || formData.graduationUniversity === "Select") {
-      setErrorMsg("Please select Name of University (विश्वविद्यालय का नाम).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Please select Name of University (विश्वविद्यालय का नाम).");
     }
 
     if (!formData.graduationDate) {
-      setErrorMsg("Please enter Graduation Completion Date (स्नातक योग्यता प्राप्त करने की तिथि).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Please enter Graduation Completion Date (स्नातक योग्यता प्राप्त करने की तिथि).");
     }
 
     if (formData.graduationDate > "2026-10-06") {
-      setErrorMsg("Graduation completion date cannot be later than 06/10/2026 (स्नातक योग्यता प्राप्त करने की तिथि 06/10/2026 से अधिक नहीं हो सकती).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Graduation completion date cannot be later than 06/10/2026 (स्नातक योग्यता प्राप्त करने की तिथि 06/10/2026 से अधिक नहीं हो सकती).");
     }
 
     if (!formData.gender || formData.gender === "Select") {
-      setErrorMsg("Please select Gender (लिंग).");
-      return;
+      return triggerError("Please select Gender (लिंग).");
     }
 
     if (!formData.category || formData.category === "Select") {
-      setErrorMsg("Please select Category (वर्ग).");
-      return;
+      return triggerError("Please select Category (वर्ग).");
     }
 
     if (!formData.dateOfBirth) {
-      setErrorMsg("Please enter Date of Birth (जन्म तिथि).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Please enter Date of Birth (जन्म तिथि).");
     }
 
     if (formData.dateOfBirth > "2008-07-01") {
-      setErrorMsg("Minimum age must be 19 years as of 01/07/2027 (01/07/2027 को न्यूनतम आयु 19 वर्ष होनी चाहिए। जन्म तिथि 01/07/2008 के बाद की नहीं हो सकती).");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError("Minimum age must be 19 years as of 01/07/2027 (01/07/2027 को न्यूनतम आयु 19 वर्ष होनी चाहिए। जन्म तिथि 01/07/2008 के बाद की नहीं हो सकती).");
     }
 
     if (!isExServiceman && formData.dateOfBirth < minAllowedDob) {
       const msg = `Age must not be more than ${maxAllowedAge} years${relaxationText} as of 01/07/2027 (01/07/2027 को आयु ${maxAllowedAge} वर्ष से अधिक नहीं होनी चाहिए। जन्म तिथि 01/07/${minAllowedDobYear} से पूर्व की नहीं हो सकती).`;
-      setErrorMsg(msg);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return triggerError(msg);
     }
 
     if (!formData.motherName || !formData.motherName.trim()) {
-      setErrorMsg("Please enter Mother's Name (माता का नाम).");
-      return;
+      return triggerError("Please enter Mother's Name (माता का नाम).");
     }
 
     const subCat = formData.subCategory && formData.subCategory !== "Select" ? formData.subCategory : "लागू/कोई नहीं";
     if (!subCat) {
-      setErrorMsg("Please select Sub Category (उपवर्ग).");
-      return;
+      return triggerError("Please select Sub Category (उपवर्ग).");
     }
 
     if (isExServiceman) {
       if (!formData.retirementDate) {
-        setErrorMsg("Please enter Retirement Date from Armed Forces (सेना से सेवा-निवृत्ति की तिथि).");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
+        return triggerError("Please enter Retirement Date from Armed Forces (सेना से सेवा-निवृत्ति की तिथि).");
       }
       const todayStr = getTodayStr();
       if (formData.retirementDate >= todayStr) {
-        setErrorMsg("Date of retirement cannot be today's date or a future date. It must be less than today's date (सेना से सेवा-निवृत्ति की तिथि आज की तिथि से पूर्व की होनी चाहिए).");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
+        return triggerError("Date of retirement cannot be today's date or a future date. It must be less than today's date (सेना से सेवा-निवृत्ति की तिथि आज की तिथि से पूर्व की होनी चाहिए).");
       }
       if (formData.dateOfBirth && formData.retirementDate <= formData.dateOfBirth) {
-        setErrorMsg("Date of retirement must be after Date of Birth (सेना से सेवा-निवृत्ति की तिथि जन्म तिथि के बाद की होनी चाहिए).");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
+        return triggerError("Date of retirement must be after Date of Birth (सेना से सेवा-निवृत्ति की तिथि जन्म तिथि के बाद की होनी चाहिए).");
       }
     }
 
     if (!formData.phyHandicapped || formData.phyHandicapped === "Select") {
-      setErrorMsg("Please select PH status (दिव्यांग हैं/नहीं हैं).");
-      return;
+      return triggerError("Please select PH status (दिव्यांग हैं/नहीं हैं).");
     }
 
     if (formData.phyHandicapped === "YES" && (!formData.phyType || formData.phyType === "Select" || formData.phyType === "--Not Applicable--")) {
-      setErrorMsg("Please select PH Type (नि:शक्तता का प्रकार).");
-      return;
+      return triggerError("Please select PH Type (नि:शक्तता का प्रकार).");
     }
 
     if (formData.phyHandicapped === "YES" && formData.phyType === "Multi") {
@@ -229,73 +206,58 @@ export default function PersonalDetailsStep({
         ? formData.multiPhType
         : (formData.multiPhType ? String(formData.multiPhType).split(",").map((s) => s.trim()).filter(Boolean) : []);
       if (multiList.length < 2) {
-        setErrorMsg("Please select two or more PH Types for Multi (Add two or more mentioned above).");
-        return;
+        return triggerError("Please select two or more PH Types for Multi (Add two or more mentioned above).");
       }
     }
 
     if (!formData.examCity1 || formData.examCity1 === "Select") {
-      setErrorMsg("Please select 1st Exam City preference (प्रथम परीक्षा शहर).");
-      return;
+      return triggerError("Please select 1st Exam City preference (प्रथम परीक्षा शहर).");
     }
 
     if (!formData.examCity2 || formData.examCity2 === "Select") {
-      setErrorMsg("Please select 2nd Exam City preference (द्वितीय परीक्षा शहर).");
-      return;
+      return triggerError("Please select 2nd Exam City preference (द्वितीय परीक्षा शहर).");
     }
 
     if (formData.examCity1 === formData.examCity2) {
-      setErrorMsg("1st and 2nd Exam City preferences cannot be the same.");
-      return;
+      return triggerError("1st and 2nd Exam City preferences cannot be the same.");
     }
 
     if (!formData.address || !formData.address.trim()) {
-      setErrorMsg("Please enter Complete Mailing Address (पत्र व्यवहार का पूर्ण पता).");
-      return;
+      return triggerError("Please enter Complete Mailing Address (पत्र व्यवहार का पूर्ण पता).");
     }
 
     if (!formData.state || formData.state === "Select") {
-      setErrorMsg("Please select State (प्रदेश).");
-      return;
+      return triggerError("Please select State (प्रदेश).");
     }
 
     if (!formData.district || formData.district === "Select") {
-      setErrorMsg("Please select District (जनपद).");
-      return;
+      return triggerError("Please select District (जनपद).");
     }
 
     if (!formData.pincode || formData.pincode.trim().length !== 6) {
-      setErrorMsg("Please enter a valid 6-digit PIN Code (पिन कोड).");
-      return;
+      return triggerError("Please enter a valid 6-digit PIN Code (पिन कोड).");
     }
 
     if (!formData.idProofType || formData.idProofType === "Select") {
-      setErrorMsg("Please select Identity Proof (पहचान पत्र).");
-      return;
+      return triggerError("Please select Identity Proof (पहचान पत्र).");
     }
 
     if (!formData.idProofNo || !formData.idProofNo.trim()) {
-      setErrorMsg("Please enter Identity Proof Number (पहचान पत्र संख्या).");
-      return;
+      return triggerError("Please enter Identity Proof Number (पहचान पत्र संख्या).");
     }
 
     const idType = formData.idProofType;
     const idNo = formData.idProofNo.trim();
     if (idType === "Aadhar Card" && !/^\d{12}$/.test(idNo)) {
-      setErrorMsg("Aadhar Card Number must be exactly 12 digits.");
-      return;
+      return triggerError("Aadhar Card Number must be exactly 12 digits.");
     } else if (idType === "PAN Card" && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(idNo)) {
-      setErrorMsg("Invalid PAN Card Number format (e.g. ABCDE1234F).");
-      return;
+      return triggerError("Invalid PAN Card Number format (e.g. ABCDE1234F).");
     } else if (idType === "Voter ID Card" && !/^[A-Za-z0-9]+$/.test(idNo)) {
-      setErrorMsg("Voter ID must contain only alphanumeric characters.");
-      return;
+      return triggerError("Voter ID must contain only alphanumeric characters.");
     } else if (idType === "Passport" && !/^[A-Z][0-9]{7}$/.test(idNo)) {
-      setErrorMsg("Invalid Passport Number format (e.g. A1234567).");
-      return;
+      return triggerError("Invalid Passport Number format (e.g. A1234567).");
     } else if (idType === "Driving License" && !/^[A-Za-z0-9]+$/.test(idNo)) {
-      setErrorMsg("Driving License must contain only alphanumeric characters.");
-      return;
+      return triggerError("Driving License must contain only alphanumeric characters.");
     }
 
     handleNext();

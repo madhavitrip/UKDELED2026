@@ -96,6 +96,16 @@ namespace DELED.Controllers
                 return BadRequest();
             }
 
+            int tokenUserId = GetUserIdFromToken();
+            bool isLocked = await _context.UserStepProgresses
+                .AnyAsync(s => s.UserId == tokenUserId && s.StepNumber >= 4);
+            bool isPaymentCompleted = await _context.PaymentTransactions
+                .AnyAsync(p => p.UserId == tokenUserId && p.Status == "SUCCESS");
+            if (isLocked || isPaymentCompleted)
+            {
+                return BadRequest("Application is confirmed and locked. Uploads cannot be modified.");
+            }
+
             _context.Entry(uploads).State = EntityState.Modified;
 
             try

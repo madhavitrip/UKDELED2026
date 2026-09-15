@@ -91,7 +91,8 @@ export default function VerifyApplication() {
   const handleSearch = (e) => {
     if (e) e.preventDefault();
     if (!searchInput.trim()) {
-      message.warning("Please enter a Registration Number or Security Token");
+      setError("Please enter a Registration Number or Security Token");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setCurrentRegNo(searchInput.trim());

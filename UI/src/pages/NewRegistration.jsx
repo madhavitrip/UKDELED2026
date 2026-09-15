@@ -74,30 +74,35 @@ export default function NewRegistration() {
     setError("");
     setSuccess("");
 
-    if (!formData.fullName.trim()) return setError("Name is required");
+    const showRegError = (msg) => {
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    if (!formData.fullName.trim()) return showRegError("Name is required");
     if (formData.fullName.trim().length > 50)
-      return setError("Name cannot exceed 50 characters");
+      return showRegError("Name cannot exceed 50 characters");
     if (!formData.fatherName.trim())
-      return setError("Father's Name is required");
+      return showRegError("Father's Name is required");
     if (formData.fatherName.trim().length > 50)
-      return setError("Father's Name cannot exceed 50 characters");
+      return showRegError("Father's Name cannot exceed 50 characters");
     if (!formData.phoneNumber.trim())
-      return setError("Mobile number is required");
-    if (!formData.email.trim()) return setError("Email ID is required");
+      return showRegError("Mobile number is required");
+    if (!formData.email.trim()) return showRegError("Email ID is required");
     
     if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber.trim())) {
-      return setError("Mobile Number must be exactly 10 digits.");
+      return showRegError("Mobile Number must be exactly 10 digits.");
     }
 
     if (
       formData.email &&
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
     ) {
-      return setError("Please enter a valid Email ID.");
+      return showRegError("Please enter a valid Email ID.");
     }
 
     if (captchaInput !== captchaVal) {
-      setError("Invalid Captcha Code. Please try again.");
+      showRegError("Invalid Captcha Code. Please try again.");
       setCaptchaInput("");
       generateCaptcha();
       return;
@@ -120,13 +125,13 @@ export default function NewRegistration() {
         }, 1000);
       } else {
         const errorMessage = result.error || "Registration failed";
-        setError(errorMessage);
+        showRegError(errorMessage);
         setCaptchaInput("");
         generateCaptcha();
       }
     } catch (err) {
       console.error("Registration error:", err);
-      setError("Registration failed. Please try again.");
+      showRegError("Registration failed. Please try again.");
       setCaptchaInput("");
       generateCaptcha();
     }
@@ -155,7 +160,7 @@ export default function NewRegistration() {
                   <span className="text-base sm:text-lg shrink-0">⚠️</span>
                   <span className="break-words">{error}</span>
                 </p>
-                {error.includes("already exists") && (
+                {error && (error.toLowerCase().includes("already exist") || error.toLowerCase().includes("already registered")) && (
                   <p className="mt-1.5 sm:mt-2 text-xs text-red-600 ml-6 sm:ml-7 break-words">
                     💡 Try registering with different email or phone number, or contact support if this is an error.
                   </p>

@@ -18,9 +18,15 @@ export default function CorrectionPage() {
   const logout = useAuthStore((state) => state.logout);
 
   const [step, setStep] = useState(1);
+  const [pageError, setPageError] = useState("");
   const [isLocked, setIsLocked] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [validatingFile, setValidatingFile] = useState(false);
+
+  const showTopError = (msg) => {
+    setPageError(msg);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const [formData, setFormData] = useState(() => {
     const stateData = location.state || {};
@@ -580,10 +586,12 @@ export default function CorrectionPage() {
         updated.multiPhType = [];
       }
       if (e.target.name === "subCategory") {
-        if (value !== "EX-SERVICEMAN (पूर्व सैनिक)" && value !== "EX-SERVICEMAN (Self)" && value !== "EX-SERVICEMAN (भूतपूर्व सैनिक(स्वयं))") {
+        const valUpper = (value || "").toUpperCase();
+        const isExServ = valUpper.includes("EX-SERVICEMAN") || valUpper.includes("EX SERVICEMAN") || (value || "").includes("पूर्व सैनिक") || (value || "").includes("भूतपूर्व सैनिक");
+        if (!isExServ) {
           updated.retirementDate = "";
         }
-        if (!value.toUpperCase().includes("SPORTS")) {
+        if (!valUpper.includes("SPORTS")) {
           updated.sportsType = "Select";
         }
       }
@@ -659,10 +667,7 @@ export default function CorrectionPage() {
 
     const spec = fileValidationSpecs[fileKey];
     if (!spec) {
-      notification.error({
-        message: "Upload Error",
-        description: `Unknown file type: ${fileKey}`,
-      });
+      showTopError(`Upload Error: Unknown file type: ${fileKey}`);
       setValidatingFile(false);
       return;
     }
@@ -670,10 +675,7 @@ export default function CorrectionPage() {
     // Check file format
     const validFormats = ["image/jpeg", "image/jpg"];
     if (!validFormats.includes(file.type)) {
-      notification.error({
-        message: "Invalid File Format",
-        description: `${spec.name}: Only .jpg / .jpeg files are allowed.`,
-      });
+      showTopError(`${spec.name}: Only .jpg / .jpeg files are allowed.`);
       if (e?.target && "value" in e.target) e.target.value = "";
       setValidatingFile(false);
       return;
@@ -682,10 +684,7 @@ export default function CorrectionPage() {
     // Check file size
     const fileSizeKB = file.size / 1024;
     if (fileSizeKB < spec.minSizeKB || fileSizeKB > spec.maxSizeKB) {
-      notification.error({
-        message: "Invalid File Size",
-        description: `${spec.name}: File size must be between ${spec.minSizeKB} KB and ${spec.maxSizeKB} KB. Current size: ${fileSizeKB.toFixed(2)} KB.`,
-      });
+      showTopError(`${spec.name}: File size must be between ${spec.minSizeKB} KB and ${spec.maxSizeKB} KB. Current size: ${fileSizeKB.toFixed(2)} KB.`);
       if (e?.target && "value" in e.target) e.target.value = "";
       setValidatingFile(false);
       return;
@@ -694,14 +693,14 @@ export default function CorrectionPage() {
     // Check image dimensions
     const dimensionValidation = await validateImageDimensions(file, spec);
     if (!dimensionValidation.valid) {
-      notification.error({
-        message: "Invalid Dimensions",
-        description: `${spec.name}: ${dimensionValidation.message}`,
-      });
+      showTopError(`${spec.name}: ${dimensionValidation.message}`);
       if (e?.target && "value" in e.target) e.target.value = "";
       setValidatingFile(false);
       return;
     }
+
+    // Clear any previous error on valid file selection
+    setPageError("");
 
     // All validations passed, update form data
     setFormData((prev) => ({
@@ -971,7 +970,12 @@ export default function CorrectionPage() {
       husbandName: formData.gender?.toUpperCase() === "FEMALE" ? (formData.husbandName?.trim() || null) : null,
       category: formData.category || "",
       subCategory: formData.subCategory || "लागू/कोई नहीं",
-      retirementDate: (formData.subCategory === "EX-SERVICEMAN (पूर्व सैनिक)" || formData.subCategory === "EX-SERVICEMAN (Self)") && formData.retirementDate ? formData.retirementDate : null,
+      retirementDate: (
+        (formData.subCategory || "").toUpperCase().includes("EX-SERVICEMAN") ||
+        (formData.subCategory || "").toUpperCase().includes("EX SERVICEMAN") ||
+        (formData.subCategory || "").includes("पूर्व सैनिक") ||
+        (formData.subCategory || "").includes("भूतपूर्व सैनिक")
+      ) && formData.retirementDate ? formData.retirementDate : null,
       isPhysicallyHandicapped: formData.phyHandicapped === "YES",
       disabilityType:
         formData.phyHandicapped === "YES" && formData.phyType !== "Select" && formData.phyType !== "--Not Applicable--"
@@ -1001,10 +1005,7 @@ export default function CorrectionPage() {
       }
       const validation = validateStep1();
       if (!validation.isValid) {
-        notification.warning({
-          message: "Validation Error",
-          description: validation.message,
-        });
+        showTopError(validation.message);
         return;
       }
 
@@ -1019,28 +1020,23 @@ export default function CorrectionPage() {
         }
       } catch (err) {
         console.error("Failed to save personal details", err);
-        notification.error({
-          message: "Error Saving Details",
-          description:
-            (typeof err.response?.data === 'string' 
-              ? err.response.data 
-              : err.response?.data?.title || err.response?.data?.message) ||
-            "Could not save personal details. Please try again.",
-        });
+        showTopError(
+          (typeof err.response?.data === 'string' 
+            ? err.response.data 
+            : err.response?.data?.title || err.response?.data?.message) ||
+          "Could not save personal details. Please try again."
+        );
         return;
       }
     }
     if (step === 2) {
       if (isLocked) {
+        setPageError("");
         setStep(3);
         return;
       }
       if (!validateStep2()) {
-        notification.warning({
-          message: "Upload Required",
-          description:
-            "Please upload Photo, Signature, and Left Hand Thumb Impression.",
-        });
+        showTopError("Please upload Photo, Signature, and Left Hand Thumb Impression.");
         return;
       }
       try {
@@ -1086,11 +1082,7 @@ export default function CorrectionPage() {
               !(formData.signatureFile instanceof File) ||
               !(formData.thumbFile instanceof File)
             ) {
-              notification.warning({
-                message: "Upload Required",
-                description:
-                  "All files must be freshly chosen for the first upload.",
-              });
+              showTopError("All files must be freshly chosen for the first upload.");
               return;
             }
             await api.post("/api/Uploads", fData, {
@@ -1100,14 +1092,12 @@ export default function CorrectionPage() {
         }
       } catch (err) {
         console.error("Failed to upload files", err);
-        notification.error({
-          message: "Upload Failed",
-          description:
-            (typeof err.response?.data === 'string' 
-              ? err.response.data 
-              : err.response?.data?.title || err.response?.data?.message) ||
-            "Could not upload files. Please ensure files are within 200KB limit and correct format.",
-        });
+        showTopError(
+          (typeof err.response?.data === 'string' 
+            ? err.response.data 
+            : err.response?.data?.title || err.response?.data?.message) ||
+          "Could not upload files. Please ensure files are within 200KB limit and correct format."
+        );
         return;
       }
       // If we made it here without returning (either skipped uploads because no changes, or successfully uploaded)
@@ -1115,10 +1105,7 @@ export default function CorrectionPage() {
     }
     if (step === 3) {
       if (!formData.agreedTerms) {
-        notification.warning({
-          message: "Agreement Required",
-          description: "Please agree to the Terms & Conditions (घोषणा) to proceed.",
-        });
+        showTopError("Please agree to the Terms & Conditions (घोषणा) to proceed.");
         return;
       }
       
@@ -1135,6 +1122,7 @@ export default function CorrectionPage() {
       navigate("/application");
       return;
     }
+    setPageError("");
     setCompletedSteps((prev) => ({ ...prev, [step]: true }));
     setStep(step + 1);
   };
@@ -1244,7 +1232,10 @@ export default function CorrectionPage() {
                       !(item.id === 1 || completedSteps[item.id - 1]) ||
                       (isLocked && item.id < 3)
                     }
-                    onClick={() => setStep(item.id)}
+                    onClick={() => {
+                      setPageError("");
+                      setStep(item.id);
+                    }}
                     className={`flex-1 text-center py-2 px-3 text-sm md:text-[15px] transition duration-150 rounded-xs ${bgClass} cursor-pointer disabled:cursor-not-allowed border border-black/10`}
                   >
                     <span>{item.label}</span>
@@ -1255,6 +1246,20 @@ export default function CorrectionPage() {
             </div>
 
             <div className="bg-white p-4 sm:p-6 md:p-8 overflow-x-hidden">
+              {pageError && (
+                <div className="bg-red-50 text-red-700 p-3 sm:p-4 rounded-md text-xs sm:text-sm font-semibold border-l-4 border-red-500 shadow-sm flex items-start justify-between gap-2 mb-4">
+                  <div className="flex items-start gap-2">
+                    <span className="text-base sm:text-lg shrink-0">⚠️</span>
+                    <span className="break-words">{pageError}</span>
+                  </div>
+                  <button
+                    onClick={() => setPageError("")}
+                    className="text-gray-400 hover:text-gray-600 font-bold ml-2 text-sm"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
               {step === 1 && (
                 <PersonalDetailsStep
                   formData={formData}
