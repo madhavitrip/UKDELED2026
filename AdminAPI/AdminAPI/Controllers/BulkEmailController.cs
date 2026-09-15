@@ -163,7 +163,7 @@ namespace DELED.Controllers
                             <td style=""vertical-align: middle; text-align: center; padding-left: 10px;"">
                                 <h1 style=""color: #006400; margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"">UTTARAKHAND BOARD OF SCHOOL EDUCATION</h1>
                                 <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड विद्यालयी शिक्षा परिषद् रामनगर, नैनीताल, उत्तराखंड</h2>
-                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026</h2>
+                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड  (DELED) 2026</h2>
                             </td>
                         </tr>
                     </table>
@@ -211,7 +211,7 @@ Last date for fee payment/ शुल्क भुगतान की अंक�
                             <td style=""vertical-align: middle; text-align: center; padding-left: 10px;"">
                                 <h1 style=""color: #006400; margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"">UTTARAKHAND BOARD OF SCHOOL EDUCATION</h1>
                                 <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड विद्यालयी शिक्षा परिषद् रामनगर, नैनीताल, उत्तराखंड</h2>
-                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026</h2>
+                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड  (DELED) 2026</h2>
                             </td>
                         </tr>
                     </table>
@@ -261,7 +261,7 @@ Last date for photo correction / फोटो संशोधन की अं�
                             <td style=""vertical-align: middle; text-align: center; padding-left: 10px;"">
                                 <h1 style=""color: #006400; margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"">UTTARAKHAND BOARD OF SCHOOL EDUCATION</h1>
                                 <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड विद्यालयी शिक्षा परिषद् रामनगर, नैनीताल, उत्तराखंड</h2>
-                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026</h2>
+                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड  (DELED) 2026</h2>
                             </td>
                         </tr>
                     </table>
@@ -275,7 +275,7 @@ Last date for photo correction / फोटो संशोधन की अं�
                         <p style=""margin: 0 0 15px 0;"">For the Uttarakhand Teachers Eligibility Test (DELED 2026) scheduled on <strong>29 September 2026</strong>, Physically Handicapped candidates who have claimed for a Scribe must download the Scribe Form, fill it completely, and send the required documents by <strong>14 September 2026</strong> to <a href=""mailto:secydeled@gmail.com"" style=""color: blue; font-weight: bold;"">secydeled@gmail.com</a>. Download Form: <a href=""{scribePdfUrl}"" style=""color: blue; font-weight: bold; text-decoration: underline;"">Download Scribe Form (PDF)</a>.</p>
                         
                         <div style=""color: red; font-size: 13.5px; line-height: 1.6; border-top: 1px solid #f9cbd3; padding-top: 15px; margin-bottom: 20px; font-weight: bold;"">
-                            <p style=""margin: 0 0 10px 0;"">दिनांक 29 सितम्बर 2026 को प्रस्तावित उत्तराखण्ड अध्यापक पात्रता परीक्षा (DELED-I &amp; II) 2026 हेतु जिन दिव्यांगजन अभ्यर्थियों द्वारा ऑनलाइन आवेदन में श्रुतलेखक का दावा किया है, वे परिषद् की वेबसाइट से श्रुतलेखक प्रारूप डाउनलोड कर पूर्ण रूप से भरकर वांछित अभिलेख (परिशिष्ट-5(I), 5(II), परिशिष्ट-छ:, शैक्षिक योग्यता प्रमाण पत्र एवं दो फोटो) दिनांक 14 सितम्बर 2026 तक अपनी पंजीकृत ई-मेल आई डी से परिषद् की ई-मेल secydeled@gmail.com पर अनिवार्यतः प्रेषित करें| प्रारूप डाउनलोड करें: <a href=""{scribePdfUrl}"" style=""color: blue; font-weight: bold; text-decoration: underline;"">Download Scribe Form (श्रुतलेखक प्रारूप)</a></p>
+                            <p style=""margin: 0 0 10px 0;"">दिनांक 29 सितम्बर 2026 को प्रस्तावित उत्तराखण्ड  (DELED-I &amp; II) 2026 हेतु जिन दिव्यांगजन अभ्यर्थियों द्वारा ऑनलाइन आवेदन में श्रुतलेखक का दावा किया है, वे परिषद् की वेबसाइट से श्रुतलेखक प्रारूप डाउनलोड कर पूर्ण रूप से भरकर वांछित अभिलेख (परिशिष्ट-5(I), 5(II), परिशिष्ट-छ:, शैक्षिक योग्यता प्रमाण पत्र एवं दो फोटो) दिनांक 14 सितम्बर 2026 तक अपनी पंजीकृत ई-मेल आई डी से परिषद् की ई-मेल secydeled@gmail.com पर अनिवार्यतः प्रेषित करें| प्रारूप डाउनलोड करें: <a href=""{scribePdfUrl}"" style=""color: blue; font-weight: bold; text-decoration: underline;"">Download Scribe Form (श्रुतलेखक प्रारूप)</a></p>
                             <p style=""margin: 0;"">Last date for submission / अभिलेख उपलब्ध कराने की अंतिम तिथि : 14 September 2026 |</p>
                         </div>
 
@@ -318,7 +318,7 @@ Last date for photo correction / फोटो संशोधन की अं�
                             <td style=""vertical-align: middle; text-align: center; padding-left: 10px;"">
                                 <h1 style=""color: #006400; margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"">UTTARAKHAND BOARD OF SCHOOL EDUCATION</h1>
                                 <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड विद्यालयी शिक्षा परिषद् रामनगर, नैनीताल, उत्तराखंड</h2>
-                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026</h2>
+                                <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड  (DELED) 2026</h2>
                             </td>
                         </tr>
                     </table>
@@ -331,7 +331,7 @@ Last date for photo correction / फोटो संशोधन की अं�
                         <p style=""margin: 0 0 15px 0; font-weight: bold;"">प्रिय <strong>{name}</strong>,</p>
                         
                         <div style=""color: #000; font-size: 14px; line-height: 1.7; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom: 20px; font-weight: bold;"">
-                            <p style=""margin: 0 0 10px 0;"">दिनांक 29 सितम्बर 2026 को प्रस्तावित उत्तराखण्ड अध्यापक पात्रता परीक्षा (DELED-I &amp; II) 2026 हेतु जिन दिव्यांगजन अभ्यर्थियों द्वारा ऑनलाइन आवेदन में श्रुतलेखक का दावा किया है, वे परिषद् की वेबसाइट से श्रुतलेखक प्रारूप डाउनलोड कर पूर्ण रूप से भरकर वांछित अभिलेख (परिशिष्ट-5(I), 5(II), परिशिष्ट-छ:, शैक्षिक योग्यता प्रमाण पत्र एवं दो फोटो) दिनांक 14 सितम्बर 2026 तक अपनी पंजीकृत ई-मेल आई डी से परिषद् की ई-मेल secydeled@gmail.com पर अनिवार्यतः प्रेषित करें| प्रारूप डाउनलोड करें: <a href=""{scribePdfUrl}"" style=""color: blue; font-weight: bold; text-decoration: underline;"">Download Scribe Form (श्रुतलेखक प्रारूप)</a></p>
+                            <p style=""margin: 0 0 10px 0;"">दिनांक 29 सितम्बर 2026 को प्रस्तावित उत्तराखण्ड  (DELED-I &amp; II) 2026 हेतु जिन दिव्यांगजन अभ्यर्थियों द्वारा ऑनलाइन आवेदन में श्रुतलेखक का दावा किया है, वे परिषद् की वेबसाइट से श्रुतलेखक प्रारूप डाउनलोड कर पूर्ण रूप से भरकर वांछित अभिलेख (परिशिष्ट-5(I), 5(II), परिशिष्ट-छ:, शैक्षिक योग्यता प्रमाण पत्र एवं दो फोटो) दिनांक 14 सितम्बर 2026 तक अपनी पंजीकृत ई-मेल आई डी से परिषद् की ई-मेल secydeled@gmail.com पर अनिवार्यतः प्रेषित करें| प्रारूप डाउनलोड करें: <a href=""{scribePdfUrl}"" style=""color: blue; font-weight: bold; text-decoration: underline;"">Download Scribe Form (श्रुतलेखक प्रारूप)</a></p>
                             <p style=""margin: 0;"">अभिलेख उपलब्ध कराने की अंतिम तिथि : <span style=""color: red;"">14 सितम्बर 2026</span> |</p>
                         </div>
 
@@ -643,7 +643,7 @@ Last date for photo correction / फोटो संशोधन की अं�
                             col.Item().AlignCenter().Text("UTTARAKHAND BOARD OF SCHOOL EDUCATION")
                                 .Bold().FontSize(13).FontColor(Colors.Blue.Darken3);
 
-                            col.Item().AlignCenter().Text("Uttarakhand Teachers Eligibility Test (DELED) - 2026")
+                            col.Item().AlignCenter().Text("DELED - 2026")
                                 .Bold().FontSize(10);
 
                             col.Item().AlignCenter().Text("Bulk Email Delivery Status Report")

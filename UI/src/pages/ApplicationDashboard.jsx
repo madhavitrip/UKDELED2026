@@ -324,7 +324,7 @@ export default function ApplicationDashboard() {
         </td>
         <td style="width: 60%; border: 1px solid #ccc; padding: 10px;">
           <h2 style="font-size: 16px; margin: 0 0 5px 0;">उत्तराखण्ड विद्यालयी शिक्षा परिषद् रामनगर (नैनीताल)</h2>
-          <h3 style="font-size: 14px; margin: 0 0 5px 0;">अध्यापक पात्रता परीक्षा (DELED) 2026</h3>
+          <h3 style="font-size: 14px; margin: 0 0 5px 0;">उत्तराखण्ड DELED 2026</h3>
           <h3 style="font-size: 14px; margin: 0;">आवेदन पत्र समीक्षा</h3>
           ${!profile.isPaymentCompleted ? `<div style="font-size: 12px; font-weight: bold; color: #d32f2f; margin-top: 5px;">(UNPAID APPLICATION PREVIEW)</div>` : ''}
         </td>
@@ -918,7 +918,7 @@ export default function ApplicationDashboard() {
                           उत्तराखण्ड विद्यालयी शिक्षा परिषद् रामनगर (नैनीताल)
                         </h2>
                         <h3 className="text-xs sm:text-sm md:text-base font-bold text-gray-800 leading-tight mb-1 sm:mb-2">
-                          अध्यापक पात्रता परीक्षा (DELED) 2026
+                          उत्तराखण्ड DELED 2026
                         </h3>
                         <h3 className="text-xs sm:text-sm md:text-base font-bold text-gray-800 leading-tight">
                           आवेदन पत्र समीक्षा

@@ -11,7 +11,7 @@ export default {
         'success': '#28a745',
       },
       fontFamily: {
-        sans: ['Utsaah', 'Poppins', 'Noto Sans Devanagari', 'sans-serif'],
+        sans: ['Poppins', 'Noto Sans Devanagari', 'sans-serif'],
       },
     },
   },

@@ -965,7 +965,7 @@ namespace DELED.Controllers
                                 <td style=""vertical-align: middle; text-align: center; padding-left: 10px;"">
                                     <h1 style=""color: #006400; margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"">UTTARAKHAND BOARD OF SCHOOL EDUCATION</h1>
                                     <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड विद्यालयी शिक्षा परिषद् रामनगर, नैनीताल, उत्तराखंड</h2>
-                                    <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026</h2>
+                                    <h2 style=""color: #000; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;"">उत्तराखंड DELED 2026</h2>
                                 </td>
                             </tr>
                         </table>
@@ -1441,42 +1441,25 @@ namespace DELED.Controllers
                     });
                 }
 
-                var cityDeled1 = await (
+                var cityData = await (
                     from pd in _context.UserPersonalDetails
                     join u in _context.Users on pd.UserId equals u.UserId
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
                     join ec in _context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
                     from ec in ecJoin.DefaultIfEmpty()
-                    where u.IsPaymentCompleted && 
-                          (et.Name == "DELED I" || et.Name.Contains("Both") || et.Name.Contains("BOTH"))
+                    where u.IsPaymentCompleted
                     group new { ec.CityName, ec.CityCode } by new { ec.CityName, ec.CityCode } into g
                     select new { CityName = g.Key.CityName, CityCode = g.Key.CityCode, Count = g.Count() }
                 ).ToListAsync();
 
-                var cityDeled2 = await (
-                    from pd in _context.UserPersonalDetails
-                    join u in _context.Users on pd.UserId equals u.UserId
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
-                    join ec in _context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
-                    from ec in ecJoin.DefaultIfEmpty()
-                    where u.IsPaymentCompleted && 
-                          (et.Name == "DELED II" || et.Name.Contains("Both") || et.Name.Contains("BOTH"))
-                    group new { ec.CityName, ec.CityCode } by new { ec.CityName, ec.CityCode } into g
-                    select new { CityName = g.Key.CityName, CityCode = g.Key.CityCode, Count = g.Count() }
-                ).ToListAsync();
-
-                var allCityNames = cityDeled1.Select(x => new { x.CityName, x.CityCode })
-                    .Union(cityDeled2.Select(x => new { x.CityName, x.CityCode }))
-                    .Distinct()
-                    .OrderBy(n => n.CityName);
-
-                var cityRows = allCityNames.Select(city =>
-                {
-                    int u1 = cityDeled1.FirstOrDefault(x => x.CityName == city.CityName)?.Count ?? 0;
-                    int u2 = cityDeled2.FirstOrDefault(x => x.CityName == city.CityName)?.Count ?? 0;
-                    string cityNameDisplay = city.CityName != null ? $"{city.CityCode} - {city.CityName}" : "Not Specified";
-                    return (CityName: cityNameDisplay, Deled1: u1, Deled2: u2, Total: u1 + u2);
-                }).ToList();
+                var cityRows = cityData
+                    .OrderBy(n => n.CityCode ?? "999")
+                    .Select(city =>
+                    {
+                        string cityNameDisplay = !string.IsNullOrEmpty(city.CityName)
+                            ? (!string.IsNullOrEmpty(city.CityCode) ? $"{city.CityCode} - {city.CityName}" : city.CityName)
+                            : "Not Specified";
+                        return (CityName: cityNameDisplay, Count: city.Count);
+                    }).ToList();
 
                 var pdfBytes = EmailSchedulerService.GenerateDailyReportPdf(
                     generatedAt: DELED.Helpers.TimeHelper.GetIST(),

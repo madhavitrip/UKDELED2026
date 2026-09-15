@@ -100,7 +100,7 @@ namespace DELED.Services
         public static byte[] GenerateDailyReportPdf(
             DateTime generatedAt,
             List<DateWiseReportDto> dateWiseData,
-            List<(string CityName, int Deled1, int Deled2, int Total)> cityRows)
+            List<(string CityName, int Count)> cityRows)
         {
             // QuestPDF community licence — set once at startup, but safe to call here too.
             QuestPDF.Settings.License = LicenseType.Community;
@@ -127,7 +127,7 @@ namespace DELED.Services
                             col.Item().AlignCenter().Text("UTTARAKHAND BOARD OF SCHOOL EDUCATION")
                                 .Bold().FontSize(13);
 
-                            col.Item().AlignCenter().Text("Uttarakhand Teachers Eligibility Test (DELED) - 2026")
+                            col.Item().AlignCenter().Text("UKDELED - 2026")
                                 .Bold().FontSize(11);
 
                             col.Item().AlignCenter().Text("Registration Report")
@@ -198,11 +198,9 @@ namespace DELED.Services
                         {
                             table.ColumnsDefinition(c =>
                             {
-                                c.ConstantColumn(30);   // Sr.No.
+                                c.ConstantColumn(35);   // Sr.No.
                                 c.RelativeColumn(3);    // Exam City Code/Name
-                                c.RelativeColumn(1);    // DELED-I
-                                c.RelativeColumn(1);    // DELED-II
-                                c.RelativeColumn(1);    // Total
+                                c.RelativeColumn(1);    // DELED
                             });
 
                             static IContainer HeaderCell(IContainer c) =>
@@ -212,33 +210,25 @@ namespace DELED.Services
                             {
                                 h.Cell().Element(HeaderCell).Text("Sr.\nNo.").Bold();
                                 h.Cell().Element(HeaderCell).Text("Exam City Code/Name").Bold();
-                                h.Cell().Element(HeaderCell).Text("DELED-I").Bold();
-                                h.Cell().Element(HeaderCell).Text("DELED-II").Bold();
-                                h.Cell().Element(HeaderCell).Text("Total").Bold();
+                                h.Cell().Element(HeaderCell).Text("DELED").Bold();
                             });
 
                             static IContainer DataCell(IContainer c) =>
                                 c.Border(1).BorderColor("#000000").Padding(4);
 
                             int sr = 1;
-                            int totalDeled1 = 0, totalDeled2 = 0, totalAll = 0;
+                            int totalAll = 0;
 
                             foreach (var city in cityRows)
                             {
                                 table.Cell().Element(DataCell).AlignCenter().Text(sr++.ToString());
                                 table.Cell().Element(DataCell).Text(city.CityName);
-                                table.Cell().Element(DataCell).AlignCenter().Text(city.Deled1.ToString());
-                                table.Cell().Element(DataCell).AlignCenter().Text(city.Deled2.ToString());
-                                table.Cell().Element(DataCell).AlignCenter().Text(city.Total.ToString());
+                                table.Cell().Element(DataCell).AlignCenter().Text(city.Count.ToString());
 
-                                totalDeled1 += city.Deled1;
-                                totalDeled2 += city.Deled2;
-                                totalAll += city.Total;
+                                totalAll += city.Count;
                             }
 
                             table.Cell().ColumnSpan(2).Element(DataCell).AlignRight().Text("Total").Bold();
-                            table.Cell().Element(DataCell).AlignCenter().Text(totalDeled1.ToString()).Bold();
-                            table.Cell().Element(DataCell).AlignCenter().Text(totalDeled2.ToString()).Bold();
                             table.Cell().Element(DataCell).AlignCenter().Text(totalAll.ToString()).Bold();
                         });
                     });
@@ -312,45 +302,26 @@ namespace DELED.Services
                 });
             }
 
-            // Exam city breakdown — fetching DELED-I and DELED-II counts per city
-            // We do two passes and merge by city name.
-            var cityDeled1 = await (
+            // Exam city breakdown — fetching single DELED paid count per city
+            var cityData = await (
                 from pd in context.UserPersonalDetails
                 join u in context.Users on pd.UserId equals u.UserId
-                join et in context.ExamTypes on pd.ExamTypeId equals et.Id
                 join ec in context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
                 from ec in ecJoin.DefaultIfEmpty()
-                where u.IsPaymentCompleted && 
-                      (et.Name == "DELED I" || et.Name.Contains("Both") || et.Name.Contains("BOTH"))
+                where u.IsPaymentCompleted
                 group new { ec.CityName, ec.CityCode } by new { ec.CityName, ec.CityCode } into g
                 select new { CityName = g.Key.CityName, CityCode = g.Key.CityCode, Count = g.Count() }
             ).ToListAsync();
 
-            var cityDeled2 = await (
-                from pd in context.UserPersonalDetails
-                join u in context.Users on pd.UserId equals u.UserId
-                join et in context.ExamTypes on pd.ExamTypeId equals et.Id
-                join ec in context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
-                from ec in ecJoin.DefaultIfEmpty()
-                where u.IsPaymentCompleted && 
-                      (et.Name == "DELED II" || et.Name.Contains("Both") || et.Name.Contains("BOTH"))
-                group new { ec.CityName, ec.CityCode } by new { ec.CityName, ec.CityCode } into g
-                select new { CityName = g.Key.CityName, CityCode = g.Key.CityCode, Count = g.Count() }
-            ).ToListAsync();
-
-            // Merge both city lists into a unified rows list
-            var allCityNames = cityDeled1.Select(x => new { x.CityName, x.CityCode })
-                .Union(cityDeled2.Select(x => new { x.CityName, x.CityCode }))
-                .Distinct()
-                .OrderBy(n => n.CityCode);
-
-            var cityRows = allCityNames.Select(city =>
-            {
-                int u1 = cityDeled1.FirstOrDefault(x => x.CityName == city.CityName)?.Count ?? 0;
-                int u2 = cityDeled2.FirstOrDefault(x => x.CityName == city.CityName)?.Count ?? 0;
-                string cityNameDisplay = city.CityName != null ? $"{city.CityCode} - {city.CityName}" : "Not Specified";
-                return (CityName: cityNameDisplay, Deled1: u1, Deled2: u2, Total: u1 + u2);
-            }).ToList();
+            var cityRows = cityData
+                .OrderBy(n => n.CityCode ?? "999")
+                .Select(city =>
+                {
+                    string cityNameDisplay = !string.IsNullOrEmpty(city.CityName)
+                        ? (!string.IsNullOrEmpty(city.CityCode) ? $"{city.CityCode} - {city.CityName}" : city.CityName)
+                        : "Not Specified";
+                    return (CityName: cityNameDisplay, Count: city.Count);
+                }).ToList();
 
             // ── Generate PDF ──────────────────────────────────────────────────
             return GenerateDailyReportPdf(

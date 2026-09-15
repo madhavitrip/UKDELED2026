@@ -3,39 +3,39 @@ import { useNavigate } from "react-router-dom";
 import { api, userApi } from "../stores/apiStore";
 import { useAuthStore } from "../stores/authStore";
 import { notification } from "antd";
-import { 
-  FaDownload, 
-  FaFileCsv, 
-  FaFilePdf, 
-  FaEye, 
-  FaEyeSlash, 
-  FaUser, 
-  FaSignOutAlt, 
-  FaChartBar, 
-  FaFileAlt, 
-  FaEnvelope, 
-  FaUserEdit, 
-  FaCreditCard, 
-  FaCalendarAlt, 
-  FaBullhorn, 
-  FaLock, 
-  FaFolder, 
-  FaEdit, 
-  FaSearch, 
-  FaInbox, 
-  FaPhone, 
-  FaPaperPlane, 
-  FaExclamationTriangle, 
-  FaCheckCircle, 
-  FaTimesCircle, 
-  FaIdCard, 
-  FaGraduationCap, 
-  FaWheelchair, 
-  FaSave, 
-  FaPlus, 
-  FaPlayCircle, 
-  FaStopCircle, 
-  FaInfoCircle, 
+import {
+  FaDownload,
+  FaFileCsv,
+  FaFilePdf,
+  FaEye,
+  FaEyeSlash,
+  FaUser,
+  FaSignOutAlt,
+  FaChartBar,
+  FaFileAlt,
+  FaEnvelope,
+  FaUserEdit,
+  FaCreditCard,
+  FaCalendarAlt,
+  FaBullhorn,
+  FaLock,
+  FaFolder,
+  FaEdit,
+  FaSearch,
+  FaInbox,
+  FaPhone,
+  FaPaperPlane,
+  FaExclamationTriangle,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaIdCard,
+  FaGraduationCap,
+  FaWheelchair,
+  FaSave,
+  FaPlus,
+  FaPlayCircle,
+  FaStopCircle,
+  FaInfoCircle,
   FaClock,
   FaPrint,
   FaSpinner,
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
   const [broadcastError, setBroadcastError] = useState("");
   const [broadcastSuccess, setBroadcastSuccess] = useState("");
   const [broadcastSubmitting, setBroadcastSubmitting] = useState(false);
- 
+
   // CMS / Timelines States
   const [cmsTimelines, setCmsTimelines] = useState([]);
   const [cmsLoading, setCmsLoading] = useState(false);
@@ -628,7 +628,7 @@ export default function AdminDashboard() {
           message: "Broadcast Sent",
           description: "Daily report email has been triggered and sent successfully to all recipients (including CC/BCC)!"
         });
-        
+
         // Refresh dashboard logs
         setTimeout(() => {
           fetchDashboardData(currentPage, pageSize, activeSearchQuery, activeFilterStatus);
@@ -649,33 +649,49 @@ export default function AdminDashboard() {
     }
   };
 
-  const [isSearchingPayment, setIsSearchingPayment] = useState(false);
-
-  // States for Update Applicant tab
+  // Update / Correction Tab States
   const [updateRegNo, setUpdateRegNo] = useState("");
-  const [isSearchingApplicant, setIsSearchingApplicant] = useState(false);
-  const [searchError, setSearchError] = useState("");
   const [foundApplicant, setFoundApplicant] = useState(null);
+  const [foundApplicantUploads, setFoundApplicantUploads] = useState(null);
+  const [isSearchingApplicant, setIsSearchingApplicant] = useState(false);
+  const [isSavingApplicant, setIsSavingApplicant] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [saveMessage, setSaveMessage] = useState({ text: "", type: "" });
 
-  // Form states for modifying candidate details
+  // Full Form States for Candidate Details
   const [editFullName, setEditFullName] = useState("");
   const [editFatherName, setEditFatherName] = useState("");
+  const [editMotherName, setEditMotherName] = useState("");
+  const [editHusbandName, setEditHusbandName] = useState("");
+  const [editGender, setEditGender] = useState("MALE");
+  const [editDOB, setEditDOB] = useState("");
   const [editPhoneNumber, setEditPhoneNumber] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editIsPaymentCompleted, setEditIsPaymentCompleted] = useState(false);
-  const [isSavingApplicant, setIsSavingApplicant] = useState(false);
-  const [saveMessage, setSaveMessage] = useState({ text: "", type: "" });
 
-  // Update School Type Tab States
-  const [schoolTypeRegNo, setSchoolTypeRegNo] = useState("");
-  const [schoolTypeApplicant, setSchoolTypeApplicant] = useState(null);
-  const [schoolTypeUploads, setSchoolTypeUploads] = useState(null);
-  const [editSchoolType1, setEditSchoolType1] = useState("Select");
-  const [editSchoolType2, setEditSchoolType2] = useState("Select");
-  const [isSearchingSchoolType, setIsSearchingSchoolType] = useState(false);
-  const [isSavingSchoolType, setIsSavingSchoolType] = useState(false);
-  const [schoolTypeSearchError, setSchoolTypeSearchError] = useState("");
-  const [schoolTypeSaveMessage, setSchoolTypeSaveMessage] = useState({ text: "", type: "" });
+  const [editAppliedCategory, setEditAppliedCategory] = useState("1-विज्ञान वर्ग");
+  const [editGraduationCourse, setEditGraduationCourse] = useState("");
+  const [editGraduationUniversity, setEditGraduationUniversity] = useState("");
+  const [editGraduationDate, setEditGraduationDate] = useState("");
+
+  const [editCategory, setEditCategory] = useState("GENERAL");
+  const [editSubCategory, setEditSubCategory] = useState("NONE");
+  const [editRetirementDate, setEditRetirementDate] = useState("");
+  const [editSportsType, setEditSportsType] = useState("");
+  const [editIsPhysicallyHandicapped, setEditIsPhysicallyHandicapped] = useState(false);
+  const [editDisabilityType, setEditDisabilityType] = useState("");
+  const [editMultiDisabilityType, setEditMultiDisabilityType] = useState("");
+  const [editScribeRequired, setEditScribeRequired] = useState(false);
+
+  const [editExamCity1, setEditExamCity1] = useState(0);
+  const [editExamCity2, setEditExamCity2] = useState(0);
+
+  const [editMailingAddress, setEditMailingAddress] = useState("");
+  const [editStateId, setEditStateId] = useState(0);
+  const [editDistrict, setEditDistrict] = useState(0);
+  const [editPinCode, setEditPinCode] = useState("");
+  const [editIdentityProof, setEditIdentityProof] = useState("Aadhar Card");
+  const [editIdentityProofNo, setEditIdentityProofNo] = useState("");
 
   // States for metadata dropdowns
   const [examTypesList, setExamTypesList] = useState([]);
@@ -684,40 +700,41 @@ export default function AdminDashboard() {
   const [statesList, setStatesList] = useState([]);
   const [districtCitiesList, setDistrictCitiesList] = useState([]);
 
-  // Form states for personal details
-  const [editExamTypeId, setEditExamTypeId] = useState(1);
-  const [editGender, setEditGender] = useState("");
-  const [editDOB, setEditDOB] = useState("");
-  const [editMotherName, setEditMotherName] = useState("");
-  const [editHusbandName, setEditHusbandName] = useState("");
-  const [editHomeDistrict, setEditHomeDistrict] = useState(0);
-  const [editCategory, setEditCategory] = useState("");
-  const [editSubCategory, setEditSubCategory] = useState("");
-  const [editRetirementDate, setEditRetirementDate] = useState("");
-  const [editIsPhysicallyHandicapped, setEditIsPhysicallyHandicapped] = useState(false);
-  const [editDisabilityType, setEditDisabilityType] = useState("");
-  const [editScribeRequired, setEditScribeRequired] = useState(false);
-  const [editFirstLanguage, setEditFirstLanguage] = useState("");
-  const [editSecondLanguage, setEditSecondLanguage] = useState("");
-  const [editSubjectCode, setEditSubjectCode] = useState("");
+  const scienceGraduationCourses = [
+    "Select",
+    "Bachelor of Science (B.Sc.)",
+    "Bachelor of Agriculture Science(B.Sc.Agri.)",
+    "Graduate Other than B.Sc./B.Sc.Agri./B.A./B.Com. and Intermediate with Science / Agri. Science",
+  ];
 
-  // Additional 16 fields form states
-  const [editDeled1TrainingQualification, setEditDeled1TrainingQualification] = useState("Select");
-  const [editDeled1TrainingStatus, setEditDeled1TrainingStatus] = useState("");
-  const [editDeled1TrainingYear, setEditDeled1TrainingYear] = useState("Select");
-  const [editDeled2TrainingQualification, setEditDeled2TrainingQualification] = useState("Select");
-  const [editDeled2TrainingStatus, setEditDeled2TrainingStatus] = useState("");
-  const [editDeled2TrainingYear, setEditDeled2TrainingYear] = useState("Select");
-  const [editEligibilityCodeDeled1, setEditEligibilityCodeDeled1] = useState("Select");
-  const [editEligibilityCodeDeled2, setEditEligibilityCodeDeled2] = useState("Select");
-  const [editExamCity1, setEditExamCity1] = useState(0);
-  const [editExamCity2, setEditExamCity2] = useState(0);
-  const [editMailingAddress, setEditMailingAddress] = useState("");
-  const [editStateId, setEditStateId] = useState(0);
-  const [editDistrict, setEditDistrict] = useState(0);
-  const [editPinCode, setEditPinCode] = useState("");
-  const [editIdentityProof, setEditIdentityProof] = useState("Select");
-  const [editIdentityProofNo, setEditIdentityProofNo] = useState("");
+  const nonScienceGraduationCourses = [
+    "Select",
+    "Bachelor of Arts (B.A.)",
+    "Bachelor of Commerce (B.Com.)",
+    "Graduate Other than B.A./B.Com. and Intermediate with Humanities / Commerce",
+  ];
+
+  const universityOptions = [
+    "Select",
+    "DEV BHOOMI UTTARAKHAND UNIVERSITY",
+    "HEMWATI NANDAN BAHUGUNA GARHWAL UNIVERSITY",
+    "KUMAUN UNIVERSITY, NAINITAL",
+    "SRI DEV SUMAN UTTARAKHAND UNIVERSITY",
+    "UTTARAKHAND OPEN UNIVERSITY",
+    "DOON UNIVERSITY, DEHRADUN",
+    "G. B. PANT UNIVERSITY OF AGRICULTURE AND TECHNOLOGY",
+    "GURUKULA KANGRI VISHWAVIDYALAYA, HARIDWAR",
+    "GRAPHIC ERA UNIVERSITY, DEHRADUN",
+    "UTTARANCHAL UNIVERSITY, DEHRADUN",
+    "DIT UNIVERSITY, DEHRADUN",
+    "SWAMI RAMA HIMALAYAN UNIVERSITY",
+    "HIMALAYAN GARHWAL UNIVERSITY",
+    "CH. CHARAN SINGH UNIVERSITY, MEERUT",
+    "M. J. P. ROHILKHAND UNIVERSITY, BAREILLY",
+    "DELHI UNIVERSITY (DU)",
+    "IGNOU (INDIRA GANDHI NATIONAL OPEN UNIVERSITY)",
+    "OTHER RECOGNIZED UNIVERSITY (अन्य मान्यता प्राप्त विश्वविद्यालय)"
+  ];
 
   const currentYear = new Date().getFullYear();
   const yearOptions = ["Select", ...Array.from({ length: 45 }, (_, i) => (currentYear - i).toString())];
@@ -736,6 +753,22 @@ export default function AdminDashboard() {
     }
   };
 
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      try {
+        const [statesRes, examCitiesRes] = await Promise.all([
+          api.get("/api/State_City/states").catch(() => ({ data: [] })),
+          api.get("/api/State_City/examCities").catch(() => ({ data: [] }))
+        ]);
+        if (statesRes.data) setStatesList(statesRes.data);
+        if (examCitiesRes.data) setExamCitiesList(examCitiesRes.data);
+      } catch (err) {
+        console.error("Failed to load metadata dropdowns:", err);
+      }
+    };
+    fetchMetadata();
+  }, []);
+
   const fetchStats = async () => {
     try {
       const response = await api.get("/api/UserRegistrations/count");
@@ -743,14 +776,14 @@ export default function AdminDashboard() {
         const totalReg = response.data.totalRegistration !== undefined
           ? response.data.totalRegistration
           : (response.data.TotalRegistration !== undefined
-             ? response.data.TotalRegistration
-             : (response.data.count !== undefined ? response.data.count : 0));
+            ? response.data.TotalRegistration
+            : (response.data.count !== undefined ? response.data.count : 0));
 
         const paidReg = response.data.paidCount !== undefined
           ? response.data.paidCount
           : (response.data.PaidCount !== undefined
-             ? response.data.PaidCount
-             : (response.data.paidApplications !== undefined ? response.data.paidApplications : 0));
+            ? response.data.PaidCount
+            : (response.data.paidApplications !== undefined ? response.data.paidApplications : 0));
 
         setStats(prev => ({
           ...prev,
@@ -840,15 +873,15 @@ export default function AdminDashboard() {
   const bothSubmissionsCount = String(reportStats.both).padStart(4, "0");
 
   // Compute Recent Submissions dynamically
-  const recentSubmissionsList = allApplications.length > 0 
+  const recentSubmissionsList = allApplications.length > 0
     ? allApplications
-        .filter(app => app.appliedFor !== "Not Selected")
-        .slice(0, 5)
-        .map(app => ({
-          regNo: app.regNo,
-          message: `${app.name} registered for ${app.appliedFor}`,
-          time: app.date
-        }))
+      .filter(app => app.appliedFor !== "Not Selected")
+      .slice(0, 5)
+      .map(app => ({
+        regNo: app.regNo,
+        message: `${app.name} registered for ${app.appliedFor}`,
+        time: app.date
+      }))
     : [];
 
   if (recentSubmissionsList.length === 0 && allApplications.length > 0) {
@@ -908,11 +941,11 @@ export default function AdminDashboard() {
 
         const csvContent = [
           headers.join(","),
-          ...rows.map(row => 
+          ...rows.map(row =>
             row.map(value => {
               const escaped = String(value).replace(/"/g, '""');
-              return escaped.includes(",") || escaped.includes('"') || escaped.includes("\n") 
-                ? `"${escaped}"` 
+              return escaped.includes(",") || escaped.includes('"') || escaped.includes("\n")
+                ? `"${escaped}"`
                 : escaped;
             }).join(",")
           )
@@ -947,19 +980,19 @@ export default function AdminDashboard() {
       return;
     }
 
-    const cityDeled1Total = reportCityWise.reduce((acc, row) => acc + (row.deled1 || row.Deled1 || 0), 0);
-    const cityDeled2Total = reportCityWise.reduce((acc, row) => acc + (row.deled2 || row.Deled2 || 0), 0);
-    const cityGrandTotal = reportCityWise.reduce((acc, row) => acc + (row.total || row.Total || 0), 0);
+    const cityGrandTotal = reportCityWise.reduce((acc, row) => acc + (row.deled || row.Deled || row.total || row.Total || 0), 0);
+    const totalRegReportCount = reportDateWise.reduce((acc, row) => acc + (row.regNo || row.RegNo || 0), 0);
+    const totalFeesReportCount = reportDateWise.reduce((acc, row) => acc + (row.feesNo || row.FeesNo || 0), 0);
 
     const filterInfo = (filterStartDate || filterEndDate)
       ? `Filter Period: ${filterStartDate || 'Start'} to ${filterEndDate || 'End'}`
       : "Consolidated Report (All-Time)";
 
-    const logoHtml = userApi.defaults.baseURL 
-      ? `<img src="${userApi.defaults.baseURL}/Logo/ubse_white.jpg" alt="Logo" class="logo" onerror="this.style.display='none'">` 
+    const logoHtml = userApi.defaults.baseURL
+      ? `<img src="${userApi.defaults.baseURL}/Logo/ubse_white.jpg" alt="Logo" class="logo" onerror="this.style.display='none'">`
       : '';
 
-    const dateRowsHtml = reportDateWise.length === 0 
+    const dateRowsHtml = reportDateWise.length === 0
       ? `<tr><td colspan="6" style="text-align: center; padding: 20px; color: #94a3b8;">No report data found for the selected period.</td></tr>`
       : reportDateWise.map((row, idx) => `
         <tr>
@@ -973,21 +1006,17 @@ export default function AdminDashboard() {
       `).join('');
 
     const cityRowsHtml = reportCityWise.length === 0
-      ? `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #94a3b8;">No report data found.</td></tr>`
+      ? `<tr><td colspan="3" style="text-align: center; padding: 20px; color: #94a3b8;">No report data found.</td></tr>`
       : `${reportCityWise.map((row, idx) => `
         <tr>
           <td style="text-align: center;">${idx + 1}</td>
           <td>${row.cityName || row.CityName || ""}</td>
-          <td style="text-align: center;">${row.deled1 || row.Deled1 || 0}</td>
-          <td style="text-align: center;">${row.deled2 || row.Deled2 || 0}</td>
-          <td style="text-align: center; font-weight: bold;">${row.total || row.Total || 0}</td>
+          <td style="text-align: center; font-weight: bold;">${row.deled || row.Deled || row.total || row.Total || 0}</td>
         </tr>
       `).join('')}
       <tr class="total-row">
         <td></td>
         <td>TOTAL</td>
-        <td style="text-align: center;">${cityDeled1Total}</td>
-        <td style="text-align: center;">${cityDeled2Total}</td>
         <td style="text-align: center; font-size: 12px;">${cityGrandTotal}</td>
       </tr>`;
 
@@ -1052,7 +1081,7 @@ export default function AdminDashboard() {
         </td>
         <td style="width: 85%; text-align: left; padding-left: 10px;">
           <h2>उत्तराखण्ड विद्यालयी शिक्षा परिषद् रामनगर (नैनीताल)</h2>
-          <h3>अध्यापक पात्रता परीक्षा (DELED) 2026</h3>
+          <h3> (DELED) 2026</h3>
           <p style="font-size: 13px; font-weight: bold; color: #0f766e; margin-top: 5px;">SUBMISSION REPORT SUMMARY</p>
         </td>
       </tr>
@@ -1068,16 +1097,16 @@ export default function AdminDashboard() {
   <!-- SUMMARY CARDS -->
   <div class="summary-grid">
     <div class="summary-card">
-      <span class="summary-label">DELED I Submissions</span>
-      <span class="summary-value">${deled1SubmissionsCount}</span>
+      <span class="summary-label">Total Registrations</span>
+      <span class="summary-value">${String(totalRegReportCount).padStart(4, "0")}</span>
     </div>
     <div class="summary-card">
-      <span class="summary-label">DELED II Submissions</span>
-      <span class="summary-value">${deled2SubmissionsCount}</span>
+      <span class="summary-label">Total Fees Paid</span>
+      <span class="summary-value">${String(totalFeesReportCount).padStart(4, "0")}</span>
     </div>
     <div class="summary-card">
-      <span class="summary-label">Both Papers Submissions</span>
-      <span class="summary-value">${bothSubmissionsCount}</span>
+      <span class="summary-label">DELED Paid Applications</span>
+      <span class="summary-value">${String(cityGrandTotal).padStart(4, "0")}</span>
     </div>
   </div>
 
@@ -1106,9 +1135,7 @@ export default function AdminDashboard() {
       <tr>
         <th style="text-align: center; width: 80px;">Sr. No.</th>
         <th>Exam City Code/Name</th>
-        <th style="text-align: center;">DELED-I</th>
-        <th style="text-align: center;">DELED-II</th>
-        <th style="text-align: center;">Total</th>
+        <th style="text-align: center;">DELED</th>
       </tr>
     </thead>
     <tbody>
@@ -1264,7 +1291,7 @@ export default function AdminDashboard() {
         </td>
         <td style="width: 60%; border: 1px solid #ccc; padding: 10px;">
           <h2 style="font-size: 16px; margin: 0 0 5px 0;">उत्तराखण्ड विद्यालयी शिक्षा परिषद् रामनगर (नैनीताल)</h2>
-          <h3 style="font-size: 14px; margin: 0 0 5px 0;">अध्यापक पात्रता परीक्षा (DELED) 2026</h3>
+          <h3 style="font-size: 14px; margin: 0 0 5px 0;"> (DELED) 2026</h3>
           <h3 style="font-size: 14px; margin: 0;">आवेदन पत्र समीक्षा</h3>
           ${!profile.isPaymentCompleted ? `<div style="font-size: 12px; font-weight: bold; color: #d32f2f; margin-top: 5px;">(UNPAID APPLICATION PREVIEW)</div>` : ''}
         </td>
@@ -1282,50 +1309,37 @@ export default function AdminDashboard() {
   <div class="main-content">
     <div class="table-section">
       <table>
-    <tr>
-      <th>Registration ID</th><td>${profile.registrationNo || "N/A"}</td>
-      <th>Exam Applied For</th><td>${profile.applicationFor || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Candidate's Name</th><td>${profile.fullName || "N/A"}</td>
-      <th>Gender</th><td>${profile.gender || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Father's Name</th><td>${profile.fatherName || "N/A"}</td>
-      <th>Mother's Name</th><td>${profile.motherName || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Date of Birth</th><td>${formatDob(profile.dob)}</td>
-      <th>Mobile Number</th><td>${profile.phoneNumber || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Email ID</th><td>${profile.email || "N/A"}</td>
-      <th>Husband's Name</th><td>${profile.husbandName || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Home District</th><td>${profile.homeDistrict || "N/A"}</td>
-      <th>Category</th><td>${profile.category || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Sub Category</th><td>${profile.subCategory || "N/A"}${profile.subCategory === 'EX-SERVICEMAN (Self)' && profile.retirementDate ? ` (Retirement Date: ${formatDob(profile.retirementDate)})` : ''}</td>
-      <th>Physically Handicapped</th><td>${profile.isPhysicallyHandicapped ? `YES (${profile.disabilityType || "N/A"}${profile.disabilityType === 'Multi' && profile.multiDisabilityType ? ` - ${profile.multiDisabilityType}` : ''})` : "NO"}</td>
-    </tr>
-    <tr>
-      <th>Scribe Required</th><td>${profile.scribeRequired ? "YES" : "NO"}</td>
-      <th>Mailing Address</th><td>${profile.mailingAddress || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>State</th><td>${profile.state || "N/A"}</td>
-      <th>District</th><td>${profile.district || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Pincode</th><td>${profile.pinCode || "N/A"}</td>
-      <th>Identity Proof</th><td>${profile.identityProof ? `${profile.identityProof} (${profile.identityProofNo || "N/A"})` : "N/A"}</td>
-    </tr>
-    <tr>
-      <th>First Language</th><td>${profile.firstLanguage || "N/A"}</td>
-      <th>Second Language</th><td>${profile.secondLanguage || "N/A"}</td>
-    </tr>
+        <tr>
+          <th>Registration ID</th><td><b>${profile.registrationNo || "N/A"}</b></td>
+          <th>Applied Category</th><td>${profile.appliedCategory || profile.applicationFor || "N/A"}</td>
+        </tr>
+        <tr>
+          <th>Candidate's Name</th><td>${profile.fullName || "N/A"}</td>
+          <th>Gender</th><td>${profile.gender || "N/A"}</td>
+        </tr>
+        <tr>
+          <th>Father's Name</th><td>${profile.fatherName || "N/A"}</td>
+          <th>Mother's Name</th><td>${profile.motherName || "N/A"}</td>
+        </tr>
+        <tr>
+          <th>Date of Birth</th><td>${formatDob(profile.dob)}</td>
+          <th>Mobile Number</th><td>${profile.phoneNumber || "N/A"}</td>
+        </tr>
+        <tr>
+          <th>Email ID</th><td>${profile.email || "N/A"}</td>
+          <th>Husband's Name</th><td>${profile.husbandName || "N/A"}</td>
+        </tr>
+        <tr>
+          <th>Category</th><td>${profile.category || "N/A"}</td>
+          <th>Sub Category</th><td>${profile.subCategory || "N/A"}${profile.subCategory === 'EX-SERVICEMAN (Self)' && profile.retirementDate ? ` (Retirement Date: ${formatDob(profile.retirementDate)})` : ''}${profile.subCategory === 'SPORTS' && profile.sportsType ? ` (${profile.sportsType})` : ''}</td>
+        </tr>
+        <tr>
+          <th>Physically Handicapped</th><td>${profile.isPhysicallyHandicapped ? `YES (${profile.disabilityType || "N/A"}${profile.disabilityType === 'Multiple Disabilities' && profile.multiDisabilityType ? ` - ${profile.multiDisabilityType}` : ''})` : "NO"}</td>
+          <th>Scribe Required</th><td>${profile.scribeRequired ? "YES" : "NO"}</td>
+        </tr>
+        <tr>
+          <th>Mailing Address</th><td colspan="3">${profile.mailingAddress || "N/A"}, ${profile.district || "N/A"}, ${profile.state || "N/A"} - ${profile.pinCode || "N/A"}</td>
+        </tr>
       </table>
     </div>
     
@@ -1338,9 +1352,9 @@ export default function AdminDashboard() {
       </div>
       <div class="photo-item">
         <div class="photo-box medium">
-          ${uploads.thumbFilePreview ? `<img src="${uploads.thumbFilePreview}" alt="Thumb">` : '<span style="color: #999; font-size: 8px;">Thumb</span>'}
+          ${uploads.thumbFilePreview ? `<img src="${uploads.thumbFilePreview}" alt="Thumb">` : '<span style="color: #999; font-size: 8px;">Thumb Impression</span>'}
         </div>
-        <div class="photo-label">Left Hand Thumb</div>
+        <div class="photo-label">Thumb Impression</div>
       </div>
       <div class="photo-item">
         <div class="photo-box medium">
@@ -1351,59 +1365,19 @@ export default function AdminDashboard() {
     </div>
   </div>
 
-  <!-- TRAINING TABLE -->
+  <!-- ACADEMIC & GRADUATION TABLE -->
   <table>
-    ${isNotDeled2(profile.applicationFor) ? `
     <tr style="background: #f0f0f0;">
-      <th colspan="4">डी.एल.एड. प्रथम परीक्षा (DELED-I) में सम्मिलित होने हेतु प्राप्त की गयी प्रशिक्षण योग्यता का विवरण</th>
+      <th colspan="4">प्रशिक्षण हेतु आवेदित वर्ग एवं स्नातक योग्यता विवरण (Academic & Graduation Details)</th>
     </tr>
     <tr>
-      <th>Training Qualification</th><td>${profile.deled1TrainingQualification || profile.deled1TrainingQualification || "N/A"}</td>
-      <th>Training Status</th><td>${profile.deled1TrainingStatus || profile.deled1TrainingStatus || "N/A"}</td>
-    </tr>
-    ${(profile.deled1TrainingQualification || profile.deled1TrainingQualification) === "In Service Teachers" ? `
-    <tr>
-      <th>Training Name</th><td colspan="3">${(profile.deled1InServiceTraining === "Others" ? profile.deled1InServiceTrainingOthers : profile.deled1InServiceTraining) || "N/A"}</td>
-    </tr>
-    ` : ''}
-    <tr>
-      <th>Training Year</th><td>${profile.deled1TrainingYear || profile.deled1TrainingYear || "N/A"}</td>
-      <th>Eligibility Code</th><td><b>${profile.eligibilityCodeDELED1 || "N/A"}</b></td>
-    </tr>
-    ${(profile.deled1TrainingQualification || profile.deled1TrainingQualification) === "In Service Teachers" ? `
-    <tr>
-      <th>U-DISE Code</th><td>${profile.deled1UdiseCode || profile.deled1UdiseCode || "N/A"}</td>
-      <th>Type of School</th><td>${profile.deled1SchoolType || profile.deled1SchoolType || "N/A"}</td>
-    </tr>
-    ` : ''}
-    ` : ''}
-    ${isNotDeled1(profile.applicationFor) ? `
-    <tr style="background: #f0f0f0;">
-      <th colspan="4">डी.एल.एड. द्वितीय परीक्षा (DELED-II) में सम्मिलित होने हेतु प्राप्त की गयी प्रशिक्षण योग्यता का विवरण</th>
+      <th>Applied Category (आवेदित वर्ग)</th><td>${profile.appliedCategory || profile.applicationFor || "N/A"}</td>
+      <th>Graduation Course (स्नातक परीक्षा)</th><td>${profile.graduationCourse || "N/A"}</td>
     </tr>
     <tr>
-      <th>Training Qualification</th><td>${profile.deled2TrainingQualification || profile.deled2TrainingQualification || "N/A"}</td>
-      <th>Training Status</th><td>${profile.deled2TrainingStatus || profile.deled2TrainingStatus || "N/A"}</td>
+      <th>University Name (विश्वविद्यालय)</th><td>${profile.graduationUniversity || "N/A"}</td>
+      <th>Graduation Date (उत्तीर्ण तिथि)</th><td>${formatDob(profile.graduationDate)}</td>
     </tr>
-    ${(profile.deled2TrainingQualification || profile.deled2TrainingQualification) === "In Service Teachers" ? `
-    <tr>
-      <th>Training Name</th><td colspan="3">${(profile.deled2InServiceTraining === "Others" ? profile.deled2InServiceTrainingOthers : profile.deled2InServiceTraining) || "N/A"}</td>
-    </tr>
-    ` : ''}
-    <tr>
-      <th>Training Year</th><td>${profile.deled2TrainingYear || profile.deled2TrainingYear || "N/A"}</td>
-      <th>Subject</th><td>${profile.subjectCode || "N/A"}</td>
-    </tr>
-    <tr>
-      <th>Eligibility Code</th><td colspan="3"><b>${profile.eligibilityCodeDELED2 || "N/A"}</b></td>
-    </tr>
-    ${(profile.deled2TrainingQualification || profile.deled2TrainingQualification) === "In Service Teachers" ? `
-    <tr>
-      <th>U-DISE Code</th><td>${profile.deled2UdiseCode || profile.deled2UdiseCode || "N/A"}</td>
-      <th>Type of School</th><td>${profile.deled2SchoolType || profile.deled2SchoolType || "N/A"}</td>
-    </tr>
-    ` : ''}
-    ` : ''}
     <tr style="background: #f0f0f0;">
       <th colspan="4">Exam Centers & Identification</th>
     </tr>
@@ -1431,10 +1405,10 @@ export default function AdminDashboard() {
     <p>मैं <b>${profile.fullName}</b> पुत्र/पुत्री श्री <b>${profile.fatherName}</b> शपथपूर्वक घोषणा करता/करती हूँ कि :</p>
     <ol>
       <li>
-              मैंने "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय (DELED I & II) 2026: सूचना विवरणिका" में   अंकित अर्हताओं एवं दिशा - निर्देशों का भली - भाँति अध्ययन कर लिया है । मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
+              मैंने "उत्तराखंड  प्रथम एवं द्वितीय (DELED I & II) 2026: सूचना विवरणिका" में   अंकित अर्हताओं एवं दिशा - निर्देशों का भली - भाँति अध्ययन कर लिया है । मैं परीक्षा में सम्मिलित होने हेतु निर्धारित समस्त अर्हतायें पूर्ण करता/करती हूँ।
             </li>
             <li>
-              मुझे "उत्तराखंड अध्यापक पात्रता परीक्षा प्रथम एवं द्वितीय 2026 हेतु जारी समस्त दिशा-निर्देश एवं शर्तें मान्य हैं।
+              मुझे "उत्तराखंड  प्रथम एवं द्वितीय 2026 हेतु जारी समस्त दिशा-निर्देश एवं शर्तें मान्य हैं।
             </li>
             <li>
 परीक्षा में सम्मिलित होने हेतु आवेदन पत्र में भरी गयी समस्त प्रविष्टियाँ मेरे मूल अभिलेखों  पर आधारित हैं तथा मेरे संज्ञान में सही एवं सत्य हैं। मैंने कोई भी तथ्य नहीं छुपाया है। यदि परीक्षा के पूर्व अथवा बाद में जांचोपरान्त मेरे द्वारा दी गयी कोई भी सूचना असत्य अथवा त्रुटिपूर्ण पायी जाती है तो उत्तराखंड विद्यालयी शिक्षा परिषद को मेरा अभ्यर्थन एवं परीक्षाफल निरस्त करने तथा मेरे विरुद्ध वैधानिक कार्यवाही करने का अधिकार होगा और उसका सम्पूर्ण उत्तरदायित्व मेरा होगा।            </li>
@@ -1442,11 +1416,11 @@ export default function AdminDashboard() {
 आवेदन पत्र में अंकित सूचनाओं से सम्बन्धित सभी मूल अभिलेख / दस्तावेज (प्रमाण / अंक पत्र ). आवेदन की तिथि से पूर्व से मेरे पास उपलब्ध हैं। इसमें किसी भी प्रकार की त्रुटि या कमी अथवा कोई तथ्य गलत पाये जाने पर सम्पूर्ण उत्तरदायित्व मेरा होगा।
             </li>
             <li>
-निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन उत्तराखंड अध्यापक पात्रता परीक्षा (DELED) 2026 हेतु विचारणीय होगा।            </li>
+निर्धारित तिथि तक नियत शुल्क जमा करने पर ही मेरा आवेदन उत्तराखंड  (DELED) 2026 हेतु विचारणीय होगा।            </li>
             <li>
-मैं इस तथ्य से भली-भाँति अवगत हूँ कि अध्यापक पात्रता परीक्षा (TET) उत्तीर्ण अभ्यर्थी का नियुक्ति / चयन हेतु दावा/अधिकार नहीं होता है। यह परीक्षा नियुक्ति / चयन हेतु निर्धारित अर्हताओं में से मात्र एक अनिवार्य अर्हता है। शिक्षकों की नियुक्ति / चयन  राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम / निर्देश के अन्तर्गत ही किया जाता है।            </li>
+मैं इस तथ्य से भली-भाँति अवगत हूँ कि  (TET) उत्तीर्ण अभ्यर्थी का नियुक्ति / चयन हेतु दावा/अधिकार नहीं होता है। यह परीक्षा नियुक्ति / चयन हेतु निर्धारित अर्हताओं में से मात्र एक अनिवार्य अर्हता है। शिक्षकों की नियुक्ति / चयन  राज्य सरकार की संगत अध्यापक सेवा नियमावली तथा समय-समय पर जारी नियम / निर्देश के अन्तर्गत ही किया जाता है।            </li>
             <li>
-मुझे पूर्व में किसी भी केन्द्रीय या राज्य अध्यापक पात्रता परीक्षा (TET) से प्रतिबंधित (Debar) नहीं किया गया है।            </li>
+मुझे पूर्व में किसी भी केन्द्रीय या राज्य  (TET) से प्रतिबंधित (Debar) नहीं किया गया है।            </li>
     </ol>
   </div>
   </script>
@@ -1457,119 +1431,12 @@ export default function AdminDashboard() {
     printWindow.document.close();
   };
 
-  const handleFindSchoolTypeApplicant = async (e) => {
-    if (e) e.preventDefault();
-    if (!schoolTypeRegNo.trim()) return;
-
-    setIsSearchingSchoolType(true);
-    setSchoolTypeSearchError("");
-    setSchoolTypeSaveMessage({ text: "", type: "" });
-    setSchoolTypeApplicant(null);
-    setSchoolTypeUploads(null);
-
-    try {
-      const formResponse = await api.get(`/api/UserRegistrations/admin/applicant/${schoolTypeRegNo.trim()}`);
-      const previewResponse = await api.get(`/api/UserRegistrations/admin/applicant-complete/${schoolTypeRegNo.trim()}`);
-
-      if (formResponse.data && formResponse.data.success && previewResponse.data && previewResponse.data.success) {
-        const applicant = formResponse.data.data || formResponse.data;
-        const previewData = previewResponse.data.data || {};
-        const pd = applicant.personalDetails || applicant;
-
-        const schoolType1 = pd?.deled1SchoolType || pd?.deled1SchoolType || previewData?.deled1SchoolType || previewData?.deled1SchoolType || "Select";
-        const schoolType2 = pd?.deled2SchoolType || pd?.deled2SchoolType || previewData?.deled2SchoolType || previewData?.deled2SchoolType || "Select";
-
-        applicant.deled1SchoolType = schoolType1 !== "Select" ? schoolType1 : applicant.deled1SchoolType;
-        applicant.deled2SchoolType = schoolType2 !== "Select" ? schoolType2 : applicant.deled2SchoolType;
-        
-        if (applicant.personalDetails) {
-          applicant.personalDetails.deled1SchoolType = schoolType1 !== "Select" ? schoolType1 : applicant.personalDetails.deled1SchoolType;
-          applicant.personalDetails.deled2SchoolType = schoolType2 !== "Select" ? schoolType2 : applicant.personalDetails.deled2SchoolType;
-        }
-
-        setSchoolTypeApplicant(applicant);
-        setSchoolTypeUploads(previewResponse.data.uploads);
-        setEditSchoolType1(schoolType1);
-        setEditSchoolType2(schoolType2);
-      } else {
-        setSchoolTypeSearchError("Applicant details could not be loaded.");
-      }
-    } catch (error) {
-      console.error("Error finding school type applicant:", error);
-      if (error.response && error.response.data && error.response.data.message) {
-        setSchoolTypeSearchError(error.response.data.message);
-      } else {
-        setSchoolTypeSearchError("Candidate registration number not found.");
-      }
-    } finally {
-      setIsSearchingSchoolType(false);
-    }
-  };
-
-  const handleUpdateSchoolType = async (e) => {
-    if (e) e.preventDefault();
-    if (!schoolTypeApplicant) return;
-
-    setIsSavingSchoolType(true);
-    setSchoolTypeSaveMessage({ text: "", type: "" });
-
-    try {
-      const payload = {
-        deled1SchoolType: editSchoolType1 !== "Select" ? editSchoolType1 : null,
-        deled2SchoolType: editSchoolType2 !== "Select" ? editSchoolType2 : null
-      };
-
-      const response = await api.patch(`/api/UserRegistrations/admin/applicant/${schoolTypeApplicant.registrationNo}/school-type`, payload);
-      if (response.data && response.data.success) {
-        setSchoolTypeSaveMessage({ text: "School Type updated successfully!", type: "success" });
-        
-        // Update the schoolTypeApplicant state locally
-        setSchoolTypeApplicant(prev => {
-          if (!prev) return prev;
-          const updated = { ...prev };
-          if (updated.personalDetails) {
-            updated.personalDetails = {
-              ...updated.personalDetails,
-              deled1SchoolType: payload.deled1SchoolType,
-              deled2SchoolType: payload.deled2SchoolType
-            };
-          }
-          return updated;
-        });
-
-        // Also update the dashboard list in the background
-        fetchDashboardData(currentPage, pageSize, activeSearchQuery, activeFilterStatus);
-      } else {
-        setSchoolTypeSaveMessage({ text: "Failed to update school type.", type: "error" });
-      }
-    } catch (error) {
-      console.error("Error updating school type:", error);
-      if (error.response && error.response.data && error.response.data.message) {
-        setSchoolTypeSaveMessage({ text: error.response.data.message, type: "error" });
-      } else {
-        setSchoolTypeSaveMessage({ text: "Error saving school type updates.", type: "error" });
-      }
-    } finally {
-      setIsSavingSchoolType(false);
-    }
-  };
-
   const generateApplicantFormHtml = (profile, uploadsData = null) => {
     if (!profile) return "";
     const uploads = {
       photoFilePreview: uploadsData?.photoFile ? `${userApi.defaults.baseURL}/${uploadsData.photoFile}` : "",
       signatureFilePreview: uploadsData?.signatureFile ? `${userApi.defaults.baseURL}/${uploadsData.signatureFile}` : "",
       thumbFilePreview: uploadsData?.thumbImp ? `${userApi.defaults.baseURL}/${uploadsData.thumbImp}` : "",
-    };
-
-    const isNotDeled1 = (applyFor) => {
-      const val = (applyFor || "").toUpperCase().replace(/\s+/g, "").replace(/[-_]/g, "");
-      return val !== "DELEDI" && val !== "DELED1";
-    };
-
-    const isNotDeled2 = (applyFor) => {
-      const val = (applyFor || "").toUpperCase().replace(/\s+/g, "").replace(/[-_]/g, "");
-      return val !== "DELEDII" && val !== "DELED2";
     };
 
     const formatDob = (dobStr) => {
@@ -1583,16 +1450,15 @@ export default function AdminDashboard() {
     };
 
     const pd = profile.personalDetails || profile;
-    
-    const homeDistrictName = isNaN(pd.homeDistrict) ? pd.homeDistrict : (ukCitiesList.find(c => Number(c.id) === Number(pd.homeDistrict))?.name || "N/A");
-    const districtName = isNaN(pd.district) ? pd.district : (ukCitiesList.find(c => Number(c.id) === Number(pd.district))?.name || "N/A");
-    const stateName = isNaN(pd.stateId) ? pd.state : (statesList.find(s => Number(s.id) === Number(pd.stateId))?.name || "N/A");
-    const examCity1Name = isNaN(pd.examCity1) ? pd.examCity1 : (examCitiesList.find(c => Number(c.cityId) === Number(pd.examCity1))?.cityName || "N/A");
-    const examCity2Name = isNaN(pd.examCity2) ? pd.examCity2 : (examCitiesList.find(c => Number(c.cityId) === Number(pd.examCity2))?.cityName || "N/A");
+
+    const districtName = isNaN(pd.district) ? pd.district : (districtCitiesList.find(c => Number(c.id) === Number(pd.district))?.name || ukCitiesList.find(c => Number(c.id) === Number(pd.district))?.name || pd.district || "N/A");
+    const stateName = isNaN(pd.stateId) ? pd.state : (statesList.find(s => Number(s.id) === Number(pd.stateId))?.name || pd.state || "N/A");
+    const examCity1Name = isNaN(pd.examCity1) ? pd.examCity1 : (examCitiesList.find(c => Number(c.cityId) === Number(pd.examCity1))?.cityName || pd.examCity1 || "N/A");
+    const examCity2Name = isNaN(pd.examCity2) ? pd.examCity2 : (examCitiesList.find(c => Number(c.cityId) === Number(pd.examCity2))?.cityName || pd.examCity2 || "N/A");
 
     const displayProfile = {
       registrationNo: profile.registrationNo || "N/A",
-      applicationFor: profile.applicationFor || (pd.examTypeId === 1 ? "DELED-I" : pd.examTypeId === 2 ? "DELED-II" : "DELED-I & II"),
+      appliedCategory: pd.appliedCategory || profile.appliedCategory || profile.applicationFor || "1-विज्ञान वर्ग",
       fullName: profile.fullName || "N/A",
       gender: pd.gender || "N/A",
       fatherName: profile.fatherName || "N/A",
@@ -1601,10 +1467,10 @@ export default function AdminDashboard() {
       phoneNumber: profile.phoneNumber || "N/A",
       email: profile.email || "N/A",
       husbandName: pd.husbandName || "N/A",
-      homeDistrict: homeDistrictName || "N/A",
       category: pd.category || "N/A",
       subCategory: pd.subCategory || "N/A",
       retirementDate: pd.retirementDate || null,
+      sportsType: pd.sportsType || "",
       isPhysicallyHandicapped: pd.isPhysicallyHandicapped || false,
       disabilityType: pd.disabilityType || "N/A",
       multiDisabilityType: pd.multiDisabilityType || "",
@@ -1615,25 +1481,14 @@ export default function AdminDashboard() {
       pinCode: pd.pinCode || "N/A",
       identityProof: pd.identityProof || "N/A",
       identityProofNo: pd.identityProofNo || "N/A",
-      firstLanguage: pd.firstLanguage || "N/A",
-      secondLanguage: pd.secondLanguage || "N/A",
-      
-      deled1TrainingQualification: pd.deled1TrainingQualification || "N/A",
-      deled1TrainingStatus: pd.deled1TrainingStatus || "N/A",
-      deled1TrainingYear: pd.deled1TrainingYear || "N/A",
-      deled2TrainingQualification: pd.deled2TrainingQualification || "N/A",
-      deled2TrainingStatus: pd.deled2TrainingStatus || "N/A",
-      deled2TrainingYear: pd.deled2TrainingYear || "N/A",
-      eligibilityCodeDELED1: pd.eligibilityCodeDELED1 || "N/A",
-      eligibilityCodeDELED2: pd.eligibilityCodeDELED2 || "N/A",
-      
-      deled1SchoolType: editSchoolType1 || pd.deled1SchoolType || "N/A",
-      deled2SchoolType: editSchoolType2 || pd.deled2SchoolType || "N/A",
-      
-      subjectCode: pd.subjectCode || "N/A",
+
+      graduationCourse: pd.graduationCourse || "N/A",
+      graduationUniversity: pd.graduationUniversity || "N/A",
+      graduationDate: pd.graduationDate || null,
+
       examCity1: examCity1Name || "N/A",
       examCity2: examCity2Name || "N/A",
-      
+
       isPaymentCompleted: profile.isPaymentCompleted || false,
       transactionId: profile.transactionId || "N/A",
       transactionAmount: profile.transactionAmount || "N/A",
@@ -1648,51 +1503,50 @@ export default function AdminDashboard() {
   <title>Application Form - ${displayProfile.registrationNo}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; padding: 15px; line-height: 1.3; background: white; color: #333; }
+    body { font-family: Arial, sans-serif; padding: 12px; line-height: 1.3; background: white; color: #1e293b; font-size: 11px; }
     
-    .header { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 15px; }
-    .header h2 { font-size: 14px; font-weight: bold; margin: 0; color: #1e293b; }
-    .header h3 { font-size: 12px; font-weight: bold; margin: 3px 0; color: #475569; }
+    .header { text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px; }
+    .header h2 { font-size: 13px; font-weight: bold; margin: 0; color: #0f172a; }
+    .header h3 { font-size: 11px; font-weight: bold; margin: 2px 0; color: #0369a1; }
     
-    .main-content { display: flex; gap: 15px; margin-bottom: 12px; }
+    .main-content { display: flex; gap: 10px; margin-bottom: 10px; }
     .table-section { flex: 1; }
-    .photo-section { display: flex; flex-direction: column; gap: 10px; width: 110px; flex-shrink: 0; }
+    .photo-section { display: flex; flex-direction: column; gap: 8px; width: 100px; flex-shrink: 0; }
     .photo-item { display: flex; flex-direction: column; gap: 2px; align-items: center; }
-    .photo-box { border: 1px solid #cbd5e1; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .photo-box.large { width: 100px; height: 110px; }
-    .photo-box.medium { width: 90px; height: 60px; }
+    .photo-box { border: 1px solid #cbd5e1; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; }
+    .photo-box.large { width: 95px; height: 105px; }
+    .photo-box.medium { width: 85px; height: 50px; }
     .photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .photo-label { font-size: 8px; text-align: center; color: #64748b; font-weight: 600; text-transform: uppercase; }
     
-    table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px; }
-    th { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 5px; text-align: left; font-weight: 600; color: #334155; width: 25%; }
-    td { border: 1px solid #cbd5e1; padding: 5px; color: #0f172a; }
+    table { width: 100%; border-collapse: collapse; font-size: 9.5px; margin-bottom: 10px; }
+    th { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 6px; text-align: left; font-weight: 600; color: #334155; width: 25%; }
+    td { border: 1px solid #cbd5e1; padding: 4px 6px; color: #0f172a; }
+    .section-header { background: #e0f2fe; color: #0369a1; font-weight: bold; text-align: center; }
     
-    .warning { border: 1px solid #fca5a5; background: #fef2f2; padding: 8px; margin: 10px 0; font-size: 9px; color: #991b1b; text-align: center; border-radius: 4px; }
-    
-    .declarations { border: 1px solid #cbd5e1; padding: 10px; margin: 10px 0; border-radius: 6px; }
-    .declarations h3 { text-align: center; font-size: 10px; font-weight: bold; margin-bottom: 6px; color: #1e293b; }
-    .declarations p { font-size: 9px; text-align: center; margin-bottom: 6px; line-height: 1.3; color: #475569; }
-    .declarations ol { margin: 0 0 0 15px; font-size: 9px; line-height: 1.3; color: #475569; }
-    .declarations li { margin-bottom: 4px; }
+    .declarations { border: 1px solid #cbd5e1; padding: 8px; margin: 8px 0; border-radius: 4px; background: #fafafa; }
+    .declarations h3 { text-align: center; font-size: 9.5px; font-weight: bold; margin-bottom: 4px; color: #1e293b; }
+    .declarations p { font-size: 8.5px; text-align: center; margin-bottom: 4px; color: #475569; }
+    .declarations ol { margin: 0 0 0 12px; font-size: 8px; line-height: 1.25; color: #475569; }
+    .declarations li { margin-bottom: 3px; }
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <div class="header">
-    <table style="width: 100%; border: none; margin-bottom: 5px;">
+    <table style="width: 100%; border: none; margin-bottom: 4px;">
       <tr style="border: none;">
         <td style="width: 15%; border: none; padding: 0;">
-          ${userApi.defaults.baseURL ? `<img src="${userApi.defaults.baseURL}/Logo/ubse_white.jpg" alt="Logo" style="width: 50px; height: 50px; object-fit: contain;">` : ''}
+          ${userApi.defaults.baseURL ? `<img src="${userApi.defaults.baseURL}/Logo/ubse_white.jpg" alt="Logo" style="width: 45px; height: 45px; object-fit: contain;">` : ''}
         </td>
         <td style="width: 70%; border: none; padding: 0; text-align: center;">
           <h2>उत्तराखण्ड विद्यालयी शिक्षा परिषद् रामनगर (नैनीताल)</h2>
-          <h3>अध्यापक पात्रता परीक्षा (DELED) 2026</h3>
-          <h3 style="font-weight: normal; margin-top: 2px;">Live Preview (स्कूल प्रकार संशोधन)</h3>
+          <h3>द्विवर्षीय डी.एल.एड. प्रवेश परीक्षा 2026</h3>
+          <h3 style="font-weight: normal; margin-top: 1px; color: #64748b; font-size: 9px;">Application Form Preview</h3>
         </td>
         <td style="width: 15%; border: none; padding: 0; text-align: right;">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=5&data=${encodeURIComponent(`Reg No: ${displayProfile.registrationNo}\nName: ${displayProfile.fullName}\nDOB: ${formatDob(displayProfile.dob)}`)}" alt="QR Code" style="width: 50px; height: 50px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=5&data=${encodeURIComponent(`Reg No: ${displayProfile.registrationNo}\nName: ${displayProfile.fullName}\nDOB: ${formatDob(displayProfile.dob)}`)}" alt="QR Code" style="width: 45px; height: 45px;">
         </td>
       </tr>
     </table>
@@ -1704,7 +1558,7 @@ export default function AdminDashboard() {
       <table>
         <tr>
           <th>Registration ID</th><td><b>${displayProfile.registrationNo}</b></td>
-          <th>Exam Applied For</th><td>${displayProfile.applicationFor}</td>
+          <th>Applied Category</th><td><b>${displayProfile.appliedCategory}</b></td>
         </tr>
         <tr>
           <th>Candidate's Name</th><td>${displayProfile.fullName}</td>
@@ -1723,28 +1577,15 @@ export default function AdminDashboard() {
           <th>Husband's Name</th><td>${displayProfile.husbandName}</td>
         </tr>
         <tr>
-          <th>Home District</th><td>${displayProfile.homeDistrict}</td>
           <th>Category</th><td>${displayProfile.category}</td>
+          <th>Sub Category</th><td>${displayProfile.subCategory}${displayProfile.subCategory === 'EX-SERVICEMAN (Self)' && displayProfile.retirementDate ? ` (RetDate: ${formatDob(displayProfile.retirementDate)})` : ''}${displayProfile.subCategory === 'SPORTS' && displayProfile.sportsType ? ` (${displayProfile.sportsType})` : ''}</td>
         </tr>
         <tr>
-          <th>Sub Category</th><td>${displayProfile.subCategory}${displayProfile.subCategory === 'EX-SERVICEMAN (Self)' && displayProfile.retirementDate ? ` (RetDate: ${formatDob(displayProfile.retirementDate)})` : ''}</td>
-          <th>Physically Handicapped</th><td>${displayProfile.isPhysicallyHandicapped ? `YES (${displayProfile.disabilityType}${displayProfile.disabilityType === 'Multi' && displayProfile.multiDisabilityType ? ` - ${displayProfile.multiDisabilityType}` : ''})` : "NO"}</td>
-        </tr>
-        <tr>
+          <th>Physically Handicapped</th><td>${displayProfile.isPhysicallyHandicapped ? `YES (${displayProfile.disabilityType}${displayProfile.disabilityType === 'Multiple Disabilities' && displayProfile.multiDisabilityType ? ` - ${displayProfile.multiDisabilityType}` : ''})` : "NO"}</td>
           <th>Scribe Required</th><td>${displayProfile.scribeRequired ? "YES" : "NO"}</td>
-          <th>Mailing Address</th><td>${displayProfile.mailingAddress}</td>
         </tr>
         <tr>
-          <th>State</th><td>${displayProfile.state}</td>
-          <th>District</th><td>${displayProfile.district}</td>
-        </tr>
-        <tr>
-          <th>Pincode</th><td>${displayProfile.pinCode}</td>
-          <th>Identity Proof</th><td>${displayProfile.identityProof} (${displayProfile.identityProofNo})</td>
-        </tr>
-        <tr>
-          <th>First Language</th><td>${displayProfile.firstLanguage}</td>
-          <th>Second Language</th><td>${displayProfile.secondLanguage}</td>
+          <th>Mailing Address</th><td colspan="3">${displayProfile.mailingAddress}, ${displayProfile.district}, ${displayProfile.state} - ${displayProfile.pinCode}</td>
         </tr>
       </table>
     </div>
@@ -1771,42 +1612,41 @@ export default function AdminDashboard() {
     </div>
   </div>
 
-  <!-- TRAINING TABLE -->
+  <!-- GRADUATION & ACADEMIC TABLE -->
   <table>
-    ${isNotDeled2(displayProfile.applicationFor) ? `
-    <tr style="background: #f1f5f9;">
-      <th colspan="4" style="text-align: center;">DELED-I Academic & Training Details</th>
+    <tr class="section-header">
+      <th colspan="4" style="text-align: center;">स्नातक योग्यता विवरण (Graduation Details)</th>
     </tr>
     <tr>
-      <th>Training Qualification</th><td>${displayProfile.deled1TrainingQualification}</td>
-      <th>Training Status</th><td>${displayProfile.deled1TrainingStatus}</td>
+      <th>Applied Category (वर्ग)</th><td>${displayProfile.appliedCategory}</td>
+      <th>Graduation Course (स्नातक परीक्षा)</th><td>${displayProfile.graduationCourse}</td>
     </tr>
     <tr>
-      <th>Training Year</th><td>${displayProfile.deled1TrainingYear}</td>
-      <th>Eligibility Code</th><td><b>${displayProfile.eligibilityCodeDELED1}</b></td>
+      <th>University (विश्वविद्यालय)</th><td>${displayProfile.graduationUniversity}</td>
+      <th>Passing Date (उत्तीर्ण तिथि)</th><td>${formatDob(displayProfile.graduationDate)}</td>
+    </tr>
+    <tr class="section-header">
+      <th colspan="4" style="text-align: center;">Exam Centers & Identification</th>
     </tr>
     <tr>
-      <th>Type of School</th><td colspan="3"><span style="color: #2563eb; font-weight: bold;">${displayProfile.deled1SchoolType}</span></td>
-    </tr>
-    ` : ''}
-    ${isNotDeled1(displayProfile.applicationFor) ? `
-    <tr style="background: #f1f5f9;">
-      <th colspan="4" style="text-align: center;">DELED-II Academic & Training Details</th>
+      <th>Exam City 1</th><td>${displayProfile.examCity1}</td>
+      <th>Exam City 2</th><td>${displayProfile.examCity2}</td>
     </tr>
     <tr>
-      <th>Training Qualification</th><td>${displayProfile.deled2TrainingQualification}</td>
-      <th>Training Status</th><td>${displayProfile.deled2TrainingStatus}</td>
+      <th>Identity Proof</th><td>${displayProfile.identityProof}</td>
+      <th>Identity Proof No.</th><td>${displayProfile.identityProofNo}</td>
     </tr>
     <tr>
-      <th>Training Year</th><td>${displayProfile.deled2TrainingYear}</td>
-      <th>Subject</th><td>${displayProfile.subjectCode}</td>
+      <th>Payment Status</th><td>${displayProfile.isPaymentCompleted ? `<span style="color: #16a34a; font-weight: bold;">PAID</span>` : `<span style="color: #dc2626; font-weight: bold;">UNPAID</span>`}</td>
+      <th>Transaction ID</th><td>${displayProfile.transactionId}</td>
     </tr>
-    <tr>
-      <th>Eligibility Code</th><td><b>${displayProfile.eligibilityCodeDELED2}</b></td>
-      <th>Type of School</th><td><span style="color: #2563eb; font-weight: bold;">${displayProfile.deled2SchoolType}</span></td>
-    </tr>
-    ` : ''}
   </table>
+
+  <!-- DECLARATION -->
+  <div class="declarations">
+    <h3>घोषणा</h3>
+    <p>मैं <b>${displayProfile.fullName}</b> पुत्र/पुत्री श्री <b>${displayProfile.fatherName}</b> शपथपूर्वक घोषणा करता/करती हूँ कि आवेदन पत्र में भरी गयी समस्त प्रविष्टियाँ मेरे मूल अभिलेखों पर आधारित हैं तथा मेरे संज्ञान में सत्य एवं सही हैं।</p>
+  </div>
 </body>
 </html>`;
   };
@@ -1845,12 +1685,19 @@ export default function AdminDashboard() {
     setSearchError("");
     setSaveMessage({ text: "", type: "" });
     setFoundApplicant(null);
+    setFoundApplicantUploads(null);
 
     try {
       const response = await api.get(`/api/UserRegistrations/admin/applicant/${updateRegNo.trim()}`);
+      const previewResponse = await api.get(`/api/UserRegistrations/admin/applicant-complete/${updateRegNo.trim()}`);
+
       if (response.data && response.data.success) {
         const applicant = response.data.data;
         setFoundApplicant(applicant);
+        if (previewResponse.data && previewResponse.data.success) {
+          setFoundApplicantUploads(previewResponse.data.uploads || null);
+        }
+
         setEditFullName((applicant.fullName || "").toUpperCase());
         setEditFatherName((applicant.fatherName || "").toUpperCase());
         setEditPhoneNumber(applicant.phoneNumber || "");
@@ -1860,38 +1707,33 @@ export default function AdminDashboard() {
         // Populate personal details fields if available, else set defaults
         const pd = applicant.personalDetails;
         if (pd) {
-          setEditExamTypeId(pd.examTypeId || 1);
-          setEditGender(pd.gender || "");
-          setEditDOB(pd.dob || "");
+          setEditGender(pd.gender || "MALE");
+          setEditDOB(pd.dob ? pd.dob.split("T")[0] : "");
           setEditMotherName((pd.motherName || "").toUpperCase());
           setEditHusbandName((pd.husbandName || "").toUpperCase());
-          setEditHomeDistrict(pd.homeDistrict || 0);
-          setEditCategory(pd.category || "");
-          setEditSubCategory(pd.subCategory || "");
-          setEditRetirementDate(pd.retirementDate ? pd.retirementDate.split("T")[0] : "");
-          setEditIsPhysicallyHandicapped(pd.isPhysicallyHandicapped || false);
-          setEditDisabilityType(pd.disabilityType || "");
-          setEditScribeRequired(pd.scribeRequired || false);
-          setEditFirstLanguage(pd.firstLanguage || "");
-          setEditSecondLanguage(pd.secondLanguage || "");
-          setEditSubjectCode(pd.subjectCode || "");
+          setEditAppliedCategory(pd.appliedCategory || "1-विज्ञान वर्ग");
+          setEditGraduationCourse(pd.graduationCourse || "");
+          setEditGraduationUniversity(pd.graduationUniversity || "Select");
+          setEditGraduationDate(pd.graduationDate ? pd.graduationDate.split("T")[0] : "");
 
-          setEditDeled1TrainingQualification(pd.deled1TrainingQualification || "Select");
-          setEditDeled1TrainingStatus(pd.deled1TrainingStatus || "");
-          setEditDeled1TrainingYear(pd.deled1TrainingYear || "Select");
-          setEditDeled2TrainingQualification(pd.deled2TrainingQualification || "Select");
-          setEditDeled2TrainingStatus(pd.deled2TrainingStatus || "");
-          setEditDeled2TrainingYear(pd.deled2TrainingYear || "Select");
-          setEditEligibilityCodeDeled1(pd.eligibilityCodeDELED1 || "Select");
-          setEditEligibilityCodeDeled2(pd.eligibilityCodeDELED2 || "Select");
-          setEditExamCity1(pd.examCity1 || 0);
-          setEditExamCity2(pd.examCity2 || 0);
+          setEditCategory(pd.category || "GENERAL");
+          setEditSubCategory(pd.subCategory || "NONE");
+          setEditRetirementDate(pd.retirementDate ? pd.retirementDate.split("T")[0] : "");
+          setEditSportsType(pd.sportsType || "");
+          setEditIsPhysicallyHandicapped(Boolean(pd.isPhysicallyHandicapped));
+          setEditDisabilityType(pd.disabilityType || "");
+          setEditMultiDisabilityType(pd.multiDisabilityType || "");
+          setEditScribeRequired(Boolean(pd.scribeRequired));
+
+          setEditExamCity1(Number(pd.examCity1) || 0);
+          setEditExamCity2(Number(pd.examCity2) || 0);
           setEditMailingAddress(pd.mailingAddress || "");
-          setEditStateId(pd.stateId || 0);
-          setEditDistrict(pd.district || 0);
+          setEditStateId(Number(pd.stateId) || 0);
+          setEditDistrict(Number(pd.district) || 0);
           setEditPinCode(pd.pinCode || "");
-          setEditIdentityProof(pd.identityProof || "Select");
+          setEditIdentityProof(pd.identityProof || "Aadhar Card");
           setEditIdentityProofNo(pd.identityProofNo || "");
+
           if (pd.stateId) {
             fetchDistrictCities(pd.stateId);
           } else {
@@ -1899,37 +1741,29 @@ export default function AdminDashboard() {
           }
         } else {
           // Defaults if no personal details record exists yet
-          setEditExamTypeId(1);
-          setEditGender("");
+          setEditGender("MALE");
           setEditDOB("");
           setEditMotherName("");
           setEditHusbandName("");
-          setEditHomeDistrict(0);
-          setEditCategory("");
-          setEditSubCategory("");
+          setEditAppliedCategory("1-विज्ञान वर्ग");
+          setEditGraduationCourse("");
+          setEditGraduationUniversity("Select");
+          setEditGraduationDate("");
+          setEditCategory("GENERAL");
+          setEditSubCategory("NONE");
           setEditRetirementDate("");
+          setEditSportsType("");
           setEditIsPhysicallyHandicapped(false);
           setEditDisabilityType("");
+          setEditMultiDisabilityType("");
           setEditScribeRequired(false);
-          setEditFirstLanguage("");
-          setEditSecondLanguage("");
-          setEditSubjectCode("");
-
-          setEditDeled1TrainingQualification("Select");
-          setEditDeled1TrainingStatus("");
-          setEditDeled1TrainingYear("Select");
-          setEditDeled2TrainingQualification("Select");
-          setEditDeled2TrainingStatus("");
-          setEditDeled2TrainingYear("Select");
-          setEditEligibilityCodeDeled1("Select");
-          setEditEligibilityCodeDeled2("Select");
           setEditExamCity1(0);
           setEditExamCity2(0);
           setEditMailingAddress("");
           setEditStateId(0);
           setEditDistrict(0);
           setEditPinCode("");
-          setEditIdentityProof("Select");
+          setEditIdentityProof("Aadhar Card");
           setEditIdentityProofNo("");
           setDistrictCitiesList([]);
         }
@@ -1980,29 +1814,22 @@ export default function AdminDashboard() {
         email: editEmail.trim(),
         isPaymentCompleted: editIsPaymentCompleted,
         personalDetails: {
-          examTypeId: Number(editExamTypeId),
           gender: editGender,
           dob: editDOB || null,
           motherName: editMotherName.trim().toUpperCase(),
           husbandName: editGender?.toUpperCase() === "MALE" ? null : (editHusbandName ? editHusbandName.trim().toUpperCase() : null),
-          homeDistrict: Number(editHomeDistrict),
+          appliedCategory: editAppliedCategory,
+          graduationCourse: editGraduationCourse,
+          graduationUniversity: editGraduationUniversity !== "Select" ? editGraduationUniversity : null,
+          graduationDate: editGraduationDate || null,
           category: editCategory,
           subCategory: editSubCategory,
           retirementDate: editSubCategory === "EX-SERVICEMAN (Self)" && editRetirementDate ? editRetirementDate : null,
+          sportsType: editSubCategory === "SPORTS" ? editSportsType : null,
           isPhysicallyHandicapped: editIsPhysicallyHandicapped,
           disabilityType: editIsPhysicallyHandicapped ? editDisabilityType : null,
+          multiDisabilityType: editIsPhysicallyHandicapped && editDisabilityType === "Multiple Disabilities" ? editMultiDisabilityType : null,
           scribeRequired: editIsPhysicallyHandicapped ? editScribeRequired : false,
-          firstLanguage: editFirstLanguage,
-          secondLanguage: editSecondLanguage,
-          subjectCode: editExamTypeId === 1 ? null : editSubjectCode,
-          deled1TrainingQualification: editExamTypeId === 2 ? null : (editDeled1TrainingQualification !== "Select" ? editDeled1TrainingQualification : null),
-          deled1TrainingStatus: editExamTypeId === 2 ? null : (editDeled1TrainingStatus || null),
-          deled1TrainingYear: editExamTypeId === 2 ? null : (editDeled1TrainingYear !== "Select" ? editDeled1TrainingYear : null),
-          deled2TrainingQualification: editExamTypeId === 1 ? null : (editDeled2TrainingQualification !== "Select" ? editDeled2TrainingQualification : null),
-          deled2TrainingStatus: editExamTypeId === 1 ? null : (editDeled2TrainingStatus || null),
-          deled2TrainingYear: editExamTypeId === 1 ? null : (editDeled2TrainingYear !== "Select" ? editDeled2TrainingYear : null),
-          eligibilityCodeDELED1: editExamTypeId === 2 ? null : (editEligibilityCodeDeled1 !== "Select" ? editEligibilityCodeDeled1 : null),
-          eligibilityCodeDELED2: editExamTypeId === 1 ? null : (editEligibilityCodeDeled2 !== "Select" ? editEligibilityCodeDeled2 : null),
           examCity1: Number(editExamCity1),
           examCity2: Number(editExamCity2),
           mailingAddress: editMailingAddress.trim(),
@@ -2016,12 +1843,20 @@ export default function AdminDashboard() {
 
       const response = await api.put(`/api/UserRegistrations/admin/applicant/${foundApplicant.registrationNo}`, payload);
       if (response.data && response.data.success) {
-        setSaveMessage({ text: "Applicant and personal details record updated successfully!", type: "success" });
+        setSaveMessage({ text: "Applicant and complete application form details updated successfully!", type: "success" });
         setFoundApplicant(prev => ({
           ...prev,
-          ...payload
+          fullName: payload.fullName,
+          fatherName: payload.fatherName,
+          phoneNumber: payload.phoneNumber,
+          email: payload.email,
+          isPaymentCompleted: payload.isPaymentCompleted,
+          personalDetails: {
+            ...(prev?.personalDetails || {}),
+            ...payload.personalDetails
+          }
         }));
-        
+
         // Refresh the main applications list in the background
         fetchDashboardData(currentPage, pageSize, activeSearchQuery, activeFilterStatus);
       } else {
@@ -2055,19 +1890,18 @@ export default function AdminDashboard() {
                 EDIT
               </div>
             </div>
-            <h2 className="font-semibold text-sm text-slate-800 capitalize">{username}</h2>
-            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Senior Administrator</p>
+            <h2 className="font-extrabold text-lg text-slate-900 capitalize">{username}</h2>
+            <p className="text-sm text-slate-500 font-bold uppercase tracking-wider mt-0.5">Senior Administrator</p>
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-4 space-y-1.5">
+          <nav className="p-4 space-y-2">
             {[
               { id: "dashboard", label: "Dashboard", icon: FaChartBar },
               { id: "reviewPaid", label: "Review Paid Application", icon: FaCheckCircle },
               { id: "submission", label: "Submission Report", icon: FaFileAlt },
               { id: "email", label: "Email Report", icon: FaEnvelope },
               { id: "update", label: "Update / Correction", icon: FaUserEdit },
-              { id: "schoolType", label: "Update School Type", icon: FaSchool },
               { id: "payment", label: "Payment Status", icon: FaCreditCard },
               { id: "cms", label: "CMS / Timelines", icon: FaCalendarAlt },
               { id: "alerts", label: "Manage Alerts", icon: FaBullhorn },
@@ -2079,13 +1913,12 @@ export default function AdminDashboard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium tracking-wide uppercase transition duration-150 cursor-pointer ${
-                    isActive
+                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-base font-bold tracking-wide transition duration-150 cursor-pointer ${isActive
                       ? "bg-slate-100 text-slate-900 border-l-4 border-slate-800 rounded-l-none"
-                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-slate-850" : "text-slate-400"}`} />
+                  <Icon className={`w-5 h-5 shrink-0 ${isActive ? "text-slate-900" : "text-slate-400"}`} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -2100,9 +1933,9 @@ export default function AdminDashboard() {
               logout();
               navigate("/admin/login");
             }}
-            className="w-full flex items-center justify-center gap-2 px-4.5 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition shadow-md cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-5 py-4 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-base font-extrabold tracking-wider uppercase transition shadow-md cursor-pointer"
           >
-            <FaSignOutAlt className="w-3.5 h-3.5" /> Logout System
+            <FaSignOutAlt className="w-4 h-4" /> Logout System
           </button>
         </div>
       </aside>
@@ -2111,120 +1944,120 @@ export default function AdminDashboard() {
       <main className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         {/* Top Header */}
         <header className="bg-white h-20 px-8 flex items-center justify-between border-b border-slate-200 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-            <span className="hover:text-slate-750 cursor-pointer transition">Home</span>
+          <div className="flex items-center gap-3 text-base font-bold text-slate-500">
+            <span className="hover:text-slate-800 cursor-pointer transition">Home</span>
             <span>/</span>
-            <span className="text-slate-800 capitalize font-semibold">{activeTab}</span>
+            <span className="text-slate-900 capitalize font-extrabold text-lg">{activeTab}</span>
           </div>
 
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 text-slate-700 disabled:text-slate-400 font-semibold text-xs rounded-lg transition duration-200 shadow-xs border border-slate-200 cursor-pointer select-none"
+            className="flex items-center gap-2.5 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 text-slate-850 disabled:text-slate-400 font-extrabold text-base rounded-xl transition duration-200 shadow-xs border border-slate-200 cursor-pointer select-none"
             title="Refresh dashboard data"
           >
-            <FaSync className={`w-3 h-3 ${isRefreshing ? "animate-spin text-slate-400" : ""}`} />
+            <FaSync className={`w-4 h-4 ${isRefreshing ? "animate-spin text-slate-400" : ""}`} />
             <span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
           </button>
         </header>
 
         {/* Content Body */}
         <div className="p-8 space-y-8 overflow-y-auto flex-1">
-          
+
           {/* STATS PANEL */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
+
             {/* Stat Box 1 */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
-              <div className="space-y-1">
-                <span className="text-xs font-semibold uppercase text-slate-400 tracking-wider">Total Registration</span>
-                <span className="block text-3xl font-bold text-slate-800">{totalRegCount}</span>
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-sm font-extrabold uppercase text-slate-500 tracking-wider">Total Registration</span>
+                <span className="block text-4xl font-black text-slate-900">{totalRegCount}</span>
               </div>
-              <div className="bg-slate-50 text-slate-450 p-4 rounded-xl text-xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
+              <div className="bg-slate-100 text-slate-700 p-5 rounded-2xl text-3xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
                 <FaFolder />
               </div>
             </div>
 
             {/* Stat Box 2 */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
-              <div className="space-y-1">
-                <span className="text-xs font-semibold uppercase text-slate-400 tracking-wider">PAID Applications</span>
-                <span className="block text-3xl font-bold text-slate-800">{paidRegCount}</span>
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-sm font-extrabold uppercase text-slate-500 tracking-wider">PAID Applications</span>
+                <span className="block text-4xl font-black text-slate-900">{paidRegCount}</span>
               </div>
-              <div className="bg-slate-50 text-slate-450 p-4 rounded-xl text-xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
+              <div className="bg-slate-100 text-slate-700 p-5 rounded-2xl text-3xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
                 <FaCreditCard />
               </div>
             </div>
 
             {/* Stat Box 3 */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
-              <div className="space-y-1">
-                <span className="text-xs font-semibold uppercase text-slate-400 tracking-wider">Final Exam Count (I+II)</span>
-                <span className="block text-3xl font-bold text-slate-800">{stats.finalExamCount}</span>
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex items-center justify-between relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-sm font-extrabold uppercase text-slate-500 tracking-wider">Final Exam Count (I+II)</span>
+                <span className="block text-4xl font-black text-slate-900">{stats.finalExamCount}</span>
               </div>
-              <div className="bg-slate-50 text-slate-450 p-4 rounded-xl text-xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
+              <div className="bg-slate-100 text-slate-700 p-5 rounded-2xl text-3xl group-hover:scale-110 transition duration-300 flex items-center justify-center">
                 <FaEdit />
               </div>
             </div>
-            
+
           </section>
 
           {/* MAIN DYNAMIC CONTENT */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
             {/* Dashboard Tab */}
             {activeTab === "dashboard" && (
-              <div className="p-8 space-y-6">
-                <div className="border-b border-slate-100 pb-4 flex justify-between items-center">
+              <div className="p-8 space-y-7">
+                <div className="border-b border-slate-150 pb-5 flex justify-between items-center">
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-800">Search Applicant Database</h3>
-                    <p className="text-xs text-slate-400 font-normal mt-0.5">Query and filter live candidates records instantly.</p>
+                    <h3 className="text-2xl font-black text-slate-900">Search Applicant Database</h3>
+                    <p className="text-base text-slate-500 font-medium mt-1">Query and filter live candidate records instantly.</p>
                   </div>
-                  <span className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200/60">
-                    Total Records: {totalApplicationsCount}
+                  <span className="text-base font-bold text-slate-800 bg-slate-100 px-5 py-2.5 rounded-full border border-slate-200">
+                    Total Records: <strong className="text-slate-950 font-black">{totalApplicationsCount}</strong>
                   </span>
                 </div>
 
                 {/* Filter and Search Bar */}
-                <form onSubmit={handleSearch} className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-center bg-slate-50/50 p-4 rounded-xl border border-slate-150">
+                <form onSubmit={handleSearch} className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-center bg-slate-50/80 p-6 rounded-2xl border border-slate-200">
                   <div className="xl:col-span-6">
                     <input
                       type="text"
                       placeholder="Enter Registration No. / Name / Mobile No."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-normal text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-hidden transition shadow-inner"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-5 py-3.5 text-lg font-medium text-slate-900 focus:ring-2 focus:ring-slate-500/20 focus:border-slate-600 outline-hidden transition shadow-sm placeholder:text-slate-400"
                     />
                   </div>
 
-                  <div className="xl:col-span-4 flex items-center justify-center gap-6">
-                    <label className="flex items-center gap-2 text-sm font-medium text-slate-650 cursor-pointer">
+                  <div className="xl:col-span-4 flex items-center justify-center gap-8">
+                    <label className="flex items-center gap-3 text-lg font-bold text-slate-800 cursor-pointer">
                       <input
                         type="radio"
                         name="status"
                         checked={filterStatus === "all"}
                         onChange={() => setFilterStatus("all")}
-                        className="text-slate-800 focus:ring-slate-500 w-4 h-4 cursor-pointer"
+                        className="text-slate-800 focus:ring-slate-500 w-5 h-5 cursor-pointer accent-slate-800"
                       />
                       All
                     </label>
-                    <label className="flex items-center gap-2 text-sm font-medium text-slate-650 cursor-pointer">
+                    <label className="flex items-center gap-3 text-lg font-bold text-slate-800 cursor-pointer">
                       <input
                         type="radio"
                         name="status"
                         checked={filterStatus === "paid"}
                         onChange={() => setFilterStatus("paid")}
-                        className="text-slate-800 focus:ring-slate-500 w-4 h-4 cursor-pointer"
+                        className="text-slate-800 focus:ring-slate-500 w-5 h-5 cursor-pointer accent-slate-800"
                       />
                       Paid
                     </label>
-                    <label className="flex items-center gap-2 text-sm font-medium text-slate-650 cursor-pointer">
+                    <label className="flex items-center gap-3 text-lg font-bold text-slate-800 cursor-pointer">
                       <input
                         type="radio"
                         name="status"
                         checked={filterStatus === "unpaid"}
                         onChange={() => setFilterStatus("unpaid")}
-                        className="text-slate-800 focus:ring-slate-500 w-4 h-4 cursor-pointer"
+                        className="text-slate-800 focus:ring-slate-500 w-5 h-5 cursor-pointer accent-slate-800"
                       />
                       Unpaid
                     </label>
@@ -2234,11 +2067,11 @@ export default function AdminDashboard() {
                     <button
                       type="submit"
                       disabled={isSearching}
-                      className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-none"
+                      className="w-full py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-base font-black uppercase tracking-wider shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer border-none"
                     >
                       {isSearching ? "Searching..." : (
                         <>
-                          <FaSearch className="w-3 h-3" />
+                          <FaSearch className="w-4 h-4" />
                           <span>Search</span>
                         </>
                       )}
@@ -2247,72 +2080,73 @@ export default function AdminDashboard() {
                 </form>
 
                 {/* Table of Results */}
-                <div className="overflow-x-auto rounded-xl border border-slate-200">
-                  <table className="w-full min-w-[1200px] text-left border-collapse">
+                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs">
+                  <table className="w-full min-w-[1400px] text-left border-collapse">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-sm font-semibold uppercase text-slate-500 tracking-wider">
-                        <th className="px-6 py-4">Reg No.</th>
-                        <th className="px-6 py-4">Applicant Name</th>
-                        <th className="px-6 py-4">Clear Pass</th>
-                        <th className="px-6 py-4">Contact Info</th>
-                        <th className="px-6 py-4">Exam Option</th>
-                        <th className="px-6 py-4">Status</th>
-                        <th className="px-6 py-4">Gateway Status</th>
-                        <th className="px-6 py-4">Date</th>
-                        <th className="px-6 py-4 text-center">Actions</th>
+                      <tr className="bg-slate-100/90 border-b border-slate-200 text-base font-extrabold uppercase text-slate-800 tracking-wider">
+                        <th className="px-6 py-4.5 whitespace-nowrap">Reg No.</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Applicant Name</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Clear Pass</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Contact Info</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap min-w-[220px]">Exam Option</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Status</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Gateway Status</th>
+                        <th className="px-6 py-4.5 whitespace-nowrap">Date</th>
+                        <th className="px-6 py-4.5 text-center whitespace-nowrap">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-base font-normal text-slate-700">
+                    <tbody className="divide-y divide-slate-150 text-base font-medium text-slate-800">
                       {filteredApplications.length === 0 ? (
                         <tr>
-                          <td colSpan="9" className="text-center py-12 text-slate-400 bg-slate-50/50">
-                            <div className="flex flex-col items-center justify-center gap-2">
-                              <FaInbox className="text-2xl text-slate-300" />
-                              <span>No matching records found in the candidate database.</span>
+                          <td colSpan="9" className="text-center py-14 text-slate-500 bg-slate-50/50">
+                            <div className="flex flex-col items-center justify-center gap-3">
+                              <FaInbox className="text-4xl text-slate-300" />
+                              <span className="text-lg font-semibold">No matching records found in the candidate database.</span>
                             </div>
                           </td>
                         </tr>
                       ) : (
                         filteredApplications.map((app) => (
-                          <tr key={app.regNo} className="hover:bg-slate-50/50 transition">
-                            <td className="px-6 py-4 font-normal text-slate-800">{app.regNo}</td>
-                            <td className="px-6 py-4 font-normal text-slate-800 max-w-[200px] truncate" title={app.name}>{app.name}</td>
-                            <td className="px-6 py-4 font-mono text-sm text-slate-600 font-normal">{app.clearPass || "-"}</td>
-                            <td className="px-6 py-4 space-y-1 text-sm font-normal">
-                              <div className="flex items-center gap-1.5"><FaPhone className="text-slate-400 text-[12px] shrink-0" /> {app.mobile}</div>
-                              <div className="text-slate-500 flex items-center gap-1.5 max-w-[200px] truncate" title={app.email}>
-                                <FaEnvelope className="text-slate-400 text-[12px] shrink-0" /> {app.email}
+                          <tr key={app.regNo} className="hover:bg-slate-50 transition">
+                            <td className="px-6 py-4.5 font-extrabold text-slate-950 text-lg whitespace-nowrap">{app.regNo}</td>
+                            <td className="px-6 py-4.5 font-bold text-slate-900 text-lg whitespace-nowrap" title={app.name}>{app.name}</td>
+                            <td className="px-6 py-4.5 font-mono text-base font-extrabold text-slate-800 whitespace-nowrap">
+                              <span className="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/80">{app.clearPass || "-"}</span>
+                            </td>
+                            <td className="px-6 py-4.5 space-y-1.5 text-base font-semibold whitespace-nowrap">
+                              <div className="flex items-center gap-2 text-slate-800"><FaPhone className="text-slate-400 text-sm shrink-0" /> {app.mobile}</div>
+                              <div className="text-slate-600 flex items-center gap-2 max-w-[250px] truncate text-sm" title={app.email}>
+                                <FaEnvelope className="text-slate-400 text-xs shrink-0" /> {app.email}
                               </div>
                             </td>
-                            <td className="px-6 py-4 font-medium text-slate-700">{app.appliedFor}</td>
-                            <td className="px-6 py-4">
-                              <span className={`px-2.5 py-1 rounded-full text-sm font-semibold uppercase tracking-wider ${
-                                app.status === "Paid" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-red-50 text-red-700 border border-red-200"
-                              }`}>
+                            <td className="px-6 py-4.5 font-bold text-slate-800 text-base whitespace-nowrap min-w-[220px]">
+                              {app.appliedFor}
+                            </td>
+                            <td className="px-6 py-4.5 whitespace-nowrap">
+                              <span className={`px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${app.status === "Paid" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-red-50 text-red-700 border border-red-200"
+                                }`}>
                                 {app.status}
                               </span>
                             </td>
-                            <td className="px-6 py-4">
-                              <span className={`px-2.5 py-1 rounded-full text-sm font-semibold uppercase tracking-wider ${
-                                app.txnStatus === "SUCCESS"
-                                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            <td className="px-6 py-4.5 whitespace-nowrap">
+                              <span className={`px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${app.txnStatus === "SUCCESS"
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                                   : (app.txnStatus === "FAILED" || app.txnStatus === "FAIL")
-                                  ? "bg-red-50 text-red-700 border border-red-200"
-                                  : "bg-amber-50 text-amber-700 border border-amber-250"
-                              }`}>
+                                    ? "bg-red-50 text-red-700 border border-red-200"
+                                    : "bg-amber-50 text-amber-700 border border-amber-200"
+                                }`}>
                                 {app.txnStatus || "PENDING"}
                               </span>
                             </td>
-                            <td className="px-6 py-4 font-normal text-slate-450">{app.date}</td>
-                            <td className="px-6 py-4 text-center">
+                            <td className="px-6 py-4.5 font-semibold text-slate-700 text-base whitespace-nowrap">{app.date}</td>
+                            <td className="px-6 py-4.5 text-center whitespace-nowrap">
                               <button
                                 onClick={() => handlePrintApplicant(app.regNo)}
                                 disabled={!!printingRegNo}
-                                className={`p-2 rounded-lg transition duration-150 flex items-center justify-center mx-auto cursor-pointer ${
-                                  printingRegNo === app.regNo
+                                className={`p-3 rounded-xl transition duration-150 flex items-center justify-center mx-auto cursor-pointer ${printingRegNo === app.regNo
                                     ? "bg-slate-100 text-slate-400"
-                                    : "text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200"
-                                }`}
+                                    : "text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 border border-slate-200 shadow-xs"
+                                  }`}
                                 title="Print Preview PDF"
                               >
                                 {printingRegNo === app.regNo ? (
@@ -2331,63 +2165,63 @@ export default function AdminDashboard() {
 
                 {/* Pagination Controls */}
                 {totalApplicationsCount > 0 && (
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-150">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500 font-medium">Show</span>
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-slate-150">
+                    <div className="flex items-center gap-3">
+                      <span className="text-base text-slate-600 font-semibold">Show</span>
                       <select
                         value={pageSize}
                         onChange={(e) => {
                           setPageSize(Number(e.target.value));
                           setCurrentPage(1);
                         }}
-                        className="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-hidden transition cursor-pointer"
+                        className="bg-white border border-slate-300 rounded-xl px-3.5 py-2 text-base text-slate-900 font-bold focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-hidden transition cursor-pointer"
                       >
                         {[10, 25, 50, 100].map((size) => (
                           <option key={size} value={size}>{size} entries</option>
                         ))}
                       </select>
-                      <span className="text-xs text-slate-500 font-normal">
+                      <span className="text-base text-slate-600 font-medium">
                         Showing {totalApplicationsCount === 0 ? 0 : (currentPage - 1) * pageSize + 1} to {Math.min(totalApplicationsCount, currentPage * pageSize)} of {totalApplicationsCount} entries
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 font-sans">
+                    <div className="flex items-center gap-2 font-sans">
                       <button
                         type="button"
                         disabled={currentPage === 1}
                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                        className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 disabled:opacity-50 text-slate-600 rounded-lg text-xs font-semibold shadow-xs transition duration-150 cursor-pointer disabled:cursor-not-allowed select-none border-none"
+                        className="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 disabled:opacity-50 text-slate-800 rounded-xl text-base font-bold shadow-xs transition duration-150 cursor-pointer disabled:cursor-not-allowed select-none"
                       >
                         Previous
                       </button>
-                      
+
                       {/* Render page numbers */}
                       {(() => {
                         const totalPages = Math.ceil(totalApplicationsCount / pageSize);
                         const pages = [];
-                        
+
                         // Sliding window calculation
                         let startPage = Math.max(1, currentPage - 2);
                         let endPage = Math.min(totalPages, currentPage + 2);
-                        
+
                         if (startPage > 1) {
                           pages.push(1);
                           if (startPage > 2) pages.push("...");
                         }
-                        
+
                         for (let p = startPage; p <= endPage; p++) {
                           pages.push(p);
                         }
-                        
+
                         if (endPage < totalPages) {
                           if (endPage < totalPages - 1) pages.push("...");
                           pages.push(totalPages);
                         }
-                        
+
                         return pages.map((p, idx) => {
                           if (p === "...") {
                             return (
-                              <span key={`dots-${idx}`} className="px-2 text-xs text-slate-400 font-medium">
+                              <span key={`dots-${idx}`} className="px-2.5 text-base text-slate-400 font-bold">
                                 ...
                               </span>
                             );
@@ -2398,11 +2232,10 @@ export default function AdminDashboard() {
                               key={p}
                               type="button"
                               onClick={() => setCurrentPage(p)}
-                              className={`w-8 h-8 rounded-lg text-xs font-bold transition duration-150 flex items-center justify-center cursor-pointer border-none ${
-                                isCurrent
-                                  ? "bg-slate-800 text-white shadow-md"
-                                  : "bg-white hover:bg-slate-50 text-slate-600 border border-slate-200"
-                              }`}
+                              className={`w-10 h-10 rounded-xl text-base font-extrabold transition duration-150 flex items-center justify-center cursor-pointer ${isCurrent
+                                  ? "bg-slate-800 text-white shadow-md border-none"
+                                  : "bg-white hover:bg-slate-50 text-slate-800 border border-slate-300"
+                                }`}
                             >
                               {p}
                             </button>
@@ -2414,7 +2247,7 @@ export default function AdminDashboard() {
                         type="button"
                         disabled={currentPage === Math.ceil(totalApplicationsCount / pageSize)}
                         onClick={() => setCurrentPage(prev => Math.min(Math.ceil(totalApplicationsCount / pageSize), prev + 1))}
-                        className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 disabled:opacity-50 text-slate-600 rounded-lg text-xs font-semibold shadow-xs transition duration-150 cursor-pointer disabled:cursor-not-allowed select-none border-none"
+                        className="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 disabled:opacity-50 text-slate-800 rounded-xl text-base font-bold shadow-xs transition duration-150 cursor-pointer disabled:cursor-not-allowed select-none"
                       >
                         Next
                       </button>
@@ -2426,31 +2259,31 @@ export default function AdminDashboard() {
 
             {/* Review Paid Application Tab */}
             {activeTab === "reviewPaid" && (
-              <div className="p-8 space-y-6">
-                <div className="border-b border-slate-100 pb-4 flex justify-between items-center">
+              <div className="p-8 space-y-7">
+                <div className="border-b border-slate-150 pb-5 flex justify-between items-center">
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                    <h3 className="text-2xl font-black text-slate-900 flex items-center gap-2.5">
                       <FaCheckCircle className="text-blue-600" />
                       Review Paid Applications
                     </h3>
-                    <p className="text-xs text-slate-400 font-normal mt-0.5">
+                    <p className="text-base text-slate-500 font-medium mt-1">
                       Review Name, Gender, Father's Name, DOB, Photo, Thumb Impression, and Signature for paid candidates (ispaymentcompleted = 1).
                     </p>
                   </div>
-                  <span className="text-xs font-medium text-slate-600 bg-blue-50 text-blue-700 border border-emerald-200 px-3 py-1.5 rounded-full">
-                    Paid Count: {paidTotalCount}
+                  <span className="text-base font-bold text-blue-700 bg-blue-50 border border-blue-200 px-5 py-2.5 rounded-full">
+                    Paid Count: <strong className="font-black">{paidTotalCount}</strong>
                   </span>
                 </div>
 
                 {/* Filter and Search Bar */}
-                <form onSubmit={handlePaidSearch} className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-center bg-slate-50/50 p-4 rounded-xl border border-slate-150">
-                  <div className="xl:col-span-6 flex gap-2">
+                <form onSubmit={handlePaidSearch} className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-center bg-slate-50/80 p-6 rounded-2xl border border-slate-200">
+                  <div className="xl:col-span-6 flex gap-3">
                     <input
                       type="text"
                       placeholder="Search by Registration Number..."
                       value={paidSearchQuery}
                       onChange={(e) => setPaidSearchQuery(e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-normal text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-hidden transition shadow-inner"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-5 py-3.5 text-lg font-medium text-slate-900 focus:ring-2 focus:ring-slate-500/20 focus:border-slate-600 outline-hidden transition shadow-sm placeholder:text-slate-400"
                     />
                     {paidSearchQuery && (
                       <button
@@ -2460,15 +2293,15 @@ export default function AdminDashboard() {
                           setPaidCurrentPage(1);
                           fetchPaidApplications(1, paidPageSize, "", paidSortOrder);
                         }}
-                        className="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition border-none cursor-pointer shrink-0"
+                        className="px-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 text-sm font-bold rounded-xl transition border-none cursor-pointer shrink-0"
                       >
                         Clear
                       </button>
                     )}
                   </div>
 
-                  <div className="xl:col-span-4 flex items-center justify-end gap-3">
-                    <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Sort By:</span>
+                  <div className="xl:col-span-4 flex items-center justify-end gap-3.5">
+                    <span className="text-sm font-extrabold text-slate-600 uppercase tracking-wider">Sort By:</span>
                     <select
                       value={`${paidSortBy}_${paidSortOrder}`}
                       onChange={(e) => {
@@ -2477,7 +2310,7 @@ export default function AdminDashboard() {
                         setPaidSortOrder(order);
                         setPaidCurrentPage(1);
                       }}
-                      className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer"
+                      className="bg-white border border-slate-300 rounded-xl px-4 py-3 text-base font-bold text-slate-850 focus:outline-none cursor-pointer shadow-sm"
                     >
                       <option value="regNo_asc">Reg No. (1-9 Ascending)</option>
                       <option value="regNo_desc">Reg No. (9-1 Descending)</option>
@@ -2490,13 +2323,13 @@ export default function AdminDashboard() {
                     <button
                       type="submit"
                       disabled={paidAppsLoading}
-                      className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-none"
+                      className="w-full py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-base font-black uppercase tracking-wider shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer border-none"
                     >
                       {paidAppsLoading ? (
-                        <FaSpinner className="w-3.5 h-3.5 animate-spin" />
+                        <FaSpinner className="w-4 h-4 animate-spin" />
                       ) : (
                         <>
-                          <FaSearch className="w-3 h-3" />
+                          <FaSearch className="w-4 h-4" />
                           <span>Search</span>
                         </>
                       )}
@@ -2508,7 +2341,7 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase text-slate-600 tracking-wider">
+                      <tr className="bg-slate-100/90 border-b border-slate-200 text-sm font-extrabold uppercase text-slate-800 tracking-wider">
                         <th
                           className="px-3 py-3.5 cursor-pointer select-none hover:bg-slate-100 transition whitespace-nowrap w-32"
                           onClick={() => {
@@ -2710,21 +2543,21 @@ export default function AdminDashboard() {
                     <p className="text-xs text-slate-400 font-normal mt-0.5">Filter, export, and generate consolidated candidate registration reports.</p>
                   </div>
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={handleToggleEmailReportPdf}
                       className={`px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer flex items-center gap-1.5 border-none ${showEmailReportPdf ? 'bg-indigo-650 hover:bg-indigo-700 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                     >
                       <FaFilePdf className="w-3.5 h-3.5" />
                       <span>{showEmailReportPdf ? "Show Dashboard Stats" : "Show Email PDF Report"}</span>
                     </button>
-                    <button 
+                    <button
                       onClick={handleExportCSV}
                       className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer flex items-center gap-1.5 border-none"
                     >
                       <FaFileCsv className="w-3.5 h-3.5" />
                       <span>EXPORT REPORT (CSV)</span>
                     </button>
-                    <button 
+                    <button
                       onClick={handleExportPDF}
                       className="px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer flex items-center gap-1.5 border-none"
                     >
@@ -2754,8 +2587,8 @@ export default function AdminDashboard() {
                         <span className="text-xs text-slate-450 font-medium">Generating and downloading consolidated PDF report...</span>
                       </div>
                     ) : pdfReportUrl ? (
-                      <iframe 
-                        src={pdfReportUrl} 
+                      <iframe
+                        src={pdfReportUrl}
                         className="w-full h-[750px] border border-slate-200 rounded-lg shadow-inner bg-slate-50"
                         title="Consolidated Email PDF Report"
                       />
@@ -2768,161 +2601,151 @@ export default function AdminDashboard() {
                 ) : (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-                    <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">DELED I Submissions</span>
-                    <span className="block text-2xl font-bold text-slate-800">{deled1SubmissionsCount}</span>
-                  </div>
-                  <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-                    <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">DELED II Submissions</span>
-                    <span className="block text-2xl font-bold text-slate-800">{deled2SubmissionsCount}</span>
-                  </div>
-                  <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-                    <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">Both Papers Submissions</span>
-                    <span className="block text-2xl font-bold text-slate-800">{bothSubmissionsCount}</span>
-                  </div>
-                </div>
-
-                {/* Date Filter Panel */}
-                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-end justify-between gap-4">
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] font-bold uppercase text-slate-400 mb-1">Date From</span>
-                      <input 
-                        type="date" 
-                        value={filterStartDate}
-                        onChange={(e) => setFilterStartDate(e.target.value)}
-                        className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-slate-450 bg-white"
-                      />
+                      <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                        <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">DELED I Submissions</span>
+                        <span className="block text-2xl font-bold text-slate-800">{deled1SubmissionsCount}</span>
+                      </div>
+                      <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                        <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">DELED II Submissions</span>
+                        <span className="block text-2xl font-bold text-slate-800">{deled2SubmissionsCount}</span>
+                      </div>
+                      <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                        <span className="text-[10px] font-semibold uppercase text-slate-450 tracking-wider">Both Papers Submissions</span>
+                        <span className="block text-2xl font-bold text-slate-800">{bothSubmissionsCount}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] font-bold uppercase text-slate-400 mb-1">Date To</span>
-                      <input 
-                        type="date" 
-                        value={filterEndDate}
-                        onChange={(e) => setFilterEndDate(e.target.value)}
-                        className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-slate-450 bg-white"
-                      />
-                    </div>
-                    <button 
-                      onClick={handleApplyDateFilter}
-                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition cursor-pointer border-none h-[34px]"
-                    >
-                      Apply Filter
-                    </button>
-                    <button 
-                      onClick={handleClearDateFilter}
-                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold uppercase tracking-wider transition cursor-pointer border-none h-[34px]"
-                    >
-                      Clear
-                    </button>
-                  </div>
-                </div>
 
-                {/* Date Wise Form Submission Report */}
-                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                  <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                    <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                      Date Wise Form Submission Report
-                    </span>
-                    {reportLoading && <span className="text-xs text-slate-400">Loading...</span>}
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse text-sm text-slate-650">
-                      <thead>
-                        <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
-                          <th className="px-6 py-3 border-r border-slate-200 text-center w-16" rowSpan={2}>Sr. No.</th>
-                          <th className="px-6 py-3 border-r border-slate-200 text-left" rowSpan={2}>Date</th>
-                          <th className="px-6 py-3 border-r border-slate-200 text-center" colSpan={2}>Registration</th>
-                          <th className="px-6 py-3 text-center" colSpan={2}>Fees Paid</th>
-                        </tr>
-                        <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
-                          <th className="px-6 py-2 border-r border-slate-200 text-center">No.</th>
-                          <th className="px-6 py-2 border-r border-slate-200 text-center">Cumm.</th>
-                          <th className="px-6 py-2 border-r border-slate-200 text-center">No.</th>
-                          <th className="px-6 py-2 text-center">Cumm.</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {reportDateWise.length === 0 ? (
-                          <tr>
-                            <td colSpan={6} className="px-6 py-8 text-center text-slate-450">No report data found.</td>
-                          </tr>
-                        ) : (
-                          reportDateWise.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50/30 transition">
-                              <td className="px-6 py-3 border-r border-slate-200 text-center">{idx + 1}</td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-slate-800 font-medium">{row.date || row.Date}</td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.regNo || row.RegNo}</td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-center font-semibold text-slate-800">{row.regCumm || row.RegCumm}</td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.feesNo || row.FeesNo}</td>
-                              <td className="px-6 py-3 text-center font-semibold text-blue-700">{row.feesCumm || row.FeesCumm}</td>
+                    {/* Date Filter Panel */}
+                    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-end justify-between gap-4">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 mb-1">Date From</span>
+                          <input
+                            type="date"
+                            value={filterStartDate}
+                            onChange={(e) => setFilterStartDate(e.target.value)}
+                            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-slate-450 bg-white"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 mb-1">Date To</span>
+                          <input
+                            type="date"
+                            value={filterEndDate}
+                            onChange={(e) => setFilterEndDate(e.target.value)}
+                            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-slate-450 bg-white"
+                          />
+                        </div>
+                        <button
+                          onClick={handleApplyDateFilter}
+                          className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition cursor-pointer border-none h-[34px]"
+                        >
+                          Apply Filter
+                        </button>
+                        <button
+                          onClick={handleClearDateFilter}
+                          className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold uppercase tracking-wider transition cursor-pointer border-none h-[34px]"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Date Wise Form Submission Report */}
+                    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                          Date Wise Form Submission Report
+                        </span>
+                        {reportLoading && <span className="text-xs text-slate-400">Loading...</span>}
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse text-sm text-slate-650">
+                          <thead>
+                            <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
+                              <th className="px-6 py-3 border-r border-slate-200 text-center w-16" rowSpan={2}>Sr. No.</th>
+                              <th className="px-6 py-3 border-r border-slate-200 text-left" rowSpan={2}>Date</th>
+                              <th className="px-6 py-3 border-r border-slate-200 text-center" colSpan={2}>Registration</th>
+                              <th className="px-6 py-3 text-center" colSpan={2}>Fees Paid</th>
                             </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Exam City Wise Application count Report */}
-                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                  <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                    <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                      Exam City Wise Application count Report
-                    </span>
-                    {reportLoading && <span className="text-xs text-slate-400">Loading...</span>}
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse text-sm text-slate-650">
-                      <thead>
-                        <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
-                          <th className="px-6 py-3 border-r border-slate-200 text-center w-16">Sr. No.</th>
-                          <th className="px-6 py-3 border-r border-slate-200 text-left">Exam City Code/Name</th>
-                          <th className="px-6 py-3 border-r border-slate-200 text-center">DELED-I</th>
-                          <th className="px-6 py-3 border-r border-slate-200 text-center">DELED-II</th>
-                          <th className="px-6 py-3 text-center">Total</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {reportCityWise.length === 0 ? (
-                          <tr>
-                            <td colSpan={5} className="px-6 py-8 text-center text-slate-450">No report data found.</td>
-                          </tr>
-                        ) : (
-                          <>
-                            {reportCityWise.map((row, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50/30 transition">
-                                <td className="px-6 py-3 border-r border-slate-200 text-center">{idx + 1}</td>
-                                <td className="px-6 py-3 border-r border-slate-200 text-slate-800 font-medium">{row.cityName || row.CityName}</td>
-                                <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.deled1 || row.Deled1}</td>
-                                <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.deled2 || row.Deled2}</td>
-                                <td className="px-6 py-3 text-center font-bold text-slate-800">{row.total || row.Total}</td>
+                            <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
+                              <th className="px-6 py-2 border-r border-slate-200 text-center">No.</th>
+                              <th className="px-6 py-2 border-r border-slate-200 text-center">Cumm.</th>
+                              <th className="px-6 py-2 border-r border-slate-200 text-center">No.</th>
+                              <th className="px-6 py-2 text-center">Cumm.</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {reportDateWise.length === 0 ? (
+                              <tr>
+                                <td colSpan={6} className="px-6 py-8 text-center text-slate-450">No report data found.</td>
                               </tr>
-                            ))}
-                            {/* Totals row */}
-                            <tr className="bg-slate-50/20 border-t border-slate-200 text-sm font-bold">
-                              <td className="px-6 py-3 border-r border-slate-200 text-center"></td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-left text-slate-800 uppercase tracking-wider">Total</td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-800">
-                                {reportCityWise.reduce((acc, row) => acc + (row.deled1 || row.Deled1 || 0), 0)}
-                              </td>
-                              <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-800">
-                                {reportCityWise.reduce((acc, row) => acc + (row.deled2 || row.Deled2 || 0), 0)}
-                              </td>
-                              <td className="px-6 py-3 text-center text-slate-900 font-extrabold">
-                                {reportCityWise.reduce((acc, row) => acc + (row.total || row.Total || 0), 0)}
-                              </td>
+                            ) : (
+                              reportDateWise.map((row, idx) => (
+                                <tr key={idx} className="hover:bg-slate-50/30 transition">
+                                  <td className="px-6 py-3 border-r border-slate-200 text-center">{idx + 1}</td>
+                                  <td className="px-6 py-3 border-r border-slate-200 text-slate-800 font-medium">{row.date || row.Date}</td>
+                                  <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.regNo || row.RegNo}</td>
+                                  <td className="px-6 py-3 border-r border-slate-200 text-center font-semibold text-slate-800">{row.regCumm || row.RegCumm}</td>
+                                  <td className="px-6 py-3 border-r border-slate-200 text-center text-slate-700">{row.feesNo || row.FeesNo}</td>
+                                  <td className="px-6 py-3 text-center font-semibold text-blue-700">{row.feesCumm || row.FeesCumm}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Exam City Wise Application count Report */}
+                    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                          Exam City Wise Application count Report
+                        </span>
+                        {reportLoading && <span className="text-xs text-slate-400">Loading...</span>}
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse text-sm text-slate-650">
+                          <thead>
+                            <tr className="bg-slate-50/55 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
+                              <th className="px-6 py-3 border-r border-slate-200 text-center w-16">Sr. No.</th>
+                              <th className="px-6 py-3 border-r border-slate-200 text-left">Exam City Code/Name</th>
+                              <th className="px-6 py-3 text-center">DELED</th>
                             </tr>
-                          </>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {reportCityWise.length === 0 ? (
+                              <tr>
+                                <td colSpan={3} className="px-6 py-8 text-center text-slate-450">No report data found.</td>
+                              </tr>
+                            ) : (
+                              <>
+                                {reportCityWise.map((row, idx) => (
+                                  <tr key={idx} className="hover:bg-slate-50/30 transition">
+                                    <td className="px-6 py-3 border-r border-slate-200 text-center">{idx + 1}</td>
+                                    <td className="px-6 py-3 border-r border-slate-200 text-slate-800 font-medium">{row.cityName || row.CityName}</td>
+                                    <td className="px-6 py-3 text-center font-bold text-slate-800">{row.deled || row.Deled || row.total || row.Total || 0}</td>
+                                  </tr>
+                                ))}
+                                {/* Totals row */}
+                                <tr className="bg-slate-50/20 border-t border-slate-200 text-sm font-bold">
+                                  <td className="px-6 py-3 border-r border-slate-200 text-center"></td>
+                                  <td className="px-6 py-3 border-r border-slate-200 text-left text-slate-800 uppercase tracking-wider">Total</td>
+                                  <td className="px-6 py-3 text-center text-slate-900 font-extrabold">
+                                    {reportCityWise.reduce((acc, row) => acc + (row.deled || row.Deled || row.total || row.Total || 0), 0)}
+                                  </td>
+                                </tr>
+                              </>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             )}
-          </div>
-        )}
 
             {/* Email Report Tab */}
             {activeTab === "email" && (
@@ -2932,7 +2755,7 @@ export default function AdminDashboard() {
                     <h3 className="text-lg font-semibold text-slate-800">Email Delivery Log</h3>
                     <p className="text-xs text-slate-400 font-normal mt-0.5">Monitor system notification delivery emails sent to users.</p>
                   </div>
-                  <button 
+                  <button
                     onClick={handleBroadcastTrigger}
                     disabled={broadcastSubmitting}
                     className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 border-none"
@@ -2977,9 +2800,8 @@ export default function AdminDashboard() {
                             <td className="px-6 py-4 font-normal text-slate-800">{item.recipient}</td>
                             <td className="px-6 py-4">{item.subject}</td>
                             <td className="px-6 py-4">
-                              <span className={`px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wider ${
-                                item.status === "Delivered" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-red-50 text-red-700 border border-red-200"
-                              }`}>
+                              <span className={`px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wider ${item.status === "Delivered" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-red-50 text-red-700 border border-red-200"
+                                }`}>
                                 {item.status}
                               </span>
                             </td>
@@ -2996,357 +2818,628 @@ export default function AdminDashboard() {
             {/* Update / Correction Tab */}
             {activeTab === "update" && (
               <div className="p-8 space-y-6">
-                <div className="border-b border-slate-100 pb-4">
-                  <h3 className="text-2xl font-black text-slate-800">Modify Applicant Record</h3>
-                  <p className="text-sm text-slate-500 font-medium mt-1">Locate and update applicant names manually (Full Name, Father's Name, Mother's Name, Husband Name).</p>
+                <div className="border-b border-slate-200 pb-4">
+                  <h3 className="text-2xl font-black text-slate-850">Full Application Form Correction & Review</h3>
+                  <p className="text-sm text-slate-500 font-medium mt-1">Search candidate by registration number, correct complete form entries across all 5 sections, and preview the final application live.</p>
                 </div>
 
-                <div className="max-w-4xl space-y-6">
-                  <form onSubmit={handleFindApplicant}>
-                    <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Registration Number</label>
+                <div className="space-y-6">
+                  {/* Search Form */}
+                  <form onSubmit={handleFindApplicant} className="bg-slate-50/80 p-5 rounded-2xl border border-slate-200 shadow-xs max-w-4xl">
+                    <label className="block text-xs font-black text-slate-700 mb-2 uppercase tracking-wide">Enter Candidate Registration Number</label>
                     <div className="flex gap-3">
                       <input
                         type="text"
-                        placeholder="Enter Reg No."
+                        placeholder="e.g. 2601000123"
                         value={updateRegNo}
                         onChange={(e) => setUpdateRegNo(e.target.value)}
-                        className="flex-1 bg-white border border-slate-200 rounded-xl px-5 py-3 text-base font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition shadow-sm"
+                        className="flex-1 bg-white border border-slate-300 rounded-xl px-5 py-3 text-base font-semibold text-slate-900 focus:ring-2 focus:ring-slate-500/20 focus:border-slate-600 outline-none transition shadow-sm placeholder:text-slate-400"
                       />
                       <button
                         type="submit"
                         disabled={isSearchingApplicant}
-                        className="px-8 py-3 bg-blue-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold uppercase tracking-wider shadow-md transition duration-200 cursor-pointer min-w-[120px] flex items-center justify-center border-none"
+                        className="px-8 py-3 bg-blue-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white rounded-xl text-sm font-black uppercase tracking-wider shadow-md transition duration-200 cursor-pointer min-w-[140px] flex items-center justify-center border-none"
                       >
-                        {isSearchingApplicant ? "Finding..." : "Find"}
+                        {isSearchingApplicant ? "Searching..." : "Find Candidate"}
                       </button>
                     </div>
                   </form>
 
                   {searchError && (
-                    <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl text-sm font-semibold flex items-center gap-2">
+                    <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl text-sm font-bold flex items-center gap-2 max-w-4xl">
                       <span>❌</span> <span>{searchError}</span>
                     </div>
                   )}
 
                   {!foundApplicant && !isSearchingApplicant && !searchError && (
-                    <div className="p-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center text-sm font-semibold text-slate-400 py-10">
-                      🔍 Find an applicant above to modify their records.
+                    <div className="p-12 bg-slate-50/60 rounded-2xl border border-dashed border-slate-300 text-center text-base font-bold text-slate-400 py-16">
+                      🔍 Enter a candidate registration number above to load and edit their complete DELED 2026 application form.
                     </div>
                   )}
 
-                  {foundApplicant && (
-                    <form onSubmit={handleUpdateApplicant} className="bg-slate-50/50 border border-slate-200 rounded-2xl p-8 space-y-6 shadow-sm transition duration-300">
-                      <div className="border-b border-slate-200 pb-4 mb-4 flex justify-between items-center">
-                        <h4 className="text-base font-bold text-slate-800 uppercase tracking-wider">Modify Candidate Details ({foundApplicant.registrationNo})</h4>
-                        <span className="text-xs font-bold uppercase text-slate-500 bg-slate-200/60 px-3 py-1 rounded-md">ID: {foundApplicant.userId}</span>
-                      </div>
+                  {foundApplicant && (() => {
+                    const activePreviewCandidate = {
+                      ...foundApplicant,
+                      fullName: editFullName,
+                      fatherName: editFatherName,
+                      phoneNumber: editPhoneNumber,
+                      email: editEmail,
+                      isPaymentCompleted: editIsPaymentCompleted,
+                      personalDetails: {
+                        ...(foundApplicant.personalDetails || {}),
+                        gender: editGender,
+                        dob: editDOB,
+                        motherName: editMotherName,
+                        husbandName: editHusbandName,
+                        appliedCategory: editAppliedCategory,
+                        graduationCourse: editGraduationCourse,
+                        graduationUniversity: editGraduationUniversity,
+                        graduationDate: editGraduationDate,
+                        category: editCategory,
+                        subCategory: editSubCategory,
+                        retirementDate: editRetirementDate,
+                        sportsType: editSportsType,
+                        isPhysicallyHandicapped: editIsPhysicallyHandicapped,
+                        disabilityType: editDisabilityType,
+                        multiDisabilityType: editMultiDisabilityType,
+                        scribeRequired: editScribeRequired,
+                        examCity1: editExamCity1,
+                        examCity2: editExamCity2,
+                        mailingAddress: editMailingAddress,
+                        stateId: editStateId,
+                        district: editDistrict,
+                        pinCode: editPinCode,
+                        identityProof: editIdentityProof,
+                        identityProofNo: editIdentityProofNo
+                      }
+                    };
 
-                      {saveMessage.text && (
-                        <div className={`p-4 rounded-xl text-sm font-medium border flex items-center gap-2 ${
-                          saveMessage.type === "success" 
-                            ? "bg-blue-50 text-blue-700 border-blue-200" 
-                            : "bg-red-50 text-red-700 border-red-200"
-                        }`}>
-                          {saveMessage.type === "success" ? <FaCheckCircle className="shrink-0 text-base" /> : <FaExclamationTriangle className="shrink-0 text-base" />}
-                          <span>{saveMessage.text}</span>
-                        </div>
-                      )}
+                    const currentGraduationList = (editAppliedCategory || "").includes("1") || ((editAppliedCategory || "").includes("विज्ञान") && !(editAppliedCategory || "").includes("विज्ञानेत्तर"))
+                      ? scienceGraduationCourses
+                      : nonScienceGraduationCourses;
 
-                      {/* Editable Fields: Full Name, Father's Name, Mother's Name, Husband Name */}
-                      <div className="space-y-4">
-                        <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                          <FaUserEdit className="text-slate-400 text-base" />
-                          <span>Candidate Name Details</span>
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide">Full Name</label>
-                            <input
-                              type="text"
-                              required
-                              value={editFullName}
-                              onChange={(e) => setEditFullName(e.target.value.toUpperCase())}
-                              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-base font-medium text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-none transition shadow-sm uppercase"
-                            />
-                          </div>
+                    return (
+                      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+                        {/* Left Column: Full Form Controls */}
+                        <div className="xl:col-span-7 space-y-6">
+                          <form onSubmit={handleUpdateApplicant} className="bg-white border border-slate-200 rounded-2xl p-7 space-y-8 shadow-sm">
 
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide">Father's Name</label>
-                            <input
-                              type="text"
-                              required
-                              value={editFatherName}
-                              onChange={(e) => setEditFatherName(e.target.value.toUpperCase())}
-                              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-base font-medium text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-none transition shadow-sm uppercase"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide">Mother's Name</label>
-                            <input
-                              type="text"
-                              required
-                              value={editMotherName}
-                              onChange={(e) => setEditMotherName(e.target.value.toUpperCase())}
-                              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-base font-medium text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-none transition shadow-sm uppercase"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide">
-                              Husband Name (Optional)
-                              {editGender?.toUpperCase() === "MALE" && (
-                                <span className="text-xs text-slate-400 font-normal lowercase ml-2">(not applicable for male)</span>
-                              )}
-                            </label>
-                            <input
-                              type="text"
-                              disabled={editGender?.toUpperCase() === "MALE"}
-                              value={editGender?.toUpperCase() === "MALE" ? "" : (editHusbandName || "")}
-                              onChange={(e) => setEditHusbandName(e.target.value.toUpperCase())}
-                              placeholder={editGender?.toUpperCase() === "MALE" ? "Not applicable for Male" : "Husband Name"}
-                              className={`w-full border rounded-xl px-4 py-3 text-base font-medium transition shadow-sm uppercase ${
-                                editGender?.toUpperCase() === "MALE"
-                                  ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
-                                  : "bg-white border-slate-200 text-slate-800 focus:ring-2 focus:ring-slate-500/10 focus:border-slate-500 outline-none"
-                              }`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="pt-4 border-t border-slate-100 flex justify-end">
-                        <button
-                          type="submit"
-                          disabled={isSavingApplicant}
-                          className="px-8 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold uppercase tracking-wider shadow-md transition duration-200 cursor-pointer flex items-center justify-center min-w-[150px] border-none"
-                        >
-                          {isSavingApplicant ? "Saving..." : "Save Changes"}
-                        </button>
-                      </div>
-                    </form>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Update School Type Tab */}
-            {activeTab === "schoolType" && (
-              <div className="p-8 space-y-6">
-                <div className="border-b border-slate-100 pb-4">
-                  <h3 className="text-lg font-black text-slate-800">Update School Type</h3>
-                  <p className="text-xs text-slate-400 font-medium mt-0.5">Correct or update candidate's school type details and preview their application form side-by-side.</p>
-                </div>
-
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-                  {/* Left Column: Form Controls */}
-                  <div className="xl:col-span-6 space-y-5">
-                    <form onSubmit={handleFindSchoolTypeApplicant}>
-                      <label className="block text-xs font-black text-slate-700 mb-1.5 uppercase">Registration Number</label>
-                      <div className="flex gap-3">
-                        <input
-                          type="text"
-                          placeholder="Enter Reg No."
-                          value={schoolTypeRegNo}
-                          onChange={(e) => setSchoolTypeRegNo(e.target.value)}
-                          className="flex-1 bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition shadow-sm"
-                        />
-                        <button
-                          type="submit"
-                          disabled={isSearchingSchoolType}
-                          className="px-6 py-2.5 bg-blue-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-black uppercase tracking-wider shadow-md transition duration-200 cursor-pointer min-w-[90px] flex items-center justify-center border-none"
-                        >
-                          {isSearchingSchoolType ? "Finding..." : "Find"}
-                        </button>
-                      </div>
-                    </form>
-
-                    {schoolTypeSearchError && (
-                      <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl text-xs font-semibold">
-                        ❌ {schoolTypeSearchError}
-                      </div>
-                    )}
-
-                    {!schoolTypeApplicant && !isSearchingSchoolType && !schoolTypeSearchError && (
-                      <div className="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-xs font-semibold text-slate-400 py-8">
-                        🔍 Find an applicant above to update their school type.
-                      </div>
-                    )}
-
-                    {schoolTypeApplicant && (() => {
-                      const pd = schoolTypeApplicant.personalDetails || schoolTypeApplicant;
-                      const appFor = (schoolTypeApplicant.applicationFor || pd?.applicationFor || "").toUpperCase();
-                      const examTypeId = pd?.examTypeId || schoolTypeApplicant.examTypeId || (
-                        appFor.includes("&") || appFor.includes("BOTH") || appFor.includes("I & II") || appFor.includes("1 & 2")
-                          ? 3
-                          : appFor.includes("DELED-I") || appFor.includes("DELED1") || appFor.includes("DELED I")
-                          ? 1
-                          : appFor.includes("DELED-II") || appFor.includes("DELED2") || appFor.includes("DELED II")
-                          ? 2
-                          : 3
-                      );
-                      
-                      const isSchoolTypeValid = (val) => {
-                        if (!val) return false;
-                        const clean = val.trim().toLowerCase();
-                        return clean !== "" && clean !== "select" && clean !== "not selected" && clean !== "n/a" && clean !== "null" && clean !== "undefined";
-                      };
-
-                      const initialDeled1SchoolType = pd?.deled1SchoolType || pd?.deled1SchoolType || schoolTypeApplicant?.deled1SchoolType;
-                      const isDeled1Locked = isSchoolTypeValid(initialDeled1SchoolType);
-                      
-                      const initialDeled2SchoolType = pd?.deled2SchoolType || pd?.deled2SchoolType || schoolTypeApplicant?.deled2SchoolType;
-                      const isDeled2Locked = isSchoolTypeValid(initialDeled2SchoolType);
-
-                      const isAllVisibleLocked = 
-                        (examTypeId === 1 && isDeled1Locked) ||
-                        (examTypeId === 2 && isDeled2Locked) ||
-                        (examTypeId !== 1 && examTypeId !== 2 && isDeled1Locked && isDeled2Locked);
-
-                      return (
-                        <form onSubmit={handleUpdateSchoolType} className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 space-y-6 shadow-sm transition duration-300">
-                          <div className="border-b border-slate-200 pb-3 mb-4 flex justify-between items-center">
-                            <h4 className="text-xs font-semibold text-slate-555 uppercase tracking-wider">Update School Type ({schoolTypeApplicant.registrationNo})</h4>
-                            <span className="text-[10px] font-semibold uppercase text-slate-450">ID: {schoolTypeApplicant.userId}</span>
-                          </div>
-
-                          {schoolTypeSaveMessage.text && (
-                            <div className={`p-4 rounded-xl text-xs font-medium border flex items-center gap-2 ${
-                              schoolTypeSaveMessage.type === "success" 
-                                ? "bg-blue-50 text-blue-700 border-blue-200" 
-                                : "bg-red-50 text-red-700 border-red-200"
-                            }`}>
-                              {schoolTypeSaveMessage.type === "success" ? <FaCheckCircle className="shrink-0" /> : <FaExclamationTriangle className="shrink-0" />}
-                              <span>{schoolTypeSaveMessage.text}</span>
-                            </div>
-                          )}
-
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-1 gap-4">
+                            {/* Header & Reg No info */}
+                            <div className="border-b border-slate-200 pb-4 flex flex-wrap justify-between items-center gap-3">
                               <div>
-                                <label className="block text-[10px] font-medium text-slate-500 mb-1.5 uppercase">Candidate Name</label>
-                                <input 
-                                  type="text"
-                                  disabled
-                                  value={schoolTypeApplicant.fullName || ""}
-                                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-normal text-slate-500 outline-none"
-                                />
+                                <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider">Candidate Correction Form</h4>
+                                <span className="text-xs font-bold text-slate-500">Registration No: <strong className="text-slate-950 font-black">{foundApplicant.registrationNo}</strong> | User ID: {foundApplicant.userId}</span>
                               </div>
-                              
-                              <div>
-                                <label className="block text-[10px] font-medium text-slate-500 mb-1.5 uppercase">Applied For</label>
-                                <input 
-                                  type="text"
-                                  disabled
-                                  value={schoolTypeApplicant.applicationFor || (examTypeId === 1 ? "DELED-I" : examTypeId === 2 ? "DELED-II" : "DELED-I & II")}
-                                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-normal text-slate-500 outline-none"
-                                />
+                              <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${editIsPaymentCompleted
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : "bg-amber-50 text-amber-700 border-amber-200"
+                                }`}>
+                                {editIsPaymentCompleted ? "Paid Application" : "Unpaid Application"}
+                              </span>
+                            </div>
+
+                            {saveMessage.text && (
+                              <div className={`p-4 rounded-xl text-sm font-bold border flex items-center gap-2.5 ${saveMessage.type === "success"
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  : "bg-red-50 text-red-700 border-red-200"
+                                }`}>
+                                {saveMessage.type === "success" ? <FaCheckCircle className="shrink-0 text-lg" /> : <FaExclamationTriangle className="shrink-0 text-lg" />}
+                                <span>{saveMessage.text}</span>
+                              </div>
+                            )}
+
+                            {/* Section 1: Personal & Contact Details */}
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <FaUser className="text-slate-500 text-sm" />
+                                <h5 className="text-sm font-black text-slate-800 uppercase tracking-wider">1. Candidate Personal & Contact Details</h5>
                               </div>
 
-                              {/* DELED I School Type Dropdown */}
-                              {examTypeId !== 2 && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                  <div className="flex items-center justify-between mb-1.5">
-                                    <label className="block text-[10px] font-medium text-slate-500 uppercase">DELED I School Type (विद्यालय का प्रकार)</label>
-                                    {isDeled1Locked && (
-                                      <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                        <FaLock className="w-2.5 h-2.5" /> Locked
-                                      </span>
-                                    )}
-                                  </div>
-                                  <select
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Full Name *</label>
+                                  <input
+                                    type="text"
                                     required
-                                    disabled={isDeled1Locked}
-                                    value={editSchoolType1}
-                                    onChange={(e) => setEditSchoolType1(e.target.value)}
-                                    className={`w-full border rounded-lg px-4 py-2.5 text-xs font-normal outline-none transition ${
-                                      isDeled1Locked 
-                                        ? "bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed" 
-                                        : "bg-white border-slate-200 text-slate-850 focus:ring-2 focus:ring-emerald-555/10 focus:border-blue-500"
-                                    }`}
-                                  >
-                                    <option value="Select">Select</option>
-                                    <option value="Government">Government</option>
-                                    <option value="Government Aided">Government Aided</option>
-                                    <option value="Recognized Unaided">Recognized Unaided</option>
-                                  </select>
+                                    value={editFullName}
+                                    onChange={(e) => setEditFullName(e.target.value.toUpperCase())}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none uppercase"
+                                  />
                                 </div>
-                              )}
 
-                              {/* DELED II School Type Dropdown */}
-                              {examTypeId !== 1 && (
                                 <div>
-                                  <div className="flex items-center justify-between mb-1.5">
-                                    <label className="block text-[10px] font-medium text-slate-500 uppercase">DELED II School Type (विद्यालय का प्रकार)</label>
-                                    {isDeled2Locked && (
-                                      <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                        <FaLock className="w-2.5 h-2.5" /> Locked
-                                      </span>
-                                    )}
-                                  </div>
-                                  <select
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Father's Name *</label>
+                                  <input
+                                    type="text"
                                     required
-                                    disabled={isDeled2Locked}
-                                    value={editSchoolType2}
-                                    onChange={(e) => setEditSchoolType2(e.target.value)}
-                                    className={`w-full border rounded-lg px-4 py-2.5 text-xs font-normal outline-none transition ${
-                                      isDeled2Locked 
-                                        ? "bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed" 
-                                        : "bg-white border-slate-200 text-slate-850 focus:ring-2 focus:ring-emerald-555/10 focus:border-blue-500"
-                                    }`}
+                                    value={editFatherName}
+                                    onChange={(e) => setEditFatherName(e.target.value.toUpperCase())}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none uppercase"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Mother's Name *</label>
+                                  <input
+                                    type="text"
+                                    required
+                                    value={editMotherName}
+                                    onChange={(e) => setEditMotherName(e.target.value.toUpperCase())}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none uppercase"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Gender *</label>
+                                  <select
+                                    value={editGender}
+                                    onChange={(e) => {
+                                      setEditGender(e.target.value);
+                                      if (e.target.value === "MALE") {
+                                        setEditHusbandName("");
+                                      }
+                                    }}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
                                   >
-                                    <option value="Select">Select</option>
-                                    <option value="Government">Government</option>
-                                    <option value="Government Aided">Government Aided</option>
-                                    <option value="Recognized Unaided">Recognized Unaided</option>
+                                    <option value="MALE">MALE</option>
+                                    <option value="FEMALE">FEMALE</option>
+                                    <option value="TRANSGENDER">TRANSGENDER</option>
                                   </select>
                                 </div>
-                              )}
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">
+                                    Husband Name
+                                    {editGender === "MALE" && <span className="text-slate-400 font-normal lowercase ml-1">(not applicable)</span>}
+                                  </label>
+                                  <input
+                                    type="text"
+                                    disabled={editGender === "MALE"}
+                                    value={editGender === "MALE" ? "" : editHusbandName}
+                                    onChange={(e) => setEditHusbandName(e.target.value.toUpperCase())}
+                                    placeholder={editGender === "MALE" ? "Disabled for Male" : "Enter Husband Name"}
+                                    className={`w-full border rounded-xl px-4 py-2.5 text-sm font-semibold uppercase outline-none ${editGender === "MALE"
+                                        ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
+                                        : "bg-white border-slate-300 text-slate-900 focus:border-slate-800"
+                                      }`}
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Date of Birth *</label>
+                                  <input
+                                    type="date"
+                                    required
+                                    value={editDOB}
+                                    onChange={(e) => setEditDOB(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Mobile Number *</label>
+                                  <input
+                                    type="tel"
+                                    required
+                                    maxLength={10}
+                                    value={editPhoneNumber}
+                                    onChange={(e) => setEditPhoneNumber(e.target.value.replace(/\D/g, ""))}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Email ID *</label>
+                                  <input
+                                    type="email"
+                                    required
+                                    value={editEmail}
+                                    onChange={(e) => setEditEmail(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+
+                                <div className="md:col-span-2 pt-2">
+                                  <label className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100/80 transition">
+                                    <input
+                                      type="checkbox"
+                                      checked={editIsPaymentCompleted}
+                                      onChange={(e) => setEditIsPaymentCompleted(e.target.checked)}
+                                      className="w-5 h-5 accent-emerald-600 cursor-pointer rounded"
+                                    />
+                                    <span className="text-sm font-bold text-slate-800">Application Payment Completed (Mark Paid Status)</span>
+                                  </label>
+                                </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="pt-4 border-t border-slate-200 flex justify-end">
-                            <button
-                              type="submit"
-                              disabled={isSavingSchoolType || isAllVisibleLocked}
-                              className={`px-6 py-2.5 text-white rounded-lg text-xs font-semibold uppercase tracking-wider shadow-md transition duration-200 flex items-center justify-center min-w-[120px] border-none ${
-                                isAllVisibleLocked || isSavingSchoolType 
-                                  ? "bg-slate-400 cursor-not-allowed opacity-70" 
-                                  : "bg-slate-800 hover:bg-slate-900 cursor-pointer"
-                              }`}
-                            >
-                              {isSavingSchoolType ? "Saving..." : isAllVisibleLocked ? "Locked" : "Save Changes"}
-                            </button>
-                          </div>
-                        </form>
-                      );
-                    })()}
-                  </div>
+                            {/* Section 2: Applied Training & Graduation Details */}
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <FaGraduationCap className="text-slate-500 text-sm" />
+                                <h5 className="text-sm font-black text-slate-800 uppercase tracking-wider">2. Applied Training & Graduation Details (DELED 2026)</h5>
+                              </div>
 
-                  {/* Right Column: HTML Live Preview */}
-                  {schoolTypeApplicant && (
-                    <div className="xl:col-span-6 xl:sticky xl:top-6 space-y-4">
-                      <div className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden flex flex-col h-[700px] transition duration-300">
-                        <div className="bg-slate-800 px-6 py-4 flex items-center justify-between border-b border-slate-900">
-                          <div className="flex items-center gap-3">
-                            <span className="text-white text-xs font-semibold uppercase tracking-wider">Application Live Preview</span>
-                          </div>
-                          <button 
-                            type="button"
-                            onClick={() => generateAndPrintPDF(schoolTypeApplicant, schoolTypeUploads)}
-                            className="px-3 py-1.5 bg-blue-600 hover:bg-emerald-700 text-white rounded text-[10px] font-black uppercase tracking-wider transition border-none cursor-pointer flex items-center gap-1.5"
-                          >
-                            🖨️ Print Form
-                          </button>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Applied Category (प्रशिक्षण हेतु आवेदित वर्ग) *</label>
+                                  <select
+                                    value={editAppliedCategory}
+                                    onChange={(e) => {
+                                      setEditAppliedCategory(e.target.value);
+                                      setEditGraduationCourse("Select");
+                                    }}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value="1-विज्ञान वर्ग">1-विज्ञान वर्ग (Science)</option>
+                                    <option value="2-विज्ञानेत्तर वर्ग">2-विज्ञानेत्तर वर्ग (Non-Science / Arts / Commerce)</option>
+                                  </select>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Graduation Course (स्नातक परीक्षा का नाम) *</label>
+                                  <select
+                                    value={editGraduationCourse}
+                                    onChange={(e) => setEditGraduationCourse(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    {currentGraduationList.map((c, i) => (
+                                      <option key={i} value={c}>{c}</option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Graduation University (विश्वविद्यालय का नाम) *</label>
+                                  <select
+                                    value={editGraduationUniversity}
+                                    onChange={(e) => setEditGraduationUniversity(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    {universityOptions.map((u, i) => (
+                                      <option key={i} value={u}>{u}</option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Graduation Passing Date (उत्तीर्ण तिथि)</label>
+                                  <input
+                                    type="date"
+                                    value={editGraduationDate}
+                                    onChange={(e) => setEditGraduationDate(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Section 3: Reservation & Special Categories */}
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <FaShieldAlt className="text-slate-500 text-sm" />
+                                <h5 className="text-sm font-black text-slate-800 uppercase tracking-wider">3. Reservation & Special Categories</h5>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Category *</label>
+                                  <select
+                                    value={editCategory}
+                                    onChange={(e) => setEditCategory(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value="GENERAL">GENERAL</option>
+                                    <option value="OBC">OBC</option>
+                                    <option value="SC">SC</option>
+                                    <option value="ST">ST</option>
+                                    <option value="EWS">EWS</option>
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Sub Category *</label>
+                                  <select
+                                    value={editSubCategory}
+                                    onChange={(e) => {
+                                      setEditSubCategory(e.target.value);
+                                      if (e.target.value !== "EX-SERVICEMAN (Self)") {
+                                        setEditRetirementDate("");
+                                      }
+                                      if (e.target.value !== "SPORTS") {
+                                        setEditSportsType("");
+                                      }
+                                    }}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value="NONE">NONE</option>
+                                    <option value="EX-SERVICEMAN (Self)">EX-SERVICEMAN (Self)</option>
+                                    <option value="D.F.F.">D.F.F. (Dependent of Freedom Fighter)</option>
+                                    <option value="ORPHAN">ORPHAN</option>
+                                    <option value="WOMEN">WOMEN</option>
+                                    <option value="SPORTS">SPORTS (खेल प्रमाण-पत्र धारक)</option>
+                                  </select>
+                                </div>
+
+                                {editSubCategory === "EX-SERVICEMAN (Self)" && (
+                                  <div>
+                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Retirement Date *</label>
+                                    <input
+                                      type="date"
+                                      required
+                                      value={editRetirementDate}
+                                      onChange={(e) => setEditRetirementDate(e.target.value)}
+                                      className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                    />
+                                  </div>
+                                )}
+
+                                {editSubCategory === "SPORTS" && (
+                                  <div>
+                                    <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Sports Certificate Level *</label>
+                                    <select
+                                      value={editSportsType}
+                                      onChange={(e) => setEditSportsType(e.target.value)}
+                                      className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                    >
+                                      <option value="">Select Sports Level</option>
+                                      <option value="National Level">National Level (राष्ट्रीय स्तर)</option>
+                                      <option value="State Level">State Level (राज्य स्तर)</option>
+                                      <option value="Inter University">Inter University (अन्तर विश्वविद्यालय)</option>
+                                    </select>
+                                  </div>
+                                )}
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Physically Handicapped (PH) *</label>
+                                  <select
+                                    value={editIsPhysicallyHandicapped ? "YES" : "NO"}
+                                    onChange={(e) => {
+                                      const isPh = e.target.value === "YES";
+                                      setEditIsPhysicallyHandicapped(isPh);
+                                      if (!isPh) {
+                                        setEditDisabilityType("");
+                                        setEditMultiDisabilityType("");
+                                        setEditScribeRequired(false);
+                                      }
+                                    }}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value="NO">NO</option>
+                                    <option value="YES">YES</option>
+                                  </select>
+                                </div>
+
+                                {editIsPhysicallyHandicapped && (
+                                  <>
+                                    <div>
+                                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Disability Type *</label>
+                                      <select
+                                        value={editDisabilityType}
+                                        onChange={(e) => setEditDisabilityType(e.target.value)}
+                                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                      >
+                                        <option value="">Select Disability</option>
+                                        <option value="Locomotor Disability">Locomotor Disability</option>
+                                        <option value="Visual Impairment">Visual Impairment</option>
+                                        <option value="Hearing Impairment">Hearing Impairment</option>
+                                        <option value="Speech and Language">Speech and Language</option>
+                                        <option value="Multiple Disabilities">Multiple Disabilities</option>
+                                        <option value="Others">Others</option>
+                                      </select>
+                                    </div>
+
+                                    {editDisabilityType === "Multiple Disabilities" && (
+                                      <div className="md:col-span-2">
+                                        <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Multiple Disability Details</label>
+                                        <input
+                                          type="text"
+                                          value={editMultiDisabilityType}
+                                          onChange={(e) => setEditMultiDisabilityType(e.target.value)}
+                                          placeholder="Specify multiple disabilities"
+                                          className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                        />
+                                      </div>
+                                    )}
+
+                                    <div>
+                                      <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Scribe Required *</label>
+                                      <select
+                                        value={editScribeRequired ? "YES" : "NO"}
+                                        onChange={(e) => setEditScribeRequired(e.target.value === "YES")}
+                                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                      >
+                                        <option value="NO">NO</option>
+                                        <option value="YES">YES</option>
+                                      </select>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Section 4: Examination Centers */}
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <FaBuilding className="text-slate-500 text-sm" />
+                                <h5 className="text-sm font-black text-slate-800 uppercase tracking-wider">4. Examination Center Preference</h5>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">1st Choice Exam City *</label>
+                                  <select
+                                    value={editExamCity1}
+                                    onChange={(e) => setEditExamCity1(Number(e.target.value))}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value={0}>Select 1st Choice</option>
+                                    {examCitiesList.map((c) => (
+                                      <option key={c.cityId || c.cityCode} value={c.cityId || c.cityCode}>
+                                        {c.cityCode} - {c.cityName}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">2nd Choice Exam City *</label>
+                                  <select
+                                    value={editExamCity2}
+                                    onChange={(e) => setEditExamCity2(Number(e.target.value))}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value={0}>Select 2nd Choice</option>
+                                    {examCitiesList.map((c) => (
+                                      <option key={c.cityId || c.cityCode} value={c.cityId || c.cityCode}>
+                                        {c.cityCode} - {c.cityName}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Section 5: Mailing Address & ID Proof */}
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <FaMapMarkerAlt className="text-slate-500 text-sm" />
+                                <h5 className="text-sm font-black text-slate-800 uppercase tracking-wider">5. Mailing Address & ID Proof</h5>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Mailing Address *</label>
+                                  <textarea
+                                    rows={2}
+                                    required
+                                    value={editMailingAddress}
+                                    onChange={(e) => setEditMailingAddress(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">State *</label>
+                                  <select
+                                    value={editStateId}
+                                    onChange={(e) => {
+                                      const sId = Number(e.target.value);
+                                      setEditStateId(sId);
+                                      fetchDistrictCities(sId);
+                                    }}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value={0}>Select State</option>
+                                    {statesList.map((s) => (
+                                      <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">District *</label>
+                                  {districtCitiesList.length > 0 ? (
+                                    <select
+                                      value={editDistrict}
+                                      onChange={(e) => setEditDistrict(Number(e.target.value))}
+                                      className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                    >
+                                      <option value={0}>Select District</option>
+                                      {districtCitiesList.map((d) => (
+                                        <option key={d.id} value={d.id}>{d.name}</option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    <input
+                                      type="number"
+                                      value={editDistrict || ""}
+                                      onChange={(e) => setEditDistrict(Number(e.target.value))}
+                                      placeholder="District ID"
+                                      className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                    />
+                                  )}
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Pin Code *</label>
+                                  <input
+                                    type="text"
+                                    required
+                                    maxLength={6}
+                                    value={editPinCode}
+                                    onChange={(e) => setEditPinCode(e.target.value.replace(/\D/g, ""))}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Identity Proof *</label>
+                                  <select
+                                    value={editIdentityProof}
+                                    onChange={(e) => setEditIdentityProof(e.target.value)}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none"
+                                  >
+                                    <option value="Aadhar Card">Aadhar Card</option>
+                                    <option value="PAN Card">PAN Card</option>
+                                    <option value="Voter ID Card">Voter ID Card</option>
+                                    <option value="Driving License">Driving License</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Government ID">Government ID</option>
+                                  </select>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                  <label className="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Identity Proof Number *</label>
+                                  <input
+                                    type="text"
+                                    required
+                                    value={editIdentityProofNo}
+                                    onChange={(e) => setEditIdentityProofNo(e.target.value.toUpperCase())}
+                                    className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:border-slate-800 outline-none uppercase"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="pt-6 border-t border-slate-200 flex justify-end">
+                              <button
+                                type="submit"
+                                disabled={isSavingApplicant}
+                                className="px-10 py-4 bg-slate-850 hover:bg-slate-950 disabled:bg-slate-400 text-white rounded-xl text-base font-black uppercase tracking-wider shadow-lg transition duration-200 cursor-pointer flex items-center justify-center min-w-[200px] border-none"
+                              >
+                                {isSavingApplicant ? "Saving Changes..." : "💾 Save All Corrections"}
+                              </button>
+                            </div>
+                          </form>
                         </div>
-                        <iframe
-                          srcDoc={generateApplicantFormHtml(schoolTypeApplicant, schoolTypeUploads)}
-                          className="w-full flex-1 border-none bg-white"
-                          title="Applicant Form Preview"
-                        />
+
+                        {/* Right Column: HTML Live Preview */}
+                        <div className="xl:col-span-5 xl:sticky xl:top-6 space-y-4">
+                          <div className="bg-white border border-slate-200 shadow-md rounded-2xl overflow-hidden flex flex-col h-[780px] transition duration-300">
+                            <div className="bg-slate-850 px-6 py-4 flex items-center justify-between border-b border-slate-900">
+                              <div className="flex items-center gap-2">
+                                <span className="text-white text-xs font-black uppercase tracking-wider">Application Live Preview</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => generateAndPrintPDF(activePreviewCandidate, foundApplicantUploads)}
+                                className="px-4 py-2 bg-blue-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-black uppercase tracking-wider transition border-none cursor-pointer flex items-center gap-2 shadow-sm"
+                              >
+                                🖨️ Print Form
+                              </button>
+                            </div>
+                            <iframe
+                              srcDoc={generateApplicantFormHtml(activePreviewCandidate, foundApplicantUploads)}
+                              className="w-full flex-1 border-none bg-white"
+                              title="Applicant Form Preview"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -3363,7 +3456,7 @@ export default function AdminDashboard() {
                   {/* Header */}
                   <div className="bg-slate-800 px-6 py-4 flex items-center gap-3 border-b border-slate-900">
                     <svg className="w-5 h-5 text-white fill-current" viewBox="0 0 24 24">
-                      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                     </svg>
                     <span className="text-white text-xs font-semibold uppercase tracking-wider">Get Payment Status</span>
                   </div>
@@ -3486,7 +3579,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     type="submit"
                     disabled={passwordSubmitting}
                     className="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-none"
@@ -3512,7 +3605,7 @@ export default function AdminDashboard() {
                   </div>
                 ) : (
                   <form onSubmit={handleCmsSave} className="space-y-8">
-                    
+
                     {/* Live Preview Panel */}
                     <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-6">
                       <h4 className="text-xs font-semibold text-slate-550 uppercase tracking-wider mb-4 flex items-center gap-1.5">
@@ -3822,20 +3915,18 @@ export default function AdminDashboard() {
                         {systemAlerts.map((alert) => (
                           <div
                             key={alert.id}
-                            className={`p-5 border rounded-xl flex items-start justify-between gap-4 shadow-sm ${
-                              alert.isActive
+                            className={`p-5 border rounded-xl flex items-start justify-between gap-4 shadow-sm ${alert.isActive
                                 ? "border-slate-200 bg-slate-50/50"
                                 : "border-slate-200 bg-slate-50/10"
-                            }`}
+                              }`}
                           >
                             <div className="flex-1 space-y-1">
                               <div className="flex items-center gap-2">
                                 <span
-                                  className={`text-[9px] px-2 py-0.5 rounded font-semibold uppercase tracking-wider ${
-                                    alert.isActive
+                                  className={`text-[9px] px-2 py-0.5 rounded font-semibold uppercase tracking-wider ${alert.isActive
                                       ? "bg-slate-100 text-slate-800"
                                       : "bg-slate-100 text-slate-500"
-                                  }`}
+                                    }`}
                                 >
                                   {alert.isActive ? "Active" : "Inactive"}
                                 </span>
@@ -3859,11 +3950,10 @@ export default function AdminDashboard() {
                               </button>
                               <button
                                 onClick={() => handleToggleAlertStatus(alert)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer border ${
-                                  alert.isActive
+                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer border ${alert.isActive
                                     ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
                                     : "bg-blue-600 hover:bg-emerald-700 text-white border-transparent"
-                                }`}
+                                  }`}
                               >
                                 {alert.isActive ? "Deactivate" : "Activate"}
                               </button>
@@ -3889,7 +3979,7 @@ export default function AdminDashboard() {
           {isReviewModalOpen && selectedPaidApp && (
             <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
               <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full border border-slate-200 overflow-hidden my-8">
-                
+
                 {/* Modal Header */}
                 <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
                   <div className="flex items-center gap-3">
@@ -3913,7 +4003,7 @@ export default function AdminDashboard() {
 
                 {/* Modal Body */}
                 <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto bg-slate-50/30">
-                  
+
                   {/* Candidate Info Table */}
                   <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
                     <div className="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -3962,7 +4052,7 @@ export default function AdminDashboard() {
                     </h4>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                      
+
                       {/* Photo */}
                       <div className="flex flex-col items-center bg-slate-50 p-4 rounded-xl border border-slate-200">
                         <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Photo</span>

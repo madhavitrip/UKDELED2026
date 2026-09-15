@@ -1,3 +1,5 @@
+using System;
+
 namespace DELED.Models.NonDbModels
 {
     public class UserCompleteDetailsDTO
@@ -12,35 +14,33 @@ namespace DELED.Models.NonDbModels
         public bool IsOTPVerified { get; set; }
         public string RegistrationNo { get; set; } = "";
 
-        // User Personal Details
+        // User Personal Details (Mapped to the 29 target columns)
         public int? PersonalDetailId { get; set; }
+        public int? ExamTypeId { get; set; }
         public string ApplicationFor { get; set; } = "";
+        public string? AppliedCategory { get; set; }
+        public string? GraduationCourse { get; set; }
+        public string? GraduationUniversity { get; set; }
+        public string? GraduationDate { get; set; }
         public string ApplicantName { get; set; } = "";
         public string Gender { get; set; } = "";
         public DateTime? DOB { get; set; }
         public string MotherName { get; set; } = "";
         public string? HusbandName { get; set; }
-        public string HomeDistrict { get; set; } = "";
         public string Category { get; set; } = "";
         public string SubCategory { get; set; } = "";
+        public DateTime? RetirementDate { get; set; }
+        public string? SportsType { get; set; }
         public bool IsPhysicallyHandicapped { get; set; }
         public string? DisabilityType { get; set; }
+        public string? MultiDisabilityType { get; set; }
         public bool ScribeRequired { get; set; }
-        public string FirstLanguage { get; set; } = "";
-        public string SecondLanguage { get; set; } = "";
-        public string? SubjectCode { get; set; }
-        public string? DELED1TrainingQualification { get; set; }
-        public string? DELED1TrainingStatus { get; set; }
-        public string? DELED1TrainingYear { get; set; }
-        public string? DELED2TrainingQualification { get; set; }
-        public string? DELED2TrainingStatus { get; set; }
-        public string? DELED2TrainingYear { get; set; }
-        public string? EligibilityCodeDELED1 { get; set; }
-        public string? EligibilityCodeDELED2 { get; set; }
         public string ExamCity1 { get; set; } = "";
         public string ExamCity2 { get; set; } = "";
         public string MailingAddress { get; set; } = "";
+        public int StateId { get; set; }
         public string State { get; set; } = "";
+        public int DistrictId { get; set; }
         public string District { get; set; } = "";
         public string PinCode { get; set; } = "";
         public string IdentityProof { get; set; } = "";
@@ -52,18 +52,9 @@ namespace DELED.Models.NonDbModels
         public bool IsPaymentCompleted { get; set; }
         public DateTime? PaymentDate { get; set; }
 
-        public string? Deled1UdiseCode { get; set; }
-        public string? Deled2UdiseCode { get; set; }
-        public string? Deled1InServiceTraining { get; set; }
-        public string? Deled1InServiceTrainingOthers { get; set; }
-        public string? Deled2InServiceTraining { get; set; }
-        public string? Deled2InServiceTrainingOthers { get; set; }
-        public string? Deled1SchoolType { get; set; }
-        public string? Deled2SchoolType { get; set; }
         public string? TransactionId { get; set; }
         public DateTime? TransactionDate { get; set; }
         public decimal? TransactionAmount { get; set; }
         public string? TransactionStatus { get; set; }
-        public DateTime? RetirementDate { get; set; }
     }
 }

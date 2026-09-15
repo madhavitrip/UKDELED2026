@@ -43,51 +43,8 @@ namespace DELED.Controllers
             }
         }
 
-        //[HttpPost("admin/create-broadcast")]
-        //public async Task<IActionResult> CreateBroadcast()
-        //{
-        //    try
-        //    {
-        //        // 1. Get or create the default daily report schedule
-        //        var schedule = await _context.EmailSchedules
-        //            .FirstOrDefaultAsync(s => s.ScheduleName == "Daily Report");
-
-        //        var adminEmail = _configuration["EmailSettings:AdminEmail"] ?? "admin@example.com";
-        //        var ccEmail = _configuration["EmailSettings:AdminCcEmails"] ?? string.Empty;
-        //        var bccEmail = _configuration["EmailSettings:AdminBccEmails"] ?? string.Empty;
-
-        //        if (schedule == null)
-        //        {
-        //            schedule = new EmailSchedule
-        //            {
-        //                ScheduleName = "Daily Report",
-        //                Subject = "DELED 2026 Daily Report",
-        //                ToEmails = adminEmail,
-        //                CcEmails = ccEmail,
-        //                BccEmails = bccEmail,
-        //                ScheduledTime = new TimeSpan(9, 0, 0), // 9:00 AM
-        //                IsActive = true,
-        //                MessageBody = "Daily registration and payment report",
-        //                LastSentDate = null
-        //            };
-        //            _context.EmailSchedules.Add(schedule);
-        //            await _context.SaveChangesAsync();
-        //        }
-
-        //        // 2. Call the daily report email helper
-        //        var today = DateOnly.FromDateTime(DateTime.Today);
-        //        await EmailSchedulerService.SendDailyReportEmailAsync(_context, _configuration, schedule, today);
-
-        //        return Ok(new { success = true, message = "Daily report email triggered and sent successfully." });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { success = false, message = $"Error: {ex.Message}" });
-        //    }
-        //}
-
         [HttpGet("admin/dashboard-data")]
-        [AllowAnonymous] // Keep alignment with the original dashboard data access
+        [AllowAnonymous] // Keep alignment with dashboard data access
         public async Task<IActionResult> GetAdminDashboardData(
             [FromQuery] int? page = null,
             [FromQuery] int? pageSize = null,
@@ -159,7 +116,7 @@ namespace DELED.Controllers
                                      name = user.FullName,
                                      mobile = user.PhoneNumber,
                                      email = user.Email,
-                                     appliedFor = exam != null ? exam.Name : "Not Selected",
+                                     appliedFor = exam != null ? exam.Name : (personal != null ? personal.AppliedCategory ?? "Not Selected" : "Not Selected"),
                                      status = user.IsPaymentCompleted ? "Paid" : "Unpaid",
                                      amount = user.IsPaymentCompleted ? 
                                               (exam != null ? $"₹{exam.Payment}" : "₹0") : "₹0",
@@ -333,36 +290,22 @@ namespace DELED.Controllers
                         {
                             personalDetailId = personal.PersonalDetailId,
                             examTypeId = personal.ExamTypeId,
+                            appliedCategory = personal.AppliedCategory,
+                            graduationCourse = personal.GraduationCourse,
+                            graduationUniversity = personal.GraduationUniversity,
+                            graduationDate = personal.GraduationDate,
                             gender = personal.Gender,
                             dob = personal.DOB?.ToString("yyyy-MM-dd"),
                             motherName = personal.MotherName,
                             husbandName = personal.HusbandName,
-                            homeDistrict = personal.HomeDistrict,
                             category = personal.Category,
                             subCategory = personal.SubCategory,
                             retirementDate = personal.RetirementDate?.ToString("yyyy-MM-dd"),
+                            sportsType = personal.SportsType,
                             isPhysicallyHandicapped = personal.IsPhysicallyHandicapped,
                             disabilityType = personal.DisabilityType,
+                            multiDisabilityType = personal.MultiDisabilityType,
                             scribeRequired = personal.ScribeRequired,
-                            firstLanguage = personal.FirstLanguage,
-                            secondLanguage = personal.SecondLanguage,
-                            subjectCode = personal.SubjectCode,
-                            deled1TrainingQualification = personal.DELED1TrainingQualification,
-                            deled1TrainingStatus = personal.DELED1TrainingStatus,
-                            deled1TrainingYear = personal.DELED1TrainingYear,
-                            deled2TrainingQualification = personal.DELED2TrainingQualification,
-                            deled2TrainingStatus = personal.DELED2TrainingStatus,
-                            deled2TrainingYear = personal.DELED2TrainingYear,
-                            eligibilityCodeDELED1 = personal.EligibilityCodeDELED1,
-                            eligibilityCodeDELED2 = personal.EligibilityCodeDELED2,
-                            deled1UdiseCode = personal.Deled1UdiseCode,
-                            deled2UdiseCode = personal.Deled2UdiseCode,
-                            deled1SchoolType = personal.Deled1SchoolType,
-                            deled2SchoolType = personal.Deled2SchoolType,
-                            deled1InServiceTraining = personal.Deled1InServiceTraining,
-                            deled1InServiceTrainingOthers = personal.Deled1InServiceTrainingOthers,
-                            deled2InServiceTraining = personal.Deled2InServiceTraining,
-                            deled2InServiceTrainingOthers = personal.Deled2InServiceTrainingOthers,
                             examCity1 = personal.ExamCity1,
                             examCity2 = personal.ExamCity2,
                             mailingAddress = personal.MailingAddress,
@@ -413,10 +356,6 @@ namespace DELED.Controllers
                                              on (personal != null ? personal.ExamTypeId : 0) equals exam.Id into examGroup
                                              from exam in examGroup.DefaultIfEmpty()
                                              
-                                             join homeDist in _context.City
-                                             on (personal != null ? personal.HomeDistrict : 0) equals homeDist.Id into homeDistGroup
-                                             from homeDist in homeDistGroup.DefaultIfEmpty()
-                                             
                                              join city1 in _context.ExamCity
                                              on (personal != null ? personal.ExamCity1 : 0) equals city1.CityId into city1Group
                                              from city1 in city1Group.DefaultIfEmpty()
@@ -448,41 +387,31 @@ namespace DELED.Controllers
                                                  PaymentDate = null,
 
                                                  PersonalDetailId = personal != null ? (int?)personal.PersonalDetailId : null,
-                                                 ApplicationFor = exam != null ? exam.Name : "",
+                                                 ExamTypeId = personal != null ? (int?)personal.ExamTypeId : null,
+                                                 ApplicationFor = exam != null ? exam.Name : (personal != null ? personal.AppliedCategory ?? "" : ""),
+                                                 AppliedCategory = personal != null ? personal.AppliedCategory : null,
+                                                 GraduationCourse = personal != null ? personal.GraduationCourse : null,
+                                                 GraduationUniversity = personal != null ? personal.GraduationUniversity : null,
+                                                 GraduationDate = personal != null ? personal.GraduationDate : null,
+                                                 ApplicantName = usr.FullName,
                                                  Gender = personal != null ? personal.Gender : "",
                                                  DOB = personal != null ? personal.DOB : null,
                                                  MotherName = personal != null ? personal.MotherName : "",
                                                  HusbandName = personal != null ? personal.HusbandName : null,
-                                                 HomeDistrict = homeDist != null ? homeDist.Name : "",
                                                  Category = personal != null ? personal.Category : "",
                                                  SubCategory = personal != null ? personal.SubCategory : "",
                                                  RetirementDate = personal != null ? personal.RetirementDate : null,
+                                                 SportsType = personal != null ? personal.SportsType : null,
                                                  IsPhysicallyHandicapped = personal != null && personal.IsPhysicallyHandicapped,
                                                  DisabilityType = personal != null ? personal.DisabilityType : null,
+                                                 MultiDisabilityType = personal != null ? personal.MultiDisabilityType : null,
                                                  ScribeRequired = personal != null && personal.ScribeRequired,
-                                                 FirstLanguage = personal != null ? personal.FirstLanguage : "",
-                                                 SecondLanguage = personal != null ? personal.SecondLanguage : "",
-                                                 SubjectCode = personal != null ? personal.SubjectCode : null,
-                                                 DELED1TrainingQualification = personal != null ? personal.DELED1TrainingQualification : null,
-                                                 DELED1TrainingStatus = personal != null ? personal.DELED1TrainingStatus : null,
-                                                 DELED1TrainingYear = personal != null ? personal.DELED1TrainingYear : null,
-                                                 DELED2TrainingQualification = personal != null ? personal.DELED2TrainingQualification : null,
-                                                 DELED2TrainingStatus = personal != null ? personal.DELED2TrainingStatus : null,
-                                                 DELED2TrainingYear = personal != null ? personal.DELED2TrainingYear : null,
-                                                 Deled1UdiseCode = personal != null ? personal.Deled1UdiseCode : null,
-                                                 Deled2UdiseCode = personal != null ? personal.Deled2UdiseCode : null,
-                                                 Deled1SchoolType = personal != null ? personal.Deled1SchoolType : null,
-                                                 Deled2SchoolType = personal != null ? personal.Deled2SchoolType : null,
-                                                 Deled1InServiceTraining = personal != null ? personal.Deled1InServiceTraining : null,
-                                                 Deled1InServiceTrainingOthers = personal != null ? personal.Deled1InServiceTrainingOthers : null,
-                                                 Deled2InServiceTraining = personal != null ? personal.Deled2InServiceTraining : null,
-                                                 Deled2InServiceTrainingOthers = personal != null ? personal.Deled2InServiceTrainingOthers : null,
-                                                 EligibilityCodeDELED1 = personal != null ? personal.EligibilityCodeDELED1 : null,
-                                                 EligibilityCodeDELED2 = personal != null ? personal.EligibilityCodeDELED2 : null,
                                                  ExamCity1 = city1 != null ? city1.CityCode.ToString() + "/" + city1.CityName : "",
                                                  ExamCity2 = city2 != null ? city2.CityCode.ToString() + "/" + city2.CityName : "",
                                                  MailingAddress = personal != null ? personal.MailingAddress : "",
+                                                 StateId = personal != null ? personal.StateId : 0,
                                                  State = state != null ? state.Name : "",
+                                                 DistrictId = personal != null ? personal.District : 0,
                                                  District = dist != null ? dist.Name : "",
                                                  PinCode = personal != null ? personal.PinCode : "",
                                                  IdentityProof = personal != null ? personal.IdentityProof : "",
@@ -627,10 +556,13 @@ namespace DELED.Controllers
                     }
 
                     personal.ExamTypeId = request.PersonalDetails.ExamTypeId;
+                    personal.AppliedCategory = request.PersonalDetails.AppliedCategory;
+                    personal.GraduationCourse = request.PersonalDetails.GraduationCourse;
+                    personal.GraduationUniversity = request.PersonalDetails.GraduationUniversity;
+                    personal.GraduationDate = request.PersonalDetails.GraduationDate;
                     personal.Gender = request.PersonalDetails.Gender ?? string.Empty;
                     personal.MotherName = request.PersonalDetails.MotherName ?? string.Empty;
                     personal.HusbandName = string.Equals(request.PersonalDetails.Gender?.Trim(), "Male", StringComparison.OrdinalIgnoreCase) ? null : request.PersonalDetails.HusbandName;
-                    personal.HomeDistrict = request.PersonalDetails.HomeDistrict;
                     personal.Category = request.PersonalDetails.Category ?? string.Empty;
                     personal.SubCategory = request.PersonalDetails.SubCategory ?? string.Empty;
                     if (personal.SubCategory == "EX-SERVICEMAN (Self)" && !string.IsNullOrWhiteSpace(request.PersonalDetails.RetirementDate))
@@ -648,20 +580,11 @@ namespace DELED.Controllers
                     {
                         personal.RetirementDate = null;
                     }
+                    personal.SportsType = request.PersonalDetails.SportsType;
                     personal.IsPhysicallyHandicapped = request.PersonalDetails.IsPhysicallyHandicapped;
                     personal.DisabilityType = request.PersonalDetails.DisabilityType;
+                    personal.MultiDisabilityType = request.PersonalDetails.MultiDisabilityType;
                     personal.ScribeRequired = request.PersonalDetails.ScribeRequired;
-                    personal.FirstLanguage = request.PersonalDetails.FirstLanguage ?? string.Empty;
-                    personal.SecondLanguage = request.PersonalDetails.SecondLanguage ?? string.Empty;
-                    personal.SubjectCode = request.PersonalDetails.SubjectCode;
-                    personal.DELED1TrainingQualification = request.PersonalDetails.DELED1TrainingQualification;
-                    personal.DELED1TrainingStatus = request.PersonalDetails.DELED1TrainingStatus;
-                    personal.DELED1TrainingYear = request.PersonalDetails.DELED1TrainingYear;
-                    personal.DELED2TrainingQualification = request.PersonalDetails.DELED2TrainingQualification;
-                    personal.DELED2TrainingStatus = request.PersonalDetails.DELED2TrainingStatus;
-                    personal.DELED2TrainingYear = request.PersonalDetails.DELED2TrainingYear;
-                    personal.EligibilityCodeDELED1 = request.PersonalDetails.EligibilityCodeDELED1;
-                    personal.EligibilityCodeDELED2 = request.PersonalDetails.EligibilityCodeDELED2;
                     personal.ExamCity1 = request.PersonalDetails.ExamCity1;
                     personal.ExamCity2 = request.PersonalDetails.ExamCity2;
                     personal.MailingAddress = request.PersonalDetails.MailingAddress ?? string.Empty;
@@ -686,6 +609,7 @@ namespace DELED.Controllers
                     {
                         personal.DOB = null;
                     }
+                    personal.UpdatedOn = DateTime.Now;
                 }
 
                 await _context.SaveChangesAsync();
@@ -698,7 +622,7 @@ namespace DELED.Controllers
             }
         }
 
-        private string ValidateIdentityProof(string identityProof, string identityProofNo)
+        private string? ValidateIdentityProof(string identityProof, string identityProofNo)
         {
             if (string.IsNullOrWhiteSpace(identityProof) || identityProof == "Select")
                 return null;
@@ -803,7 +727,7 @@ namespace DELED.Controllers
                     });
                 }
 
-                // Exam city breakdown — fetching DELED-I and DELED-II counts per city
+                // Exam city breakdown
                 var personalQuery = _context.UserPersonalDetails.AsQueryable();
                 if (startDate.HasValue)
                 {
@@ -816,65 +740,37 @@ namespace DELED.Controllers
                     personalQuery = personalQuery.Where(pd => pd.CreatedOn.Date <= endVal);
                 }
 
-                var cityDeled1 = await (
+                var cityData = await (
                     from pd in personalQuery
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
+                    join u in _context.Users on pd.UserId equals u.UserId
                     join ec in _context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
                     from ec in ecJoin.DefaultIfEmpty()
-                    where et.Name == "DELED I" || et.Name == "Both" || et.Name == "BOTH"
-                        || et.Name == "DELED-I" || et.Name == "DELED-I & DELED-II"
-                    group ec.CityName by ec.CityName into g
-                    select new { CityName = g.Key, Count = g.Count() }
+                    where u.IsPaymentCompleted
+                    group new { ec.CityName, ec.CityCode } by new { ec.CityName, ec.CityCode } into g
+                    select new { CityName = g.Key.CityName, CityCode = g.Key.CityCode, Count = g.Count() }
                 ).ToListAsync();
 
-                var cityDeled2 = await (
-                    from pd in personalQuery
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
-                    join ec in _context.ExamCity on pd.ExamCity1 equals ec.CityId into ecJoin
-                    from ec in ecJoin.DefaultIfEmpty()
-                    where et.Name == "DELED II" || et.Name == "Both" || et.Name == "BOTH"
-                        || et.Name == "DELED-II" || et.Name == "DELED-I & DELED-II"
-                    group ec.CityName by ec.CityName into g
-                    select new { CityName = g.Key, Count = g.Count() }
-                ).ToListAsync();
-
-                var allCityNames = cityDeled1.Select(x => x.CityName)
-                    .Union(cityDeled2.Select(x => x.CityName))
-                    .Distinct()
-                    .OrderBy(n => n);
-
-                var cityRows = allCityNames.Select(city =>
-                {
-                    int u1 = cityDeled1.FirstOrDefault(x => x.CityName == city)?.Count ?? 0;
-                    int u2 = cityDeled2.FirstOrDefault(x => x.CityName == city)?.Count ?? 0;
-                    string cityNameDisplay = city ?? "Not Specified";
-                    return new
+                var cityRows = cityData
+                    .OrderBy(n => n.CityCode ?? "999")
+                    .Select(city =>
                     {
-                        CityName = cityNameDisplay,
-                        Deled1 = u1,
-                        Deled2 = u2,
-                        Total = u1 + u2
-                    };
-                }).ToList();
+                        string cityNameDisplay = !string.IsNullOrEmpty(city.CityName)
+                            ? (!string.IsNullOrEmpty(city.CityCode) ? $"{city.CityCode} - {city.CityName}" : city.CityName)
+                            : "Not Specified";
+                        return new
+                        {
+                            CityName = cityNameDisplay,
+                            Deled = city.Count,
+                            Deled1 = city.Count,
+                            Deled2 = 0,
+                            Total = city.Count
+                        };
+                    }).ToList();
 
-                var countDeled1 = await (
+                var countTotalPaid = await (
                     from pd in personalQuery
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
-                    where et.Name == "DELED I" || et.Name == "DELED-I"
-                    select pd.PersonalDetailId
-                ).CountAsync();
-
-                var countDeled2 = await (
-                    from pd in personalQuery
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
-                    where et.Name == "DELED II" || et.Name == "DELED-II"
-                    select pd.PersonalDetailId
-                ).CountAsync();
-
-                var countBoth = await (
-                    from pd in personalQuery
-                    join et in _context.ExamTypes on pd.ExamTypeId equals et.Id
-                    where et.Name == "Both" || et.Name == "BOTH" || et.Name == "DELED I & II" || et.Name == "DELED-I & DELED-II"
+                    join u in _context.Users on pd.UserId equals u.UserId
+                    where u.IsPaymentCompleted
                     select pd.PersonalDetailId
                 ).CountAsync();
 
@@ -883,60 +779,11 @@ namespace DELED.Controllers
                     success = true,
                     dateWise = dateWiseData,
                     cityWise = cityRows,
-                    deled1Count = countDeled1,
-                    deled2Count = countDeled2,
-                    bothCount = countBoth
+                    deledCount = countTotalPaid,
+                    deled1Count = countTotalPaid,
+                    deled2Count = 0,
+                    bothCount = 0
                 });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = $"Error: {ex.Message}" });
-            }
-        }
-
-
-        [HttpPatch("admin/applicant/{registrationNo}/school-type")]
-        public async Task<IActionResult> UpdateSchoolTypeByRegNo(string registrationNo, [FromBody] UpdateSchoolTypeRequest request)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(registrationNo))
-                {
-                    return BadRequest(new { success = false, message = "Registration number is required." });
-                }
-
-                var cleanRegNo = registrationNo.Trim().ToLower();
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.RegistrationNo.ToLower() == cleanRegNo);
-                if (user == null)
-                {
-                    return NotFound(new { success = false, message = "Candidate registration number not found." });
-                }
-
-                var personal = await _context.UserPersonalDetails.FirstOrDefaultAsync(pd => pd.UserId == user.UserId);
-                bool isNewPersonal = false;
-                if (personal == null)
-                {
-                    personal = new UserPersonalDetails { UserId = user.UserId };
-                    isNewPersonal = true;
-                }
-
-                personal.Deled1SchoolType = request.Deled1SchoolType;
-                personal.Deled2SchoolType = request.Deled2SchoolType;
-
-                if (isNewPersonal)
-                {
-                    personal.CreatedOn = DateTime.Now;
-                    _context.UserPersonalDetails.Add(personal);
-                }
-                else
-                {
-                    personal.UpdatedOn = DateTime.Now;
-                    _context.Entry(personal).State = EntityState.Modified;
-                }
-
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, message = "School Type updated successfully." });
             }
             catch (Exception ex)
             {
@@ -1026,7 +873,7 @@ namespace DELED.Controllers
                         signatureFile = upload != null ? upload.SignatureFile : null,
                         isPaymentCompleted = user.IsPaymentCompleted,
                         paymentDate = user.PaymentDate != null ? user.PaymentDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                        appliedFor = exam != null ? exam.Name : "Not Selected"
+                        appliedFor = exam != null ? exam.Name : (personal != null ? personal.AppliedCategory ?? "Not Selected" : "Not Selected")
                     };
                 }).ToList();
 
@@ -1070,28 +917,22 @@ namespace DELED.Controllers
     public class UpdatePersonalDetailsRequest
     {
         public int ExamTypeId { get; set; }
+        public string? AppliedCategory { get; set; }
+        public string? GraduationCourse { get; set; }
+        public string? GraduationUniversity { get; set; }
+        public string? GraduationDate { get; set; }
         public string Gender { get; set; } = string.Empty;
         public string? DOB { get; set; }
         public string MotherName { get; set; } = string.Empty;
         public string? HusbandName { get; set; }
-        public int HomeDistrict { get; set; }
         public string Category { get; set; } = string.Empty;
         public string SubCategory { get; set; } = string.Empty;
         public string? RetirementDate { get; set; }
+        public string? SportsType { get; set; }
         public bool IsPhysicallyHandicapped { get; set; }
         public string? DisabilityType { get; set; }
+        public string? MultiDisabilityType { get; set; }
         public bool ScribeRequired { get; set; }
-        public string FirstLanguage { get; set; } = string.Empty;
-        public string SecondLanguage { get; set; } = string.Empty;
-        public string? SubjectCode { get; set; }
-        public string? DELED1TrainingQualification { get; set; }
-        public string? DELED1TrainingStatus { get; set; }
-        public string? DELED1TrainingYear { get; set; }
-        public string? DELED2TrainingQualification { get; set; }
-        public string? DELED2TrainingStatus { get; set; }
-        public string? DELED2TrainingYear { get; set; }
-        public string? EligibilityCodeDELED1 { get; set; }
-        public string? EligibilityCodeDELED2 { get; set; }
         public int ExamCity1 { get; set; }
         public int ExamCity2 { get; set; }
         public string MailingAddress { get; set; } = string.Empty;
@@ -1100,11 +941,5 @@ namespace DELED.Controllers
         public string PinCode { get; set; } = string.Empty;
         public string IdentityProof { get; set; } = string.Empty;
         public string IdentityProofNo { get; set; } = string.Empty;
-    }
-
-    public class UpdateSchoolTypeRequest
-    {
-        public string? Deled1SchoolType { get; set; }
-        public string? Deled2SchoolType { get; set; }
     }
 }
