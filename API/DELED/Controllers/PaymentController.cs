@@ -1002,7 +1002,7 @@ namespace DELED.Controllers
                 string registrationNo = user.RegistrationNo ?? userId.ToString();
                 var applicationUrl = _configuration["AppSettings:FrontendUrl"];
                 // Build email subject
-                string subject = "🎉 Payment Successful - UTET 2026 Application";
+                string subject = "🎉 Payment Successful - DELED 2026 Application";
 
                 // Build email body with professional HTML template
                 string body = $@"
@@ -1033,11 +1033,11 @@ namespace DELED.Controllers
             <table style='width: 100%; border-collapse: collapse;'>
                 <tr>
                     <td style='width: 70px; vertical-align: middle; text-align: left;'>
-                        <img src='https://ukutet.com/API/Logo/ubse_white.jpg' alt='Logo' style='width: 60px; height: 60px; border-radius: 50%; display: block;'>
+                        <img src='https://ukDELED.com/API/Logo/ubse_white.jpg' alt='Logo' style='width: 60px; height: 60px; border-radius: 50%; display: block;'>
                     </td>
                     <td style='vertical-align: middle; text-align: left; padding-left: 15px;'>
                         <h1 style='margin: 0; font-size: 24px; font-weight: bold;'>Payment Successful!</h1>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;'>UTET 2026 Application</p>
+                        <p style='margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;'>DELED 2026 Application</p>
                     </td>
                 </tr>
             </table>
@@ -1047,7 +1047,7 @@ namespace DELED.Controllers
             
             <div class='success-badge'>✓ Payment Confirmed</div>
             
-            <p>We are pleased to confirm that your payment for UTET 2026 application has been successfully processed. Your application is now complete and locked for submission.</p>
+            <p>We are pleased to confirm that your payment for DELED 2026 application has been successfully processed. Your application is now complete and locked for submission.</p>
             
             <div class='details'>
                 <div class='detail-row'>
@@ -1077,12 +1077,12 @@ namespace DELED.Controllers
                 • Your application has been successfully submitted.<br/>
                 • Keep this email for your records as proof of payment.<br/>
                 • You will receive further updates regarding exam dates and admit card via email.<br/>
-                • For any queries, contact: <a href='mailto:helpdesk@ukutet.com' style='color: #1565c0;'>helpdesk@ukutet.com</a>
+                • For any queries, contact: <a href='mailto:helpdesk@ukDELED.com' style='color: #1565c0;'>helpdesk@ukDELED.com</a>
             </div>
             
             <a href='{applicationUrl}' class='button'>View Your Application</a>
             
-            <p>Thank you for registering with Uttarakhand Teacher Eligibility Test (UTET) 2026.<br/>
+            <p>Thank you for registering with Uttarakhand Teacher Eligibility Test (DELED) 2026.<br/>
             We wish you all the best for the examination!</p>
             
             <p style='color: #999; font-size: 12px; margin-top: 20px;'>
@@ -1092,8 +1092,8 @@ namespace DELED.Controllers
             </p>
         </div>
         <div class='footer'>
-            <p>This is an automated email. Please do not reply to this email. For support, visit helpdesk@ukutet.com</p>
-            <p>&copy; 2026 UTET. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply to this email. For support, visit helpdesk@ukDELED.com</p>
+            <p>&copy; 2026 DELED. All rights reserved.</p>
         </div>
     </div>
 </body>
