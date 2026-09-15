@@ -32,7 +32,7 @@ builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<DatabaseLoggerService>(); // Add database logger
-//builder.Services.AddHostedService<EmailSchedulerService>();
+builder.Services.AddHostedService<EmailSchedulerService>();
 builder.Services.AddHostedService<PaymentRequerySchedulerService>();
 builder.Services.AddHttpClient<IAtomPaymentService, AtomPaymentService>();
 builder.Services.AddCors(options =>
